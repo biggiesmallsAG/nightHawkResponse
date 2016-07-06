@@ -1,0 +1,18 @@
+<script>
+	$(document).ready(function() {
+    $('.datepicker').datepicker({ 
+    	dateFormat: 'yy-mm-dd' 
+    });
+});
+</script>
+
+<div class="updatedoc" ng-controller="confirmController">
+	[[ngDialogData._source.Record.Comment]]
+	<form name="{{UpdateDoc.form_name}}" validate>
+    {{UpdateDoc.as_table}}
+    <br>
+    <span><button type="submit" class="btn btn-danger submit" ng-click="confirm(submitUpdate())" ng-disabled="UpdateDocForm.$invalid">Submit</button></span>
+     </form>
+</div>
+
+

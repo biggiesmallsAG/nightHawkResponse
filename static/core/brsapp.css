@@ -1,0 +1,205 @@
+@font-face {
+
+  font-family: Panpro;
+  src: url(panpro.ttf);
+  
+}
+
+html,body {
+	margin:0; 
+	padding:0; 
+	height:100vh;
+	width:100%;
+	color: #4AAAC4 !important;
+}
+
+#fullsize {
+	height:100%;
+	width:100%;
+	padding-left: 1%;
+	padding-right: 1%;
+	padding-top: 1%;
+	background-color: #222;
+	font-size: 9pt;
+	letter-spacing: 0px;
+}
+
+.navbar-default {
+	background-color: #222 !important;
+	border: 0px #235460 solid !important;
+}
+
+.navbar-default .navbar-brand {
+	font-family: Panpro;
+    color: #4AAAC4 !important;
+    line-height: 30px !important
+}
+
+.btn-default {
+    color: #F7973D !important;
+    background-color: #222 !important;
+    border-color: #303E43 !important;
+}
+
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 1px solid rgba(74, 170, 196, 0.16) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #2C2A2A !important;
+}
+
+td {
+	cursor: pointer !important;
+}
+
+.dataTables_filter input[type="search"] {
+    border: 1px solid #4AAAC4 !important;
+    border-radius: 3px !important;
+}
+
+.dataTables_wrapper {
+    /*border: 1px solid #DDDDDD;*/
+    padding: 0rem 0 !important; 
+}
+
+.form-control {
+    color: #F7973D !important;
+    background-color: #222 !important;
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: #F7973D !important;
+    background-color: #222 !important;
+    border: 1px solid #28373c !important;
+}
+
+.pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
+    color: RGB(247, 151, 61) !important;
+    background-color: #2C2A2A !important;
+    border-color: #28373c !important;
+}
+
+label {
+    color: #F7973D !important;
+}
+
+.treecol {
+	/*height: 100%;*/
+	width: 16.666667% !important;
+	/*display: inline-block;*/
+	background-color: #222;
+	border-radius: 5px;
+	/*padding-top: 1%;*/
+	border-left: #2C2A2A solid 2px;
+	border-bottom: 2C2A2A solid 1px;
+
+}
+
+.midcol {
+	/*width: 3.333% !important;*/
+	/*background-color: rgba(212, 212, 212, 0.50) !important;*/
+	padding-left: 1px !important
+}
+
+.maincol {
+	/*height: 100%;*/
+	/*width: 80% !important;*/
+	/*border: 1px solid RGBA(61, 60, 68, 0.18);*/
+	/*border-radius: 5px;*/
+	/*padding-top: 1%;*/
+}
+
+.maincolexpand {
+	width: 100% !important;
+}
+
+.dataTable {
+  overflow: hidden; /* this is what fixes the expansion */
+  text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+  white-space: nowrap;
+}
+
+.updatedoc {
+	background-color: #222 ;
+	font-size: 8pt;
+	color: #F7973D;
+	padding: 5%;
+}
+
+.buttonside button {
+	margin-bottom: 3%
+}
+
+.endpoint_name {
+	color: #F7973D;
+}
+
+.doc_dialog {
+	background-color: rgba(255, 255, 255, 0.99) ;
+	font-size: 8pt;
+	color: #1F1E22;
+	padding: 5%;
+}
+
+.ngdialog.ngdialog-theme-default.custom-width-800 .ngdialog-content {
+    width: 800px;
+}
+
+input.ng-invalid {
+	border: 1px solid #BE2327
+}
+
+select.ng-invalid {
+	border: 1px solid #BE2327
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+div.tooltip {
+	position: absolute;
+	text-align: left;
+	width: 230px;
+	/*height: 80px;*/
+	padding: 2px;
+	font: 12px;
+	background: #2C2A2A;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+}
+
+.node {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #fff;
+	stroke: #BE2327;
+	stroke-width: 3px;
+}
+
+.node text {
+	fill: #F7973D;
+	font: 12px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: #4AAAC4;
+	stroke-width: 2px;
+}

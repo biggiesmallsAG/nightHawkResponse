@@ -1,0 +1,19 @@
+<div class="uploads" ng-controller="uploadFile">
+    <h4>
+        To begin an investigation, please select a .man(s) file for processing.
+    </h4>
+
+    <form method="post" action="upload/" enctype="multipart/form-data">
+    	{{UploadForm.as_p}}
+		{% csrf_token %}
+    <h5>
+    	<i>
+    	<span style="color: #F7973D">Disclaimer: **EXPERIMENTAL**</span>
+    	 <br> <br>Choosing concurrent processing limits 5 files (configurable) in batch. 
+    	 <br> If this option is not selected, processing is
+    	sequential and there are no limits. </i>
+    </h5>
+		<input type="submit" value="Upload">
+    </form>
+</div>
+
