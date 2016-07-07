@@ -1,6 +1,6 @@
 # nightHawk Response
 
-Custom built application for asynchronus data presentation inconjunction with ElasticSearch.<br>
+Custom built application for asynchronus forensic data presentation on an ElasticSearch backend.<br>
 This application is designed to ingest a Mandiant Redline "collections" file and give flexibility in search/stack and tagging.
 
 **The application was born out of the inability to control multiple investigations (or hundreds of endpoints) in a single pane of glass.**
