@@ -6,6 +6,7 @@ from django.template import loader, RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from nighthawk.triageapi.dataendpoint.common import CommonAttributes
+from nighthawk.triageapi.utility.validate import ValidateUserInput
 from nighthawk.forms import UploadForm
 from nighthawk import settings
 import subprocess
@@ -26,37 +27,41 @@ class Upload(View, CommonAttributes):
 			case_id = request.POST.get('case_number')
 			concurrent = request.POST.get('concurrent')
 
-			if concurrent == '0':
-				if len(files) > self.file_upload_max:
-					return HttpResponse("Max Uploads concurrency is set to {0}. This can be reset in nightHawk.json".format(self.file_upload_max))
+			if ValidateUserInput(case_id).ValidateInputMixed():
+				if concurrent == '0':
+					if len(files) > self.file_upload_max:
+						return HttpResponse("Max Uploads concurrency is set to {0}. This can be reset in nightHawk.json".format(self.file_upload_max))
 
-				for f in files:
-					self.process_files(f)
+					for f in files:
+						self.process_files(f)
 
-				processes = []
-				for f in files:
-					if case_id:
-						processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
-					else:
-						processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
-				
-				for p in processes:
-					if p.poll() is not None:
-						if p.returncode == 0:
-							processes.remove(p)
+					processes = []
+					for f in files:
+						if case_id:
+							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
+						else:
+							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
+					
+					for p in processes:
+						if p.poll() is not None:
+							if p.returncode == 0:
+								processes.remove(p)
+
+				else:
+					for f in files:
+						self.process_files(f)
+
+					for f in files: 
+						if case_id:
+							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
+						else:
+							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
+								
+				return HttpResponseRedirect('/upload')
 
 			else:
-				for f in files:
-					self.process_files(f)
-
-				for f in files: 
-					if case_id:
-						subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
-					else:
-						subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
-							
-			return HttpResponseRedirect('/upload')
-
+				return HttpResponseRedirect('/upload')
+				
 	def process_files(self, f):
 	    with open(settings.MEDIA_DIR + '/{0}'.format(f), 'wb+') as destination:
 	        for chunk in f.chunks():

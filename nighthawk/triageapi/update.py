@@ -5,12 +5,22 @@ from requests import ConnectionError
 import elasticsearch
 from elasticsearch_dsl import Search, Q, A
 import json
+from nighthawk.triageapi.utility.validate import ValidateUserInput
 
 class UpdateES(CommonAttributes):
 	def __init__(self):
 		CommonAttributes.__init__(self)
 
 	def UpdateDoc(self, row_data):
+		err = {"error": "Input Validation Failed"}
+
+		if not ValidateUserInput(row_data['comment']).ValidateInputMixed():
+			return err
+		elif not ValidateUserInput(row_data['date']).ValidateInputMixedPunctual():
+			return err
+		elif not ValidateUserInput(row_data['analyst']).ValidateInputMixed():
+			return err
+
 		query = {
 			"doc": {
 				"Record": {
