@@ -18,4 +18,4 @@ class CommonAttributes():
 		self.index = '/investigations'
 		self.type_hostname = '/hostname'
 		self.type_audit_type = '/audit_type'
-		self.file_upload_max = self.conf_data['nightHawk']['file_upload_max']
+		self.file_upload_max = self.conf_data['nightHawk']['max_file_upload']
