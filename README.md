@@ -1,3 +1,5 @@
+<p align="center"><img src="https://cloud.githubusercontent.com/assets/17421028/16673233/c9455f02-44ef-11e6-86f4-5bdec3fa7124.png" width="450px"</img></p>
+
 # nightHawk Response
 
 Custom built application for asynchronus forensic data presentation on an ElasticSearch backend.<br>
@@ -17,7 +19,7 @@ To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher appli
 6. Interactive process tree view.<br>
 7. Multiple file upload & Named investigations.<br>
 
-<b>nightHawk ISO</b>:
+# nightHawk ISO
 
 To make it straight forward for users of nightHawk, we built an ISO with everything setup ready to go. That means you get the following;
 
