@@ -276,10 +276,14 @@
 	    .withOption('scrollCollapse', true);
 
 	    vm.dtColumns = [
-		    DTColumnBuilder.newColumn('_source.Record.FilenameCreated').withTitle('Created'),
-		    DTColumnBuilder.newColumn('_source.Record.FilenameModified').withTitle('Modified'),
-		    DTColumnBuilder.newColumn('_source.Record.FilenameAccessed').withTitle('Accessed'),
-		    DTColumnBuilder.newColumn('_source.Record.FilenameChanged').withTitle('Changed'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameCreated').withTitle('FNCreated'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameModified').withTitle('FNModified'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameAccessed').withTitle('FNAccessed'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameChanged').withTitle('FNChanged'),
+		    DTColumnBuilder.newColumn('_source.Record.Created').withTitle('SICreated'),
+		    DTColumnBuilder.newColumn('_source.Record.Modified').withTitle('SIModified'),
+		    DTColumnBuilder.newColumn('_source.Record.Accessed').withTitle('SIAccessed'),
+		    DTColumnBuilder.newColumn('_source.Record.Changed').withTitle('SIChanged'),
 		    DTColumnBuilder.newColumn('_source.Record.Username').withTitle('User'),
 		    DTColumnBuilder.newColumn('_source.Record.Path').withTitle('Path'),
 		    DTColumnBuilder.newColumn('_source.Record.FileName').withTitle('FileName'),
