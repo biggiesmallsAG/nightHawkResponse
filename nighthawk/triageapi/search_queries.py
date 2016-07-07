@@ -45,6 +45,85 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 
 		return query
 
+	elif auditgenerator_type == "w32rawfiles":
+		order_dict = {
+			"0": "FilenameCreated",
+			"1": "FilenameModified",
+			"2": "FilenameAccessed",
+			"3": "FilenameChanged",
+			"4": "Username",
+			"5": "Path",
+			"6": "FileName",
+			"7": "FileExtension",
+			"8": "SizeInBytes",
+			"9": "Md5sum",
+			"10": "IsGoodHash",
+			"11": "FileAttributes",
+			"12": "PeInfo.Type",
+			"13": "Comment",
+			"14": "nHscore"
+		}
+		if str_query == "":
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		else:
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.FilenameChanged", "Record.FilenameCreated", "Record.FilenameAccessed", "Record.FilenameModified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		return query
+
+	elif auditgenerator_type == "w32apifiles":
+		order_dict = {
+			"0": "Modified",
+			"1": "Accessed",
+			"2": "Changed",
+			"3": "Username",
+			"4": "Path",
+			"5": "FileName",
+			"6": "FileExtension",
+			"7": "SizeInBytes",
+			"8": "Md5sum",
+			"9": "IsGoodHash",
+			"10": "FileAttributes",
+			"11": "PeInfo.Type",
+			"12": "Comment",
+			"13": "nHscore"
+		}
+		if str_query == "":
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		else:
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Changed", "Record.Created", "Record.Accessed", "Record.Modified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		return query
+
 	elif auditgenerator_type == "filedownloadhistory":
 		order_dict = {
 			"0": "LastModifiedDate",

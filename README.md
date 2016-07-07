@@ -1,7 +1,7 @@
 # nightHawk Response
 
 Custom built application for asynchronus data presentation inconjunction with ElasticSearch.<br>
-This application is designed to ingest a Mandiant Redline ".mans" file and give flexibility in search/stack and tagging.
+This application is designed to ingest a Mandiant Redline "collections" file and give flexibility in search/stack and tagging.
 
 **The application was born out of the inability to control multiple investigations (or hundreds of endpoints) in a single pane of glass.**
 
@@ -55,11 +55,13 @@ Once complete, in your browser (Chrome/FireFox), goto; `https://192.168.42.173`.
 
 If you need to access Kibana, goto; `https://192.168.42.173:8443`. <br>
 
-If you need to SSH into the box, the login details are; `admin/nightHawk`.
+If you need to SSH into the box, the login details are; `admin/nightHawk`. <br>
 
-<b>Uploading .mans:</b>
+Redline Audit Collection Script can be found in the root of this repo.
 
-Navigate to the "Upload" icon on the nav bar, select a .mans (or multiple) and submit. Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. _Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
+<b>Uploading:</b>
+
+Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple) and submit. If you have used our Redline audit script to build your collection, simply zip all the audit files returned from the collector together and upload the zip. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits. Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. _Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
 
 <b>Tagging:</b>
 
@@ -75,7 +77,10 @@ There are custom mappings (supplied in git root) and advisory comments on the fo
 
 2. <b>Sharding:</b>
 
-  ElasticSearch setups require tuning and proper design recognition. Sharding is important to understand because of the way we are linking parent/child documents. The child is ALWAYS routed to the parent, it cannot exist on its own. This means consideration must be given to how many shards are resident on the index. From what we understand, it may be wise to choose a setup that encorporates many nodes with single shards. To gain performance out of this kind of setup we are working on shard routed searches. <br>
+  ElasticSearch setups require tuning and proper design recognition. Sharding is important to understand because of the way we are linking parent/child documents. The child is ALWAYS routed to the parent, it cannot exist on its own. This means consideration must be given to how many shards are resident on the index. From what we understand, it may be wise to choose a setup that encorporates many nodes with single shards. To gain performance out of this kind of setup we are working on shard routed searches. 
+
+  We are currently working on designing the best possible configuration for fast searching.
+  <br>
 
 3. <b>Scaling:</b>
 
@@ -99,7 +104,7 @@ There are custom mappings (supplied in git root) and advisory comments on the fo
 
 <b>To Do:</b>
 
-APIFiles (MFT). (in progress). <br>
+Process Handles (in progress). <br>
 Time selection sliders for time based generators (in progress). <br>
 Context menu for Current/Previous investigations. <br>
 Tagging context. The tagging system will integrate in a websocket loop for live comments across analyst panes (in progress).<br>
@@ -122,7 +127,7 @@ Roshan Maskey
 
 <b>Credits:</b>
 
-Mandiant Redline devs, AngularJS, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch, jsTree, qTip, Django devs.
+Mandiant Redline devs, AngularJS, Django devs, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch, jsTree, qTip.
 
 # Screenshots:
 

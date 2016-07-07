@@ -45,6 +45,18 @@ app = angular
 			controller: 'w32registry'
 		}).
 
+		when('/w32apifiles/:casename/:hostname', {
+			templateUrl: function(urlattr) {
+				return '/w32apifiles_anchor/' + urlattr.casename + '/' + urlattr.hostname;
+			}
+		}).
+
+		when('/w32rawfiles/:casename/:hostname', {
+			templateUrl: function(urlattr) {
+				return '/w32rawfiles_anchor/' + urlattr.casename + '/' + urlattr.hostname;
+			}
+		}).
+
 		when('/w32services/:casename/:hostname', {
 			templateUrl: function(urlattr) {
 				return '/w32services_anchor/' + urlattr.casename + '/' + urlattr.hostname;

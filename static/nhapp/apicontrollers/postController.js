@@ -6,6 +6,10 @@
 
 	.controller('w32registry', GetDataRegistry)
 
+	.controller('w32apifiles', GetDataApiFiles)
+
+	.controller('w32rawfiles', GetDataRawFiles)
+
 	.controller('w32services', GetDataServices)
 
 	.controller('filedownloadhistory', GetDataFileDownload)
@@ -114,6 +118,191 @@
 		    DTColumnBuilder.newColumn('_source.Record.Comment.Analyst').withTitle('Comment Analyst'),
 		    DTColumnBuilder.newColumn('_source.Record.Comment.Comment').withTitle('Comment'),
 		    DTColumnBuilder.newColumn('_source.Record.NHScore').withTitle('nHScore'),
+		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
+		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
+		    
+	    ];		
+	    function ClickHandler(info) {
+	        vm.message = info;
+
+			ngDialog.openConfirm({
+		            template: 'update_doc/',
+		            controller: 'confirmController',
+		            data: vm.message
+				})
+			.then(function (success) {
+
+					$http.post(nHResponse + 'update_doc/', JSON.stringify(success)).then(function (data){
+						ngDialog.open({
+					            template: '<p><center>Document Updated Successfully.</center></p>',
+					            plain: true
+							})			
+					})
+				})
+	    }
+
+	    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+	        $('td', nRow).unbind('click');
+	        $('td', nRow).bind('click', function() {
+	            $scope.$apply(function() {
+	                vm.ClickHandler(aData);
+	            });
+	        });
+	        return nRow;
+	    }
+	}
+
+	function GetDataApiFiles($scope, ngDialog, DTOptionsBuilder, DTColumnBuilder, DTDefaultOptions, $http, $routeParams, $cookies) {
+	    var vm = this;
+	    vm.message = '';
+	    vm.ClickHandler = ClickHandler;
+
+	    vm.dtOptions = DTOptionsBuilder.newOptions()
+	        .withOption('ajax', {
+	         url: nHResponse + 'w32apifiles_anchor/' + $routeParams.casename + '/' + $routeParams.hostname,
+	         type: 'POST',
+	         data: {
+	         	data: 'data',
+	         	csrfmiddlewaretoken: $cookies.get('csrftoken')
+	         }
+	     })
+        .withOption('processing', true)
+        .withOption('serverSide', true)
+        .withLanguage({
+        	"sProcessing": '<img src="static/images/loader.gif">'
+        })
+	    .withOption('rowCallback', rowCallback)
+	    .withBootstrap()
+	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
+	    // .withButtons([
+	    // 	'columnsToggle'])
+	    .withOption('order', [0, 'desc'])
+	    .withColReorder()
+	    .withPaginationType('numbers')
+	    .withDisplayLength(100)
+	    .withOption('scrollX', '100%')
+	    .withOption('scrollY', '65vh')
+	    .withOption('scrollCollapse', true);
+
+	    vm.dtColumns = [
+		    DTColumnBuilder.newColumn('_source.Record.Modified').withTitle('Modified'),
+		    DTColumnBuilder.newColumn('_source.Record.Accessed').withTitle('Accessed'),
+		    DTColumnBuilder.newColumn('_source.Record.Changed').withTitle('Changed'),
+		    DTColumnBuilder.newColumn('_source.Record.Username').withTitle('User'),
+		    DTColumnBuilder.newColumn('_source.Record.Path').withTitle('Path'),
+		    DTColumnBuilder.newColumn('_source.Record.SizeInBytes').withTitle('SizeInBytes'),
+		    DTColumnBuilder.newColumn('_source.Record.Md5sum').withTitle('Md5sum'),
+		    DTColumnBuilder.newColumn('_source.Record.IsGoodHash').withTitle('IsGoodHash'),
+		    DTColumnBuilder.newColumn('_source.Record.FileAttributes').withTitle('FileAttributes'),
+			DTColumnBuilder.newColumn('_source.Record.PeInfo.Type').withTitle('File.PeInfo.Type'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.Subsystem').withTitle('File.PeInfo.Subsystem'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.BaseAddress').withTitle('File.PeInfo.BaseAddress'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.PETimeStamp').withTitle('File.PeInfo.PETimeStamp'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.SignatureExists').withTitle('File.DigitalSignature.SignatureExists'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.SignatureVerified').withTitle('File.DigitalSignature.SignatureVerified'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.Description').withTitle('File.DigitalSignature.Description'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.CertificateSubject').withTitle('File.DigitalSignature.CertificateSubject'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.CertificateIssuer').withTitle('File.DigitalSignature.CertificateIssuer'),
+		    DTColumnBuilder.newColumn('_source.Record.JobCreated').withTitle('JobCreated'),
+		    DTColumnBuilder.newColumn('_source.Record.SecurityID').withTitle('SecurityID'),
+		    DTColumnBuilder.newColumn('_source.Record.Tag').withTitle('Tag'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Date').withTitle('Comment Date'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Analyst').withTitle('Comment Analyst'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Comment').withTitle('Comment'),
+		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
+		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
+		    
+	    ];		
+	    function ClickHandler(info) {
+	        vm.message = info;
+
+			ngDialog.openConfirm({
+		            template: 'update_doc/',
+		            controller: 'confirmController',
+		            data: vm.message
+				})
+			.then(function (success) {
+
+					$http.post(nHResponse + 'update_doc/', JSON.stringify(success)).then(function (data){
+						ngDialog.open({
+					            template: '<p><center>Document Updated Successfully.</center></p>',
+					            plain: true
+							})			
+					})
+				})
+	    }
+
+	    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+	        $('td', nRow).unbind('click');
+	        $('td', nRow).bind('click', function() {
+	            $scope.$apply(function() {
+	                vm.ClickHandler(aData);
+	            });
+	        });
+	        return nRow;
+	    }
+	}
+
+	function GetDataRawFiles($scope, ngDialog, DTOptionsBuilder, DTColumnBuilder, DTDefaultOptions, $http, $routeParams, $cookies) {
+	    var vm = this;
+	    vm.message = '';
+	    vm.ClickHandler = ClickHandler;
+
+	    vm.dtOptions = DTOptionsBuilder.newOptions()
+	        .withOption('ajax', {
+	         url: nHResponse + 'w32rawfiles_anchor/' + $routeParams.casename + '/' + $routeParams.hostname,
+	         type: 'POST',
+	         data: {
+	         	data: 'data',
+	         	csrfmiddlewaretoken: $cookies.get('csrftoken')
+	         }
+	     })
+        .withOption('processing', true)
+        .withOption('serverSide', true)
+        .withLanguage({
+        	"sProcessing": '<img src="static/images/loader.gif">'
+        })
+	    .withOption('rowCallback', rowCallback)
+	    .withBootstrap()
+	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
+	    // .withButtons([
+	    // 	'columnsToggle'])
+	    .withOption('order', [0, 'desc'])
+	    .withColReorder()
+	    .withPaginationType('numbers')
+	    .withDisplayLength(100)
+	    .withOption('scrollX', '100%')
+	    .withOption('scrollY', '65vh')
+	    .withOption('scrollCollapse', true);
+
+	    vm.dtColumns = [
+		    DTColumnBuilder.newColumn('_source.Record.FilenameCreated').withTitle('Created'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameModified').withTitle('Modified'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameAccessed').withTitle('Accessed'),
+		    DTColumnBuilder.newColumn('_source.Record.FilenameChanged').withTitle('Changed'),
+		    DTColumnBuilder.newColumn('_source.Record.Username').withTitle('User'),
+		    DTColumnBuilder.newColumn('_source.Record.Path').withTitle('Path'),
+		    DTColumnBuilder.newColumn('_source.Record.FileName').withTitle('FileName'),
+		    DTColumnBuilder.newColumn('_source.Record.FileExtension').withTitle('Extension'),
+		    DTColumnBuilder.newColumn('_source.Record.SizeInBytes').withTitle('SizeInBytes'),
+		    DTColumnBuilder.newColumn('_source.Record.Md5sum').withTitle('Md5sum'),
+		    DTColumnBuilder.newColumn('_source.Record.IsGoodHash').withTitle('IsGoodHash'),
+		    DTColumnBuilder.newColumn('_source.Record.FileAttributes').withTitle('FileAttributes'),
+			DTColumnBuilder.newColumn('_source.Record.PeInfo.Type').withTitle('File.PeInfo.Type'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.Subsystem').withTitle('File.PeInfo.Subsystem'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.BaseAddress').withTitle('File.PeInfo.BaseAddress'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.PETimeStamp').withTitle('File.PeInfo.PETimeStamp'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.SignatureExists').withTitle('File.DigitalSignature.SignatureExists'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.SignatureVerified').withTitle('File.DigitalSignature.SignatureVerified'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.Description').withTitle('File.DigitalSignature.Description'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.CertificateSubject').withTitle('File.DigitalSignature.CertificateSubject'),
+		    DTColumnBuilder.newColumn('_source.Record.PeInfo.DigitalSignature.CertificateIssuer').withTitle('File.DigitalSignature.CertificateIssuer'),
+		    DTColumnBuilder.newColumn('_source.Record.JobCreated').withTitle('JobCreated'),
+		    DTColumnBuilder.newColumn('_source.Record.SecurityID').withTitle('SecurityID'),
+		    DTColumnBuilder.newColumn('_source.Record.Tag').withTitle('Tag'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Date').withTitle('Comment Date'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Analyst').withTitle('Comment Analyst'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Comment').withTitle('Comment'),
 		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
 		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
 		    
