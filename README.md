@@ -61,7 +61,10 @@ Redline Audit Collection Script can be found in the root of this repo.
 
 <b>Uploading:</b>
 
-Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple) and submit. If you have used our Redline audit script to build your collection, simply zip all the audit files returned from the collector together and upload the zip. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits. Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. _Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
+Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, simply zip all the audit files returned from the collector together and upload the zip. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits. Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
+
+
+_Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
 
 <b>Tagging:</b>
 
