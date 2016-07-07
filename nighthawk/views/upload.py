@@ -27,7 +27,7 @@ class Upload(View, CommonAttributes):
 			case_id = request.POST.get('case_number')
 			concurrent = request.POST.get('concurrent')
 
-			if ValidateUserInput(case_id).ValidateInputMixed():
+			if ValidateUserInput(case_id).ValidateInputMixed() or case_id == '':
 				if concurrent == '0':
 					if len(files) > self.file_upload_max:
 						return HttpResponse("Max Uploads concurrency is set to {0}. This can be reset in nightHawk.json".format(self.file_upload_max))
@@ -61,7 +61,7 @@ class Upload(View, CommonAttributes):
 
 			else:
 				return HttpResponseRedirect('/upload')
-				
+
 	def process_files(self, f):
 	    with open(settings.MEDIA_DIR + '/{0}'.format(f), 'wb+') as destination:
 	        for chunk in f.chunks():
