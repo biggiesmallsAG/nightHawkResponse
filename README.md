@@ -57,6 +57,8 @@ If you need to access Kibana, goto; `https://192.168.42.173:8443`. <br>
 
 If you need to SSH into the box, the login details are; `admin/nightHawk`. <br>
 
+If you want to change the IP address (reflected application wide); `/opt/nighthawk/bin/nighthawkctl set-ip <new_ipaddress>` <br>
+
 Redline Audit Collection Script can be found in the root of this repo.
 
 <b>Uploading:</b>
@@ -130,7 +132,7 @@ Roshan Maskey
 
 <b>Credits:</b>
 
-Mandiant Redline devs, AngularJS, Django devs, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch, jsTree, qTip.
+Mandiant Redline devs, AngularJS, Django devs, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch/ES-dsl.py, jsTree, qTip, GOlang & Python..
 
 # Screenshots:
 
