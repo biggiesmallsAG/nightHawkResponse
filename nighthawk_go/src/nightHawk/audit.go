@@ -1,11 +1,11 @@
 /*
  * @package 	nightHawk
- * @file		nightHawkaudit.go
+ * @file		audit.go
  * @author		roshan maskey <roshanmaskey@gmail.com>
  * @version		0.0.1
  * @updated		2016-06-15
  *
- * @description	Contains functions for structures descripted on rl.go
+ * @description	
  * 				
  */
 

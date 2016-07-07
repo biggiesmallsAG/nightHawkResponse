@@ -1,11 +1,11 @@
 /*
  *@package 	nightHawk
- *@file 	nightHawkmodule.go
+ *@file 	module.go
  *@author	roshan maskey <roshanmaskey@gmail.com>
  *@version	0.0.1
  *@updated	2016-06-15
  *
- *@description	nightHawk Triage module
+ *@description	nightHawk Response module
  */
 
 package nightHawk
@@ -334,7 +334,10 @@ func (rl *RlApiFile) ParseAuditData(computername string, caseInfo CaseInformatio
 		if rl.FileList[i].Changed == "" {
 			rl.FileList[i].Changed = FixEmptyTimestamp()
 		}
+
+		rl.FileList[i].TlnTime = rl.FileList[i].Created
 	}
+
 }
 
 
@@ -390,6 +393,8 @@ func (rl *RlRawFile) ParseAuditData(computername string, caseInfo CaseInformatio
 		if rl.FileList[i].FilenameChanged == "" {
 			rl.FileList[i].FilenameChanged = FixEmptyTimestamp()
 		}
+
+		rl.FileList[i].TlnTime = rl.FileList[i].FilenameCreated
 	}
 }
 /* __end_of_w32rawfiles__ */

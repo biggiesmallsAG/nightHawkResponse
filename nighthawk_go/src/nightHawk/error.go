@@ -1,11 +1,11 @@
 /*
  *@package 	nightHawk
- *@file 	common.go
+ *@file 	error.go
  *@author	roshan maskey <roshanmaskey@gmail.com>
  *@version	0.0.1
  *@updated	2016-06-15
  *
- *@description	nightHawk Triage common
+ *@description	nightHawk Response error code
  */
 
 

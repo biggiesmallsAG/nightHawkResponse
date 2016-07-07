@@ -5,7 +5,7 @@
  *@version	0.0.1
  *@updated	2016-06-15
  *
- *@description	nightHawk Triage common
+ *@description	nightHawk Response common
  */
 
 
