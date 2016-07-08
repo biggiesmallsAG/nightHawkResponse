@@ -30,7 +30,7 @@ class StackES(CommonAttributes):
 			"id": "stackable", "parent": "#", "text": "Stackable Data"
 		}]
 
-		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch']
+		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch', 'w32network-dns']
 
 		for x in r.json()['aggregations']['datatypes']['buckets']:
 			if x['key'] not in i:

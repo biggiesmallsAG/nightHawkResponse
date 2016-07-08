@@ -33,6 +33,13 @@ def GetAuditGenerator(endpoints):
 		t = Q('query_string', default_field="ComputerName.raw", query=joined)
 		query = s.query(t).filter('term', AuditType__Generator=generator)
 
+	elif generator == 'w32network-dns':
+		aggs_gen = A('terms', field='Record.RecordName.raw', size=0)
+		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
+		s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
+		t = Q('query_string', default_field="ComputerName.raw", query=joined)
+		query = s.query(t).filter('term', AuditType__Generator=generator)
+
 	else:
 		aggs_gen = A('terms', field='Record.Name.raw', size=0)
 		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)

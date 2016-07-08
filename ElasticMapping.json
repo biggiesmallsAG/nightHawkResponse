@@ -71,6 +71,16 @@
                 }
               }
             },
+            "RecordName": {
+              "type": "string",
+              "analyzer": "english",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
             "ApplicationFileName": {
               "type": "string",
               "analyzer": "english",
