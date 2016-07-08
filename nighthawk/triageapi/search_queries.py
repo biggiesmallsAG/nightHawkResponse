@@ -30,7 +30,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		else:
@@ -40,7 +40,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Path", "Record.Username", "Record.ValueName", "Record.Text", "Record.Tag", "Record.Comment"], query="{0}".format(str_query))
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Path", "Record.Username", "Record.ValueName", "Record.Text", "Record.Tag", "Record.Comment"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query
@@ -70,7 +70,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		else:
@@ -80,7 +80,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.FilenameChanged", "Record.FilenameCreated", "Record.FilenameAccessed", "Record.FilenameModified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.FilenameChanged", "Record.FilenameCreated", "Record.FilenameAccessed", "Record.FilenameModified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query
@@ -92,10 +92,10 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 			"2": "Changed",
 			"3": "Username",
 			"4": "Path",
-			"5": "FileName",
-			"6": "FileExtension",
-			"7": "SizeInBytes",
-			"8": "Md5sum",
+			"5": "SizeInBytes",
+			"6": "Md5sum",
+			"7": "IsGoodHash",
+			"8": "FileAttributes",
 			"9": "IsGoodHash",
 			"10": "FileAttributes",
 			"11": "PeInfo.Type",
@@ -109,7 +109,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		else:
@@ -119,7 +119,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Changed", "Record.Created", "Record.Accessed", "Record.Modified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Changed", "Record.Created", "Record.Accessed", "Record.Modified", "Record.Username", "Record.Path", "Record.FileName", "Record.FileExtension", "Record.SizeInBytes"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query
@@ -151,7 +151,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id)
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id)
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		else:
@@ -160,7 +160,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 					"order": order
 				}
 			}
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', fields=["Record.SourceUrl", "Record.Username", "Record.TargetDirectory", "Record.FullHttpHeader", "Record.Filename", "Record.BrowserName", "Record.Profile", "Record.Tag", "Record.Comment"], query="{0}".format(str_query))
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', fields=["Record.SourceUrl", "Record.Username", "Record.TargetDirectory", "Record.FullHttpHeader", "Record.Filename", "Record.BrowserName", "Record.Profile", "Record.Tag", "Record.Comment"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query
@@ -189,7 +189,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id)
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id)
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		else:
@@ -199,7 +199,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 				}
 			}
 			
-			t = Q('query_string', default_field="ComputerName", query=endpoint_id) & Q('query_string', fields=["Record.Url", "Record.Username", "Record.Profile"], query="{0}".format(str_query))
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', fields=["Record.Url", "Record.Username", "Record.Profile"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query

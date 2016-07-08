@@ -92,7 +92,7 @@ class QueryES(CommonAttributes):
 		else:
 			s = Search()
 			s = s[0:1000]
-			t = Q('query_string', default_field="ComputerName", query=child_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			t = Q('query_string', default_field="ComputerName.raw", query=child_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
 			query = s.query(t).filter('term', AuditType__Generator=data_type)
 
 		try:

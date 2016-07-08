@@ -46,7 +46,7 @@ class StackES(CommonAttributes):
 		s = Search()
 		s = s[0]
 		t = Q('has_parent', type='hostname', query=Q('query_string', query='*'))
-		aggs = A('terms', field='ComputerName', size=0)
+		aggs = A('terms', field='ComputerName.raw', size=0)
 
 
 		s.aggs.bucket('endpoints', aggs)
