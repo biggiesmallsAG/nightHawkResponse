@@ -1,9 +1,9 @@
 /*
  * @package 	nightHawk
  * @file		elastic.go
- * @author		Daniel Eden
- * @version		0.0.2
- * @updated 	2016-06-02
+ * @author		Daniel Eden, 0xredskull
+ * @version		0.0.3
+ * @updated 	2016-07-08
  */
 
 package nightHawk
@@ -14,7 +14,9 @@ import (
  	"bytes"
  	"net/http"
  	"encoding/json"
+	"io"
  	"io/ioutil"
+ 	"crypto/tls"
 )
 
 
@@ -64,7 +66,14 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
 	 *	Third: check if case date is same, if so dont update.
 	 *  Fourth: build child document and post to parent
 	 */
-	 var ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+	 //var ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+	 var ElasticHost string 
+	 if ELASTIC_SSL {
+		 ElasticHost = fmt.Sprintf("https://%s:%d", ELASTICHOST, ELASTICPORT)
+	 } else {
+		 ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+	 }
+	
 	 var HostnameIndex = fmt.Sprintf("%s/hostname", ELASTIC_INDEX)
 
 	 var parent ParentCheck
@@ -72,8 +81,8 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
 	 //var eserr ESErrorCheck
 
 	 es_url := fmt.Sprintf("%s/%s/%s", ElasticHost, HostnameIndex, computername)
-
-	 res, err := http.Get(es_url)
+	 
+	 res, err := HttpOperation("GET", es_url, ELASTIC_AUTHCODE, ELASTIC_SSL, nil)
 	 if err != nil {
 	 	panic(err.Error())
 	 }
@@ -91,7 +100,8 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
  		post_data := bytes.NewBufferString(parent_data)
 
  		post_url := fmt.Sprintf("%s/%s/_bulk", ElasticHost, HostnameIndex)
- 		pres,err := http.Post(post_url, "application/json", post_data)
+ 		pres,err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
+
  		if err != nil {
  			panic(err.Error())
  		}
@@ -108,7 +118,7 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
 	post_data := bytes.NewBufferString(audit_data)
 
 	post_url := fmt.Sprintf("%s/investigations/_bulk", ElasticHost)
-	pres, err := http.Post(post_url, "application/json", post_data)
+	pres, err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -118,3 +128,18 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
 		fmt.Println(string(prbody))
 	}		
 }
+
+
+func HttpOperation(method string, url string, authcode string, sslenabled bool, data io.Reader) (resp *http.Response, err error) {
+	req, err := http.NewRequest(method,url, data)
+	req.Header.Add("Authorization", "Basic " + authcode)
+	
+	if sslenabled {
+		transcfg := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true},}
+		client := &http.Client{Transport: transcfg}
+		return client.Do(req)
+	} else {
+		client := &http.Client{}
+		return client.Do(req)
+	}
+} // __HttpOperation__

@@ -2,8 +2,8 @@
  *@package 	nightHawk
  *@file 	config.go
  *@author	roshan maskey <roshanmaskey@gmail.com>
- *@version	0.0.1
- *@updated	2016-06-15
+ *@version	0.0.2
+ *@updated	2016-07-8
  *
  *@description	nightHawk Response Configuration settings
  */
@@ -54,6 +54,8 @@
  var ELASTICHOST = ""
  var ELASTICPORT = 0
  var ELASTIC_INDEX = ""
+ var ELASTIC_SSL = false
+ var ELASTIC_AUTHCODE = ""
 
 
 
@@ -72,6 +74,8 @@ type nHElastic struct {
 	ElasticHost 		string `json:"elastic_server"`
 	ElasticPort 		int `json:"elastic_port"`
 	ElasticIndex 		string `json:"elastic_index"`
+	ElasticSsl 			int `json:"elastic_ssl"`
+	Authcode			string `json:"authcode"`
 }
 
 type nightHawkConfig struct {
@@ -108,6 +112,12 @@ func LoadConfigFile(configfile string) bool {
 	ELASTICHOST = nhconfig.Elastic.ElasticHost
 	ELASTICPORT = nhconfig.Elastic.ElasticPort
 	ELASTIC_INDEX = nhconfig.Elastic.ElasticIndex
+	
+	if nhconfig.Elastic.ElasticSsl == 1 {
+		ELASTIC_SSL = true
+	}
+	
+	ELASTIC_AUTHCODE = nhconfig.Elastic.Authcode 
 
 	return true
 }

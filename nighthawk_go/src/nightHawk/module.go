@@ -247,6 +247,9 @@ func (rl *RlUrlHistory) ParseAuditData(computername string, caseInfo CaseInforma
 			rl.UrlHistoryList[i].LastVisitDate = FixEmptyTimestamp()
 		}
 		rl.UrlHistoryList[i].TlnTime = rl.UrlHistoryList[i].LastVisitDate
+		h,d := UrlToHostname(rl.UrlHistoryList[i].Url)
+		rl.UrlHistoryList[i].UrlHostname = h
+		rl.UrlHistoryList[i].UrlDomain = d
 	}
 }
 
@@ -267,6 +270,11 @@ func (rl *RlFileDownloadHistory) ParseAuditData(computername string, caseInfo Ca
 		}
 
 		rl.FileDownloadHistoryList[i].TlnTime = rl.FileDownloadHistoryList[i].LastModifiedDate
+		//ConsoleMessage("DEBUG",rl.FileDownloadHistoryList[i].SourceUrl, true)
+		h,d := UrlToHostname(rl.FileDownloadHistoryList[i].SourceUrl)
+		//ConsoleMessage("DEBUG", h+" ==> "+d, true)
+		rl.FileDownloadHistoryList[i].UrlHostname =h 
+		rl.FileDownloadHistoryList[i].UrlDomain = d
 	}
 }
 

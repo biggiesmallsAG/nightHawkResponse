@@ -387,13 +387,13 @@ type PrefetchItem struct {
 	ApplicationFileName	string
 	LastRun				string
 	TimesExecuted		int
-	AccessedFileList	[]string `xml:"AccessedFile"`
+	AccessedFileList	[]string `xml:"AccessedFileList>AccessedFile"`
 	ApplicationFullPath string
 	VolumeDevicePath	string `xml:"DevicePath"`
 	VolumeCreationTime	string `xml:"CreationTime"`
 	VolumeSerialNumber	string `xml:"SerialNumber"`
 	IsGoodPrefetch		string
-	NHScore			int
+	NHScore				int
 	Tag 				string 
 	NhComment 			NHComment `json:"Comment"`
 }
@@ -546,6 +546,8 @@ type UrlHistoryItem struct {
 	BrowserVersion		string `xml:"BrowserVersion"`
 	Username 			string `xml:"Username"`
 	Url 				string `xml:"URL"`
+	UrlHostname 		string 
+	UrlDomain			string 
 	PageTitle 			string `xml:"PageTitle"`
 	Hidden 				bool 	`xml:"Hidden"`
 	LastVisitDate		string 	`xml:"LastVisitDate"`
@@ -554,7 +556,7 @@ type UrlHistoryItem struct {
 	VisitCount			int `xml:"VisitCount"`
 	IsGoodDomain		string
 	IsNewDomain			string
-	NHScore			int
+	NHScore				int
 	Tag 				string
 	NhComment 			NHComment `json:"Comment"`
 }
@@ -578,6 +580,8 @@ type FileDownloadHistoryItem struct {
 	DownloadType		string 
 	Filename 			string `xml:"FileName"`
 	SourceUrl			string `xml:"SourceURL"`
+	UrlHostname 		string
+	UrlDomain 			string 
 	TargetDirectory		string `xml:"TargetDirectory"`
 	FullHttpHeader		string
 	LastModifiedDate	string
@@ -587,7 +591,7 @@ type FileDownloadHistoryItem struct {
 	CacheHitCount		int
 	LastCheckedDate		string
 	IsGoodFile			string
-	NHScore			int
+	NHScore				int
 	Tag 				string
 	NhComment 			NHComment `json:"Comment"`
 }
@@ -686,7 +690,7 @@ type ArpEntryItem struct {
 	IsRouter 			bool `xml:"IsRouter,omitempty"`
 	LastReachable 		string `xml:"LastReachable,omitempty"`
 	LastUnreachable 	string `xml:"LastUnreachable,omitempty"`
-	NHScore			int 
+	NHScore				int 
 	Tag 				string
 	NhComment 			NHComment `json:"Comment"`
 }

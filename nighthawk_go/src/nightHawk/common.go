@@ -16,6 +16,7 @@
  	"strings"
  	"os"
  	"time"
+ 	"regexp"
  )
 
  const (
@@ -99,6 +100,55 @@
  	return MOD_XML
  }
 
+ func UrlToHostname(Url string) (string, string) {
+    var Hostname string = ""
+    var Domain string = ""
+
+    re,_ := regexp.Compile("(http|https|ftp)://[^/]+")
+
+    if !re.MatchString(Url) {
+    	return "",""
+    }
+
+    r0,_ := regexp.Compile(":\\d+")
+    baseUrl := r0.ReplaceAllString(Url, "")
+
+
+    baseUrl = re.FindString(baseUrl)
+
+    prefixList := []string{"http", "https", "ftp"}
+
+    for _, urlProto := range prefixList {
+            if strings.HasPrefix(baseUrl, urlProto) {
+                    baseUrl = strings.Replace(baseUrl, urlProto+"://", "", 2)
+            }
+    }
+
+    ipre,_ := regexp.Compile("(\\d+\\.){3}\\d+")
+    if ipre.MatchString(baseUrl) {
+            return baseUrl, baseUrl
+    }
+
+    urlPart := strings.Split(baseUrl, ".")
+    numPart := len(urlPart)
+
+    if numPart <= 2 {
+        return baseUrl, baseUrl
+    } else if numPart == 4{
+    	Hostname = baseUrl
+    	Domain = urlPart[1]+"."+urlPart[2]+"."+urlPart[3]
+    }  else {
+        if len(urlPart[numPart-1]) == 2 {
+                Hostname = baseUrl
+                Domain = urlPart[numPart-3]+"."+urlPart[numPart-2]+"."+urlPart[numPart-1]
+        } else {
+                Hostname = baseUrl
+                Domain = urlPart[numPart-2]+"."+urlPart[numPart-1]
+        }
+    }
+
+    return Hostname, Domain
+ }
 
 
 
