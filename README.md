@@ -136,7 +136,7 @@ Roshan Maskey
 
 <b>Credits:</b>
 
-Mandiant Redline devs, AngularJS, Django devs, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch/ES-dsl.py, jsTree, qTip, GOlang & Python..
+Mandiant Redline devs, AngularJS, Django devs, Angular-DataTables/DataTables, D3 (Bostock), Elasticsearch/ES-dsl.py, jsTree, qTip, GOlang, Python, Fahad Abdulaal (Logo/Video).
 
 # Screenshots:
 
