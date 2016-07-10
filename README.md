@@ -1,4 +1,4 @@
-<p align="center"><img src="https://cloud.githubusercontent.com/assets/17421028/16673233/c9455f02-44ef-11e6-86f4-5bdec3fa7124.png" width="450px"</img></p>
+<p align="center"><img src="https://cloud.githubusercontent.com/assets/17421028/16711172/0e5cc930-4690-11e6-89a4-c0e86d07dd24.png" width="450px"</img></p>
 
 # nightHawk Response
 
@@ -10,6 +10,8 @@ This application is designed to ingest a Mandiant Redline "collections" file and
 To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher application designed to accompany this framework. The source code to the application is available in this repo, a binary has been compiled and is running inside the iso ready to ingest from first boot.
 
 <b>Features:</b>
+
+Video Demonstration: <a href="https://www.youtube.com/watch?v=3bHfAt8bEk8">nightHawk Response Platform</a>
 
 1. Single view endpoint forensics (multiple audit types).<br>
 2. Global search.<br>
