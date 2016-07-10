@@ -88,8 +88,9 @@
                         <thead>
                             <tr>
                                 <th>Attributes</th>
-                                <th>Count</th>
+                                <th>Doc Count</th>
                                 <th>Endpoints</th>
+                                <th>Endpoint Count</th>
                                 <th>Audit Type</th>
                             </tr>
                         </thead>
@@ -177,8 +178,9 @@
                     data: result,
                     columns: [
                         { data: "attribute" },
-                        { data: "count" },
+                        { data: "doc_count" },
                         { data: "endpoints" },
+                        { data: "endpoint_count" },
                         { data: "audittype" }
                     ],
                     order: [[
@@ -186,7 +188,7 @@
                         ]],
                     scrollY: '50vh',
                     scrollX: '100%',
-                    iDisplayLength: 100,
+                    iDisplayLength: 200,
                     fnDrawCallback: function (oSettings, json) {
                         $(".loader").hide()
                         $(".stack_data").show();

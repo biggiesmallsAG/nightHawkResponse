@@ -21,30 +21,25 @@ def GetAuditGenerator(endpoints):
 
 	if generator == 'w32scripting-persistence':
 		aggs_gen = A('terms', field='Record.Path.raw', size=0)
-		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
-		s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
-		t = Q('query_string', default_field="ComputerName.raw", query=joined)
-		query = s.query(t).filter('term', AuditType__Generator=generator)
 
 	elif generator == 'w32prefetch':
 		aggs_gen = A('terms', field='Record.ApplicationFileName.raw', size=0)
-		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
-		s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
-		t = Q('query_string', default_field="ComputerName.raw", query=joined)
-		query = s.query(t).filter('term', AuditType__Generator=generator)
 
 	elif generator == 'w32network-dns':
 		aggs_gen = A('terms', field='Record.RecordName.raw', size=0)
-		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
-		s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
-		t = Q('query_string', default_field="ComputerName.raw", query=joined)
-		query = s.query(t).filter('term', AuditType__Generator=generator)
+
+	elif generator == 'urlhistory':
+		aggs_gen = A('terms', field='Record.UrlDomain.raw', size=0)
+
+	elif generator == 'w32registryraw':
+		aggs_gen = A('terms', field='Record.KeyPath.raw', size=0)
 
 	else:
 		aggs_gen = A('terms', field='Record.Name.raw', size=0)
-		aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
-		s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
-		t = Q('query_string', default_field="ComputerName.raw", query=joined)
-		query = s.query(t).filter('term', AuditType__Generator=generator)
+
+	aggs_endpoint = A('terms', field="ComputerName.raw", size=0)
+	s.aggs.bucket('generator', aggs_gen).bucket('endpoint', aggs_endpoint)
+	t = Q('query_string', default_field="ComputerName.raw", query=joined)
+	query = s.query(t).filter('term', AuditType__Generator=generator)
 
 	return query.to_dict()
