@@ -613,7 +613,7 @@ type DnsEntryItem struct {
     Host                string 
     RecordName          string
     RecordType          string
-    TimeToLive          string
+    TimeToLive          int      
     Flags               string
     DataLength          string
     RecordDataList      []RecordData `xml:"RecordData"`

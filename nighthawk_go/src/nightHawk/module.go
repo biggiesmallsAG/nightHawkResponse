@@ -52,6 +52,10 @@ func (rl *RlPersistence)ParseAuditData(computername string, caseinfo CaseInforma
     // Elastic does not like Timestamp field with "" 
     // Implementing workaround to fix it. Workaround timestamp is 1970-01-01T01:01:01Z
     for i := range rl.PersistenceList {
+        if rl.PersistenceList[i].RegModified == "" {
+            rl.PersistenceList[i].RegModified = FixEmptyTimestamp()
+        }
+
         if rl.PersistenceList[i].FileModified == "" {
             rl.PersistenceList[i].FileModified = FixEmptyTimestamp()
         }
@@ -94,6 +98,10 @@ func (rl *RlPersistence)ParseAuditData(computername string, caseinfo CaseInforma
 
         if rl.PersistenceList[i].Registry.Modified == "" {
             rl.PersistenceList[i].Registry.Modified = FixEmptyTimestamp()
+        }
+
+        if rl.PersistenceList[i].File.PeInfo.PETimeStamp == "" {
+            rl.PersistenceList[i].File.PeInfo.PETimeStamp = FixEmptyTimestamp()
         }
 
         // Fixing for timeline search in Elastic Search
