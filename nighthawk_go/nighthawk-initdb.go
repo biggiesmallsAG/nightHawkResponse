@@ -26,7 +26,6 @@ import (
 
 func main() {
     esmap,_ := ioutil.ReadFile("/opt/nighthawk/lib/elastic/ElasticMapping.json")
-    fmt.Println(string(esmap))
 
     nightHawk.LoadConfigFile("/opt/nighthawk/etc/nighthawk.json")
 
@@ -38,8 +37,6 @@ func main() {
         panic(err.Error())
     }
     
-    fmt.Println(resp.StatusCode)
-
     if resp.StatusCode == 200 || resp.StatusCode == 201 {
         reader := bufio.NewReader(os.Stdin)
 
@@ -64,6 +61,7 @@ func main() {
             CreateElasticIndex(esIndexUrl, esmap)
         }       
     } else {
+        esIndexUrl = GetElasticUrl("investigation1")
         CreateElasticIndex(esIndexUrl, esmap)
     }
 }
