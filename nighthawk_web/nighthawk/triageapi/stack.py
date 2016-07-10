@@ -30,7 +30,7 @@ class StackES(CommonAttributes):
 			"id": "stackable", "parent": "#", "text": "Stackable Data"
 		}]
 
-		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch', 'w32network-dns', 'urlhistory', 'w32registryraw']
+		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch', 'w32network-dns', 'urlhistory']
 
 		for x in r.json()['aggregations']['datatypes']['buckets']:
 			if x['key'] not in i:
@@ -81,7 +81,7 @@ class StackES(CommonAttributes):
 			endpoints = len(v)
 
 		data = []
-		exclude = ['', 'URL ?', '1URL ?', 'gURL ?', 'wURL ?', 'sURL ?', 'wwURL ?']
+		exclude = ['', 'URL ?', '1URL ?', 'gURL ?', 'wURL ?', 'sURL ?', 'wwURL ?', 'bURL ?', '2URL ?', 'auURL ?', 'dURL ?', 'geoURL ?', 'maxURL ?', 'teURL ?', 'cURL ?', 'wwwURL ?']
 
 		for x in r.json()['aggregations']['generator']['buckets']:
 			if x['key'] not in exclude:			
