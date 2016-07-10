@@ -1,22 +1,22 @@
 /*
- * @package 	nightHawk
- * @file		elastic.go
- * @author		Daniel Eden, 0xredskull
- * @version		0.0.3
- * @updated 	2016-07-08
+ * @package     nightHawk
+ * @file        elastic.go
+ * @author      Daniel Eden, 0xredskull
+ * @version     0.0.3
+ * @updated     2016-07-08
  */
 
 package nightHawk
 
 import (
- 	"fmt"
- 	"time"
- 	"bytes"
- 	"net/http"
- 	"encoding/json"
-	"io"
- 	"io/ioutil"
- 	"crypto/tls"
+    "fmt"
+    "time"
+    "bytes"
+    "net/http"
+    "encoding/json"
+    "io"
+    "io/ioutil"
+    "crypto/tls"
 )
 
 
@@ -24,122 +24,122 @@ const Layout = "2006-01-02T15:04:05Z"
 
 
 type ESSource struct {
-	DateCreated 	string `json:"date_created"`
+    DateCreated     string `json:"date_created"`
 }
 
 type ParentCheck struct {
-	Found 			bool `json:"found"`
-	Source			ESSource `json:"_source"`
+    Found           bool `json:"found"`
+    Source          ESSource `json:"_source"`
 }
 
 type CB struct {
-	Type 			string `json:"type"`
-	Reason 			string `json:"reason"`
+    Type            string `json:"type"`
+    Reason          string `json:"reason"`
 }
 
 type RootCause struct {
-	Type 			string `json:"type"`
-	Reason 			string `json:"reason"`
-	CausedBy 		CB 		`json:"caused_by"`
+    Type            string `json:"type"`
+    Reason          string `json:"reason"`
+    CausedBy        CB      `json:"caused_by"`
 }
 
 type ESErrorCheck struct {
-	Error 			RootCause `json:"error"`
+    Error           RootCause `json:"error"`
 }
 
 type Shard struct {
-	Total 			int `json:"total"`
-	Successful 		int `json:"successful"`
-	Failed 			int `json:"failed"`
+    Total           int `json:"total"`
+    Successful      int `json:"successful"`
+    Failed          int `json:"failed"`
 }
 
 type ESSuccess struct {
-	Shards 			Shard 	`json:"_shards"`
-	Created 		bool 	`json:"created"`
+    Shards          Shard   `json:"_shards"`
+    Created         bool    `json:"created"`
 }
 
 
 
 func ExportToElastic(computername string, auditgenerator string, data []byte) {
-	/*	First: understand if the parent exists, if it does just append the child.
-	 *	Second: build string concat of ComputerName for index parent
-	 *	Third: check if case date is same, if so dont update.
-	 *  Fourth: build child document and post to parent
-	 */
-	 //var ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
-	 var ElasticHost string 
-	 if ELASTIC_SSL {
-		 ElasticHost = fmt.Sprintf("https://%s:%d", ELASTICHOST, ELASTICPORT)
-	 } else {
-		 ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
-	 }
-	
-	 var HostnameIndex = fmt.Sprintf("%s/hostname", ELASTIC_INDEX)
+    /*  First: understand if the parent exists, if it does just append the child.
+     *  Second: build string concat of ComputerName for index parent
+     *  Third: check if case date is same, if so dont update.
+     *  Fourth: build child document and post to parent
+     */
+     //var ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+     var ElasticHost string 
+     if ELASTIC_SSL {
+         ElasticHost = fmt.Sprintf("https://%s:%d", ELASTICHOST, ELASTICPORT)
+     } else {
+         ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+     }
+    
+     var HostnameIndex = fmt.Sprintf("%s/hostname", ELASTIC_INDEX)
 
-	 var parent ParentCheck
-	 //var essuccess ESSuccess
-	 //var eserr ESErrorCheck
+     var parent ParentCheck
+     //var essuccess ESSuccess
+     //var eserr ESErrorCheck
 
-	 es_url := fmt.Sprintf("%s/%s/%s", ElasticHost, HostnameIndex, computername)
-	 
-	 res, err := HttpOperation("GET", es_url, ELASTIC_AUTHCODE, ELASTIC_SSL, nil)
-	 if err != nil {
-	 	panic(err.Error())
-	 }
-	 	
-	 defer res.Body.Close()
-	 body,_ := ioutil.ReadAll(res.Body)
-	 json.Unmarshal(body, &parent)
+     es_url := fmt.Sprintf("%s/%s/%s", ElasticHost, HostnameIndex, computername)
+     
+     res, err := HttpOperation("GET", es_url, ELASTIC_AUTHCODE, ELASTIC_SSL, nil)
+     if err != nil {
+        panic(err.Error())
+     }
+        
+     defer res.Body.Close()
+     body,_ := ioutil.ReadAll(res.Body)
+     json.Unmarshal(body, &parent)
 
-	 // Create new parent if it does not exist
-	 if !parent.Found {
+     // Create new parent if it does not exist
+     if !parent.Found {
 
-	 	cur_time := fmt.Sprintf("%s", time.Now().UTC().Format(Layout))
- 		parent_data := fmt.Sprintf("{\"index\": {\"_id\": \"%s\"}}\n {\"date_created\":\"%s\"}\n", computername, cur_time)
+        cur_time := fmt.Sprintf("%s", time.Now().UTC().Format(Layout))
+        parent_data := fmt.Sprintf("{\"index\": {\"_id\": \"%s\"}}\n {\"date_created\":\"%s\"}\n", computername, cur_time)
 
- 		post_data := bytes.NewBufferString(parent_data)
+        post_data := bytes.NewBufferString(parent_data)
 
- 		post_url := fmt.Sprintf("%s/%s/_bulk", ElasticHost, HostnameIndex)
- 		pres,err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
+        post_url := fmt.Sprintf("%s/%s/_bulk", ElasticHost, HostnameIndex)
+        pres,err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
 
- 		if err != nil {
- 			panic(err.Error())
- 		}
+        if err != nil {
+            panic(err.Error())
+        }
 
- 		ConsoleMessage("INFO", "New parent created for "+computername, VERBOSE)
- 		if pres.StatusCode != 200 {
- 			ConsoleMessage("ERROR", "Error creating parent node "+computername, true)
- 		}
- 		
-	 }
+        ConsoleMessage("INFO", "New parent created for "+computername, VERBOSE)
+        if pres.StatusCode != 200 {
+            ConsoleMessage("ERROR", "Error creating parent node "+computername, true)
+        }
+        
+     }
 
-	 // Adding record to Elastic
-	audit_data := string(data[:])
-	post_data := bytes.NewBufferString(audit_data)
+     // Adding record to Elastic
+    audit_data := string(data[:])
+    post_data := bytes.NewBufferString(audit_data)
 
-	post_url := fmt.Sprintf("%s/investigations/_bulk", ElasticHost)
-	pres, err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
-	if err != nil {
-		panic(err.Error())
-	}
+    post_url := fmt.Sprintf("%s/investigations/_bulk", ElasticHost)
+    pres, err := HttpOperation("POST", post_url, ELASTIC_AUTHCODE, ELASTIC_SSL, post_data)
+    if err != nil {
+        panic(err.Error())
+    }
 
-	prbody,_ := ioutil.ReadAll(pres.Body)
-	if pres.StatusCode != 200 && pres.StatusCode != 201 {
-		fmt.Println(string(prbody))
-	}		
+    prbody,_ := ioutil.ReadAll(pres.Body)
+    if pres.StatusCode != 200 && pres.StatusCode != 201 {
+        fmt.Println(string(prbody))
+    }       
 }
 
 
 func HttpOperation(method string, url string, authcode string, sslenabled bool, data io.Reader) (resp *http.Response, err error) {
-	req, err := http.NewRequest(method,url, data)
-	req.Header.Add("Authorization", "Basic " + authcode)
-	
-	if sslenabled {
-		transcfg := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true},}
-		client := &http.Client{Transport: transcfg}
-		return client.Do(req)
-	} else {
-		client := &http.Client{}
-		return client.Do(req)
-	}
+    req, err := http.NewRequest(method,url, data)
+    req.Header.Add("Authorization", "Basic " + authcode)
+    
+    if sslenabled {
+        transcfg := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true},}
+        client := &http.Client{Transport: transcfg}
+        return client.Do(req)
+    } else {
+        client := &http.Client{}
+        return client.Do(req)
+    }
 } // __HttpOperation__

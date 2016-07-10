@@ -1,11 +1,11 @@
 /*
- *@package 	nightHawk
- *@file 	config.go
- *@author	roshan maskey <roshanmaskey@gmail.com>
- *@version	0.0.2
- *@updated	2016-07-8
+ *@package  nightHawk
+ *@file     config.go
+ *@author   roshan maskey <roshanmaskey@gmail.com>
+ *@version  0.0.2
+ *@updated  2016-07-8
  *
- *@description	nightHawk Response Configuration settings
+ *@description  nightHawk Response Configuration settings
  */
 
 
@@ -13,9 +13,9 @@
 
 
  import (
- 	"path/filepath"
- 	"io/ioutil"
- 	"encoding/json"
+    "path/filepath"
+    "io/ioutil"
+    "encoding/json"
  )
 
  const VERSION = "0.0.1"
@@ -42,10 +42,10 @@
 
  // Controlling output
  const (
- 	OP_CONSOLE_ONLY = 1
- 	OP_DATASTORE_ONLY = 2
- 	OP_CONSOLE_DATASTORE = 3
- 	OP_WRITE_FILE = 4
+    OP_CONSOLE_ONLY = 1
+    OP_DATASTORE_ONLY = 2
+    OP_CONSOLE_DATASTORE = 3
+    OP_WRITE_FILE = 4
  )
  var OPCONTROL = OP_DATASTORE_ONLY
 
@@ -61,65 +61,65 @@
 
 /// Config Loading structure and functions
 type nHConfig struct {
-	MaxProcs 			int `json:"max_procs"`
-	MaxGorouting 		int `json:"max_goroutine"`
-	BulkPostSize 		int `json:"bulk_post_size"`
-	OpControl 			int `json:"opcontrol"`
-	SessionDirSize 		int `json:"sessiondir_size"` 
-	Verbose 			bool `json:"verbose"`
-	VerboseLevel 		int `json:"verbose_level"`
+    MaxProcs            int `json:"max_procs"`
+    MaxGorouting        int `json:"max_goroutine"`
+    BulkPostSize        int `json:"bulk_post_size"`
+    OpControl           int `json:"opcontrol"`
+    SessionDirSize      int `json:"sessiondir_size"` 
+    Verbose             bool `json:"verbose"`
+    VerboseLevel        int `json:"verbose_level"`
 }
 
 type nHElastic struct {
-	ElasticHost 		string `json:"elastic_server"`
-	ElasticPort 		int `json:"elastic_port"`
-	ElasticIndex 		string `json:"elastic_index"`
-	ElasticSsl 			int `json:"elastic_ssl"`
-	Authcode			string `json:"authcode"`
+    ElasticHost         string `json:"elastic_server"`
+    ElasticPort         int `json:"elastic_port"`
+    ElasticIndex        string `json:"elastic_index"`
+    ElasticSsl          int `json:"elastic_ssl"`
+    Authcode            string `json:"authcode"`
 }
 
 type nightHawkConfig struct {
-	NightHawk 			nHConfig `json:"nightHawk"`
-	Elastic				nHElastic `json:"elastic"`
+    NightHawk           nHConfig `json:"nightHawk"`
+    Elastic             nHElastic `json:"elastic"`
 }
 
 
 func LoadConfigFile(configfile string) bool {
-	configData, err := ioutil.ReadFile(configfile)
+    configData, err := ioutil.ReadFile(configfile)
 
-	if err != nil {
-		return false
-	}
+    if err != nil {
+        return false
+    }
 
-	var nhconfig nightHawkConfig 
-	json.Unmarshal(configData, &nhconfig)
+    var nhconfig nightHawkConfig 
+    json.Unmarshal(configData, &nhconfig)
 
-	MAXPROCS = nhconfig.NightHawk.MaxProcs
-	MAX_GOROUTINE = nhconfig.NightHawk.MaxGorouting
-	BULKPOST_SIZE = nhconfig.NightHawk.BulkPostSize
-	OPCONTROL = nhconfig.NightHawk.OpControl
+    MAXPROCS = nhconfig.NightHawk.MaxProcs
+    MAX_GOROUTINE = nhconfig.NightHawk.MaxGorouting
+    BULKPOST_SIZE = nhconfig.NightHawk.BulkPostSize
+    OPCONTROL = nhconfig.NightHawk.OpControl
 
-	if nhconfig.NightHawk.SessionDirSize > SESSIONDIR_SIZE {
-		SESSIONDIR_SIZE = nhconfig.NightHawk.SessionDirSize
-	}
+    if nhconfig.NightHawk.SessionDirSize > SESSIONDIR_SIZE {
+        SESSIONDIR_SIZE = nhconfig.NightHawk.SessionDirSize
+    }
 
-	VERBOSE = nhconfig.NightHawk.Verbose
-	if nhconfig.NightHawk.VerboseLevel > 0 {
-		VERBOSE_LEVEL = nhconfig.NightHawk.VerboseLevel
-	}
+    VERBOSE = nhconfig.NightHawk.Verbose
+    if nhconfig.NightHawk.VerboseLevel > 0 {
+        VERBOSE_LEVEL = nhconfig.NightHawk.VerboseLevel
+    }
 
 
-	ELASTICHOST = nhconfig.Elastic.ElasticHost
-	ELASTICPORT = nhconfig.Elastic.ElasticPort
-	ELASTIC_INDEX = nhconfig.Elastic.ElasticIndex
-	
-	if nhconfig.Elastic.ElasticSsl == 1 {
-		ELASTIC_SSL = true
-	}
-	
-	ELASTIC_AUTHCODE = nhconfig.Elastic.Authcode 
+    ELASTICHOST = nhconfig.Elastic.ElasticHost
+    ELASTICPORT = nhconfig.Elastic.ElasticPort
+    ELASTIC_INDEX = nhconfig.Elastic.ElasticIndex
+    
+    if nhconfig.Elastic.ElasticSsl == 1 {
+        ELASTIC_SSL = true
+    }
+    
+    ELASTIC_AUTHCODE = nhconfig.Elastic.Authcode 
 
-	return true
+    return true
 }
 
 
