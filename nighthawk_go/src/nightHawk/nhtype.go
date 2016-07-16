@@ -513,7 +513,7 @@ type RlDisk struct {
 
 /* __start_of_w32volumes__ */
 type VolumeItem struct {
-    JobCreated          string `xml:"created, attr"`
+    JobCreated          string `xml:"created,attr"`
     VolumeName          string 
     DevicePath          string
     Type                string
@@ -611,10 +611,11 @@ type RecordData struct {
 }
 
 type DnsEntryItem struct {
+    //JobCreated          string `xml:"created,attr"`
     Host                string 
-    RecordName          string
-    RecordType          string
-    TimeToLive          int      
+    RecordName          string 
+    RecordType          string 
+    TimeToLive          string       
     Flags               string
     DataLength          string
     RecordDataList      []RecordData `xml:"RecordData"`
@@ -628,7 +629,7 @@ type RlNetworkDns struct {
     ComputerName        string
     CaseInfo            CaseInformation
     AuditType           RlAuditType
-    DnsEntryList        []DnsEntryItem  `xml:"DnsEntryItem"`
+    DnsEntryList        []DnsEntryItem `xml:"DnsEntryItem"`
 }
 
 

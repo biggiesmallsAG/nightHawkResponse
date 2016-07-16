@@ -279,7 +279,7 @@ func LoadAuditData(ret OutputDataType, computerName string, caseInfo CaseInforma
         rl.ParseAuditData(computerName, caseInfo, auditInfo, xmlData)
         
         intf = rl
-
+        
         for _,ml := range rl.DnsEntryList {
             var rr RlRecord
             rr.ComputerName = rl.ComputerName
@@ -291,7 +291,7 @@ func LoadAuditData(ret OutputDataType, computerName string, caseInfo CaseInforma
             jd,_ := json.Marshal(rr)
             rlRecord = append(rlRecord, jd)
         }
-
+        
     case RL_NETWORKROUTE:
         var rl RlNetworkRoute
         rl.ParseAuditData(computerName, caseInfo, auditInfo, xmlData)

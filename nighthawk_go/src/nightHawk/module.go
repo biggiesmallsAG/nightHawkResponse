@@ -15,6 +15,8 @@ import (
     "math/rand"
     "time"
     "encoding/xml"
+    "fmt"
+    "strings"
 )
 
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -31,6 +33,17 @@ func NewSessionDir(szdir int) string {
 
 func FixEmptyTimestamp() string {
     return "1970-01-01T01:01:01Z"
+}
+
+func FixBiosDate(biosdate string) string {
+    s := strings.SplitN(biosdate, "/", 3)
+    if len(s) == 3 {
+        newBiosDate := fmt.Sprintf("%s-%s-%sT00:00:00Z", s[2],s[1],s[0])    
+        return newBiosDate
+    } else {
+        return FixEmptyTimestamp()
+    }
+    
 }
 
 
@@ -230,6 +243,37 @@ func (rl *RlSystemInfo) ParseAuditData(computername string, caseInfo CaseInforma
     rl.CaseInfo = caseInfo
     rl.AuditType = auditInfo
     xml.Unmarshal(xmlData, &rl)
+    
+    // Fixing Empty Dates
+    if rl.SystemInfo.BiosDate == "" {
+        rl.SystemInfo.BiosDate = FixEmptyTimestamp()
+    } else {
+        fixedDate := FixBiosDate(rl.SystemInfo.BiosDate)
+        rl.SystemInfo.BiosDate = fixedDate
+    }
+
+    if rl.SystemInfo.Date == "" {
+        rl.SystemInfo.Date = FixEmptyTimestamp()
+    }
+
+    if rl.SystemInfo.InstallDate == "" {
+        rl.SystemInfo.InstallDate = FixEmptyTimestamp()
+    }
+
+    if rl.SystemInfo.AppCreated == "" {
+        rl.SystemInfo.AppCreated = FixEmptyTimestamp()
+    }
+
+    for i:= range rl.SystemInfo.NetworkList {
+        if rl.SystemInfo.NetworkList[i].DhcpLeaseObtained == "" {
+            rl.SystemInfo.NetworkList[i].DhcpLeaseObtained = FixEmptyTimestamp()
+        }
+
+        if rl.SystemInfo.NetworkList[i].DhcpLeaseExpires == "" {
+            rl.SystemInfo.NetworkList[i].DhcpLeaseExpires = FixEmptyTimestamp()
+        }
+    }
+
 }
 
 func (rl *RlVolume) ParseAuditData(computername string, caseInfo CaseInformation, auditInfo RlAuditType, xmlData []byte) {
@@ -292,7 +336,6 @@ func (rl *RlNetworkDns) ParseAuditData(computername string, caseInfo CaseInforma
     rl.CaseInfo = caseInfo
     rl.AuditType = auditInfo
     xml.Unmarshal(xmlData, &rl)
-
 }
 
 
