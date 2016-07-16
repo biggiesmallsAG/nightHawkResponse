@@ -53,6 +53,20 @@
                 }
               }
             },
+            "Registry": {
+              "properties": {
+                "StackPath": {
+                  "type": "string",
+                  "analyzer": "english",
+                  "fields": {
+                    "raw": {
+                      "type": "string",
+                      "index": "not_analyzed"
+                    }
+                  }
+                }
+              }
+            },
             "_children": {
               "properties": {
                 "startTime": {

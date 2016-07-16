@@ -20,7 +20,7 @@ def GetAuditGenerator(endpoints):
 	s = s[0]
 
 	if generator == 'w32scripting-persistence':
-		aggs_gen = A('terms', field='Record.Path.raw', size=0)
+		aggs_gen = A('terms', field='Record.Registry.StackPath.raw', size=0)
 
 	elif generator == 'w32prefetch':
 		aggs_gen = A('terms', field='Record.ApplicationFileName.raw', size=0)

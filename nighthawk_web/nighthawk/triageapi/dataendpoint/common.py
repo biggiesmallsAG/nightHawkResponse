@@ -8,11 +8,11 @@ class CommonAttributes():
 		self.name = 'nightHawk'
 		self.nighthawk_version = 'v1.0.2'
 		self.nighthawk_stack = 'Stack'
-		self.nighthawk_stack_ver = 'v0.5'
+		self.nighthawk_stack_ver = 'v0.6'
 		self.nighthawk_timeline = 'Timeline'
 		self.nighthawk_timeline_ver = 'v0.2'
 		self.global_search = 'Global Search'
-		self.global_search_version = "v0.1"
+		self.global_search_version = "v0.2"
 		self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
 		self.es_port = ':9200'
 		self.index = '/investigations'

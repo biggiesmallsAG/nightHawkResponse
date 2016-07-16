@@ -39,7 +39,7 @@ class TimeLineES(CommonAttributes):
 	def BuildAuditAggs(self, child_id):
 		s = Search()
 		s = s[0:1000]
-		t = Q('has_child', type='audit_type', query=Q('query_string', query=child_id))
+		t = Q('has_child', type='audit_type', query=Q('query_string', default_field="CaseInfo.case_name", query=child_id))
 		query = s.query(t)
 
 		try:

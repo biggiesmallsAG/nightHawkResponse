@@ -1,13 +1,13 @@
 (function(){
 
-var API_PATH = 'api/v1.0/';
+var API_PATH = '/';
 
 angular
 	.module('getApi', [])
 
 	.factory('getApiServices', ['$resource', function($resource) {
 
-			return $resource(API_PATH+':api_path/', {api_path: '@api_path'});
+			return $resource(API_PATH+':api_path', {api_path: '@api_path'});
 				
 	}])
 

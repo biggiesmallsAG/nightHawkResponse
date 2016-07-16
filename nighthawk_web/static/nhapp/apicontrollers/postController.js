@@ -1,5 +1,5 @@
 (function(){
-	var nHResponse = "http://localhost:9090/";
+	var nHResponse = "/";
 
 	angular
 	.module('postController', [])

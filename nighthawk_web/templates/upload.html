@@ -6,6 +6,7 @@
     <form method="post" action="upload/" enctype="multipart/form-data">
     	{{UploadForm.as_p}}
 		{% csrf_token %}
+        <p>If supplying a casename, the only accepted special characters are '-' or '_'</p>
     <h5>
     	<i>
     	<span style="color: #F7973D">Disclaimer: **EXPERIMENTAL**</span>

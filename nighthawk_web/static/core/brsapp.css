@@ -84,6 +84,10 @@ label {
     color: #F7973D !important;
 }
 
+em {
+	background-color: rgba(247, 151, 61, 0.35);
+}
+
 .treecol {
 	/*height: 100%;*/
 	width: 16.666667% !important;

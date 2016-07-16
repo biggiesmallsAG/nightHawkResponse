@@ -8,7 +8,7 @@ class ValidateUserInput:
 		return re.match("^[a-zA-Z0-9.\s]+$", self.input)
 
 	def ValidateInputMixedPunctual(self): ## Matching only Alpha Numeric on user input + Punctuation
-		return re.match("^[a-zA-Z0-9.\s\.\,\-]+$", self.input)
+		return re.match("^[a-zA-Z0-9.-_]+$", self.input)
 
 	def ValidateInputInteger(self):
 		return re.match("^[0-9]+$", self.input)

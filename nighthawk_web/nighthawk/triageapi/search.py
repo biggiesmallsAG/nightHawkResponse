@@ -40,7 +40,7 @@ class QueryES(CommonAttributes):
 	def BuildEndpointAggs(self, child_id):
 		s = Search()
 		s = s[0:1000]
-		t = Q('has_child', type='audit_type', query=Q('query_string', query=child_id))
+		t = Q('has_child', type='audit_type', query=Q('query_string', default_field="CaseInfo.case_name", query=child_id))
 		query = s.query(t)
 
 		try:
@@ -128,15 +128,17 @@ class QueryES(CommonAttributes):
 
 		data = []
 
-		for x in r.json()['hits']['hits']:
-			for y, v in x['highlight'].iteritems():
-				data.append({
-						"doc_id": x['_id'],
-						"endpoint": x['_parent'],
-						"audittype": x['_source']['AuditType']['Generator'],
-						"field": y,
-						"response": v
-					})
-
+		try:
+			for x in r.json()['hits']['hits']:
+				for y, v in x['highlight'].iteritems():
+					data.append({
+							"doc_id": x['_id'],
+							"endpoint": x['_parent'],
+							"audittype": x['_source']['AuditType']['Generator'],
+							"field": y,
+							"response": v
+						})
+		except KeyError:
+			pass
 
 		return data
