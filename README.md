@@ -11,7 +11,7 @@ To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher appli
 
 # Build
 
-- 16/07/16 : Version 1.0.2 <br>
+16/07/16 : Version 1.0.2 <br>
 
 - Bug fixes (tokenization and mapping updates) <br>
 - Global Search error handling, keyword highlighting <br>
