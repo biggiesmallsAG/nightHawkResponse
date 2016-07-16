@@ -25,12 +25,14 @@ from nighthawk.views.datatypes.w32processestree import W32ProcessesTree
 from nighthawk.views.datatypes.w32volumes import W32Volumes
 from nighthawk.views.datatypes.w32apifiles import W32APIFiles
 from nighthawk.views.datatypes.w32rawfiles import W32RAWFiles
+from nighthawk.views.datatypes.w32system import W32System
 
 data_types = patterns('',
     url(r'^filedownloadhistory_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', FiledownloadHistory.as_view(), name="filedownloadhistory"),
     url(r'^urlhistory_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', UrlHistory.as_view(), name="urlhistory"),
     url(r'^w32tasks_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32Tasks.as_view(), name="w32tasks"),
     url(r'^w32services_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32Services.as_view(), name="w32services"),
+    url(r'^w32system_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32System.as_view(), name="w32system"),
     url(r'^w32registryraw_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32Registry.as_view(), name="w32registryraw"),
     url(r'^w32apifiles_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32APIFiles.as_view(), name="w32apifiles"),
     url(r'^w32rawfiles_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32RAWFiles.as_view(), name="w32rawfiles"),

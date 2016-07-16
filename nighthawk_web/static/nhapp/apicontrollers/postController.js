@@ -4,6 +4,8 @@
 	angular
 	.module('postController', [])
 
+	.controller('w32system', GetDataSystem)
+
 	.controller('w32registry', GetDataRegistry)
 
 	.controller('w32apifiles', GetDataApiFiles)
@@ -66,6 +68,76 @@
 
 	function GetSearchAllDocs($scope) {
 		$scope.search_main = 'To search all documents:'
+	}
+
+	function GetDataSystem($scope, ngDialog, DTOptionsBuilder, DTColumnBuilder, DTDefaultOptions, $http, $routeParams) {
+	    var vm = this;
+	    vm.message = '';
+	    vm.ClickHandler = ClickHandler;
+	    DTDefaultOptions.setLoadingTemplate('<img src="static/images/loader.gif">');
+	    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+	        return $http.post(nHResponse + "w32system_anchor/" + $routeParams.casename + '/' + $routeParams.hostname).then(function (data) {
+	        	return data.data
+	        });
+	    })
+	    .withBootstrap()
+	    .withOption('rowCallback', rowCallback)
+	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
+	    // .withButtons([
+	    // 	'columnsToggle'])
+	    .withColReorder()
+	    .withPaginationType('full_numbers')
+	    .withDisplayLength(100)
+	    .withOption('scrollX', '100%')
+	    .withOption('scrollY', '65vh')
+	    .withOption('scrollCollapse', true);
+
+
+	    vm.dtColumns = [
+		    DTColumnBuilder.newColumn('_source.SystemInfo.BiosVersion').withTitle('BIOS Version'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.Drives').withTitle('Drives'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.InstallDate').withTitle('Install Date'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.Domain').withTitle('Domain'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.LoggedOnUser').withTitle('Logged On User'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.Mac').withTitle('Mac Addr'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.OS').withTitle('OS'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.OsBitness').withTitle('OS (32/64bit)'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.PrimaryIpAddress').withTitle('Primary IP'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.TimezoneStandard').withTitle('TimezoneStandard'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.GmtOffset').withTitle('GMTOffset'),
+		    DTColumnBuilder.newColumn('_source.SystemInfo.TotalPhysical').withTitle('TotalPhysical'),
+		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
+		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
+		    
+	    ];		
+	    function ClickHandler(info) {
+	        vm.message = info;
+
+			ngDialog.openConfirm({
+		            template: 'update_doc/',
+		            controller: 'confirmController',
+		            data: vm.message
+				})
+			.then(function (success) {
+
+					$http.post(nHResponse + 'update_doc/', JSON.stringify(success)).then(function (data){
+						ngDialog.open({
+					            template: '<p><center>Document Updated Successfully.</center></p>',
+					            plain: true
+							})			
+					})
+				})
+	    }
+
+	    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+	        $('td', nRow).unbind('click');
+	        $('td', nRow).bind('click', function() {
+	            $scope.$apply(function() {
+	                vm.ClickHandler(aData);
+	            });
+	        });
+	        return nRow;
+	    }
 	}
 
 	function GetDataRegistry($scope, ngDialog, DTOptionsBuilder, DTColumnBuilder, DTDefaultOptions, $http, $routeParams, $cookies) {

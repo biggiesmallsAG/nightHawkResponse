@@ -38,6 +38,12 @@ app = angular
 			controller: 'uploadFile'
 		}).
 
+		when('/w32system/:casename/:hostname', {
+			templateUrl: function(urlattr) {
+				return '/w32system_anchor/' + urlattr.casename + '/' + urlattr.hostname;
+			}
+		}).
+
 		when('/w32registryraw/:casename/:hostname', {
 			templateUrl: function(urlattr) {
 				return '/w32registryraw_anchor/' + urlattr.casename + '/' + urlattr.hostname;
