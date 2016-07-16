@@ -168,6 +168,7 @@ type PersistenceItem struct {
     Md5sum              string `xml:"md5sum"`
     File                FileItem `xml:"FileItem"`
     Registry            RegistryItem `xml:"RegistryItem"`
+    StackPath           string
     IsGoodPersistence   string 
     NHScore             int
     Tag                 string

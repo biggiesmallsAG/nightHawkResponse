@@ -108,6 +108,8 @@ func (rl *RlPersistence)ParseAuditData(computername string, caseinfo CaseInforma
         rl.PersistenceList[i].TlnTime = rl.PersistenceList[i].FileCreated
         rl.PersistenceList[i].File.TlnTime = rl.PersistenceList[i].File.Created
         rl.PersistenceList[i].Registry.TlnTime = rl.PersistenceList[i].Registry.Modified
+
+        rl.PersistenceList[i].StackPath = rl.PersistenceList[i].Registry.KeyPath + rl.PersistenceList[i].Registry.ValueName
     }
 }
 
@@ -412,7 +414,6 @@ func (rl *RlRawFile) ParseAuditData(computername string, caseInfo CaseInformatio
     }
 }
 /* __end_of_w32rawfiles__ */
-
 
 
 
