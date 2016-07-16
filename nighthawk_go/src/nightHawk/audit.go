@@ -3,7 +3,7 @@
  * @file        audit.go
  * @author      roshan maskey <roshanmaskey@gmail.com>
  * @version     0.0.1
- * @updated     2016-06-15
+ * @updated     2016-07-16
  *
  * @description 
  *              
@@ -199,6 +199,8 @@ func LoadAuditData(ret OutputDataType, computerName string, caseInfo CaseInforma
         var rl RlSystemInfo
         rl.ParseAuditData(computerName, caseInfo, auditInfo, xmlData)
         intf = rl
+        jd,_ := json.Marshal(rl)
+        rlRecord = append(rlRecord, jd)
 
     case RL_DISKS:
         var rl RlDisk
