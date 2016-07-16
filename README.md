@@ -9,6 +9,20 @@ This application is designed to ingest a Mandiant Redline "collections" file and
 
 To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher application designed to accompany this framework. The source code to the application is available in this repo, a binary has been compiled and is running inside the iso ready to ingest from first boot.
 
+# Build
+
+- 16/07/16 : Version 1.0.2 <br>
+
+- Bug fixes (tokenization and mapping updates) <br>
+- Global Search error handling, keyword highlighting <br>
+- Stacking on URL Domain and DNS, fixed stacking registry <br>
+- Reindex data utility added (see <a href="https://github.com/biggiesmallsAG/nightHawkResponse/wiki/Reindexing-data">wiki article</a> for usage) <br>
+- Upgrade feature added, you can now update the sourcecode from yum without downloading a new iso (see <a href="https://github.com/biggiesmallsAG/nightHawkResponse/wiki/Upgrading-to-latest-source">wiki article</a> for usage) <br>
+- Rotate /media folder to remove old collections after 1 day (or > 2GB foldersize) <br>
+- Added w32system (system info) <br>
+- Removed static mapping in postController for hostname <br>
+- Fixed issue with building audit aggs where default_field was not being passed to ES. <br>
+
 <b>Features:</b>
 
 Video Demonstration: <a href="https://www.youtube.com/watch?v=3bHfAt8bEk8">nightHawk Response Platform</a>
@@ -51,7 +65,7 @@ _Pending_: User based storage setup for large scale instances. If you desire to 
 
 <b>Installation</b>:
 
-Download ISO: <a href="https://drive.google.com/drive/folders/0B7rD-z1KKpYZMmp0TGJaR1V6Wk0">nightHawk v1.0</a>
+Download ISO: <a href="https://drive.google.com/open?id=0B7rD-z1KKpYZS3A2MVVnZVlOdjQ">nightHawk v1.0.2</a>
 
 Configure the hardware, mount the ISO into the VM, start the installtion script. <br> 
 
