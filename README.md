@@ -81,12 +81,14 @@ Redline Audit Collection Script can be found in the root of this repo.
 
 
 <b>Uploading:</b> <br/>
-Creating audit zip file to upload <br/>
+Creating audit zip file to upload (Redline Collector) <br/>
 step_1: Navigate to Sessions\AnalysisSessionX\Audits\<ComputerName>  where X is analysis number which is 1 for most cases. <br/>
-step_2: Create zip of folding containing audit files i.e. 20160708085733 <br/>
+step_2: Create zip of folder containing audit files i.e. 20160708085733 <br/>
 step_3: Upload 20160708085733.zip <br/><br/>
 
-Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, simply zip all the audit files returned from the collector together and upload the zip. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits. Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
+Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, follow the instructions just above. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits, the .mans file is a zip, you can upload this directly. <br>
+
+Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
 
 
 _Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
