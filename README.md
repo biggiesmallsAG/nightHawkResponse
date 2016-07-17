@@ -80,7 +80,7 @@ If you want to change the IP address (reflected application wide); `/opt/nightha
 Redline Audit Collection Script can be found in the root of this repo.
 
 
-<b>Uploading:<br>
+<b>Uploading:<b> <br>
 Creating audit zip file to upload <br>
 step_1: Navigate to Sessions\AnalysisSessionX\Audits\<ComputerName>  where X is analysis number which is 1 for most cases. <br>
 step_2: Create zip of folding containing audit files i.e. 20160708085733 <br>
