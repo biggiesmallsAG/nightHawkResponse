@@ -2,7 +2,7 @@
 
 # nightHawk Response
 
-Custom built application for asynchronus forensic data presentation on an ElasticSearch backend.<br>
+Custom built application for asynchronus forensic data presentation on an Elasticsearch backend.<br>
 This application is designed to ingest a Mandiant Redline "collections" file and give flexibility in search/stack and tagging.
 
 **The application was born out of the inability to control multiple investigations (or hundreds of endpoints) in a single pane of glass.**
@@ -42,7 +42,7 @@ To make it straight forward for users of nightHawk, we built an ISO with everyth
 1. Latest nightHawk source. <br>
 2. CentOS 7 Minimal with core libs needed to operate nightHawk. <br>
 3. Nginx and UWSGI setup in reverse proxy (socketed and optimized), SSL enabled. <br>
-4. Latest ElasticSearch/Kibana (Kibana is exposed and useable if desired). <br>
+4. Latest Elasticsearch/Kibana (Kibana is exposed and useable if desired). <br>
 5. Sysctrl for all core services. <br>
 6. Logging (rotated) for all core services. <br>
 7. Configurable system settings, a list of these can be found in the `/opt/nighthawk/etc/nightHawk.json` file. <br>
@@ -88,7 +88,7 @@ step_3: Upload 20160708085733.zip <br/><br/>
 
 Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, follow the instructions just above. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits, the .mans file is a zip, you can upload this directly. <br>
 
-Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into ElasticSearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
+Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into Elasticsearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
 
 
 _Please Note: Concurrent uploads are limited to 5 at a time and can be resource intensive, if you have an underpowered machine then restrict usage of this feature to 2-3._
@@ -97,7 +97,7 @@ _Please Note: Concurrent uploads are limited to 5 at a time and can be resource 
 
 You can click on any row in any table (in response view) to tag that data. Once tagged you can view the comments in the comments view.
 
-<b>ElasticSearch:</b>
+<b>Elasticsearch:</b>
 
 There are custom mappings (supplied in git root) and advisory comments on the following;
 
@@ -107,7 +107,7 @@ There are custom mappings (supplied in git root) and advisory comments on the fo
 
 2. <b>Sharding:</b>
 
-  ElasticSearch setups require tuning and proper design recognition. Sharding is important to understand because of the way we are linking parent/child documents. The child is ALWAYS routed to the parent, it cannot exist on its own. This means consideration must be given to how many shards are resident on the index. From what we understand, it may be wise to choose a setup that encorporates many nodes with single shards. To gain performance out of this kind of setup we are working on shard routed searches. 
+  Elasticsearch setups require tuning and proper design recognition. Sharding is important to understand because of the way we are linking parent/child documents. The child is ALWAYS routed to the parent, it cannot exist on its own. This means consideration must be given to how many shards are resident on the index. From what we understand, it may be wise to choose a setup that encorporates many nodes with single shards. To gain performance out of this kind of setup we are working on shard routed searches. 
 
   We are currently working on designing the best possible configuration for fast searching.
   <br>
@@ -120,7 +120,7 @@ There are custom mappings (supplied in git root) and advisory comments on the fo
 
 1. <b>DataTables mixed processing:</b>
    
-   There are several audit types ingested that are much to large to return all documents to the table. For example, URL history and Registry may return 15k doc's back to the DOM, rendering this would put strain on the client browser. To combat this, we are using ServerSide processing to page through results of certain audit types. This means you can also search over documents in audit type using ElasticSearch in the backend.
+   There are several audit types ingested that are much to large to return all documents to the table. For example, URL history and Registry may return 15k doc's back to the DOM, rendering this would put strain on the client browser. To combat this, we are using ServerSide processing to page through results of certain audit types. This means you can also search over documents in audit type using Elasticsearch in the backend.
 
 2. <b>Tagging:</b>
    
