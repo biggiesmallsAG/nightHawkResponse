@@ -86,7 +86,7 @@ step_1: Navigate to Sessions\AnalysisSessionX\Audits\<ComputerName>  where X is 
 step_2: Create zip of folder containing audit files i.e. 20160708085733 <br/>
 step_3: Upload 20160708085733.zip <br/><br/>
 
-<b>Use exisiting HX audit file (<u>HX collector</u>): <b><br>
+<b>Use exisiting HX audit file (<u>HX collector</u>): </b><br>
 <b>IMPORTANT</b>: FireEye HX audits are an extension ending in .mans. The audit from HX differs from the Redline collector because the .mans that it returns is actually a zip file. This means it can be uploaded directly unlike the Redline audit which you need to follow the instructions above.
 
 Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, follow the "Redline Collector" instructions just above. <br>
