@@ -77,16 +77,19 @@ If you need to SSH into the box, the login details are; `admin/nightHawk`. <br>
 
 If you want to change the IP address (reflected application wide); `/opt/nighthawk/bin/nighthawkctl set-ip <new_ipaddress>` <br>
 
-Redline Audit Collection Script can be found in the root of this repo.
+Redline Audit Collection Script can be found in the root of this repo. Use this when using the standalone redline collector as this will return the documents you need to populate nightHawk correctly.
 
-
-<b>Uploading:</b> <br/>
-Creating audit zip file to upload (Redline Collector) <br/>
+<b>Uploading:</b> <br><br>
+<b>IMPORTANT</b>:
+<b>Creating audit zip file to upload (<u>Redline stand alone collector</u>):</b> <br/>
 step_1: Navigate to Sessions\AnalysisSessionX\Audits\<ComputerName>  where X is analysis number which is 1 for most cases. <br/>
 step_2: Create zip of folder containing audit files i.e. 20160708085733 <br/>
 step_3: Upload 20160708085733.zip <br/><br/>
 
-Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, follow the instructions just above. You can also upload FireEye HX collections as they are ultimately the same structure as Redline audits, the .mans file is a zip, you can upload this directly. <br>
+<b>Use exisiting HX audit file (<u>HX collector</u>): <b><br>
+<b>IMPORTANT</b>: FireEye HX audits are an extension ending in .mans. The audit from HX differs from the Redline collector because the .mans that it returns is actually a zip file. This means it can be uploaded directly unlike the Redline audit which you need to follow the instructions above.
+
+Navigate to the "Upload" icon on the nav bar, select an audit .zip (or multiple), a case name (otherwise the system will supply you with one) and submit. If you have used our Redline audit script to build your collection, follow the "Redline Collector" instructions just above. <br>
 
 Once processed, the endpoint will appear in the "Current Investigations" tree node. Under the endpoint you will be presented with all audit types available for that endpoint. The upload feature of this web app spawns pOpen subprocesss that calls the GO application to parse the redline audit and push data into Elasticsearch. There are 2 options for uploading, one is sequential, the other is concurrent. 
 
