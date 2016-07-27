@@ -49,9 +49,24 @@ html,body {
     background-color: #2C2A2A !important;
 }
 
+table.stats td, th {
+    padding: 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 30px;
+}
+
 td {
 	cursor: pointer !important;
 }
+
+li {
+	list-style: none;
+}
+
+nav .navbar-nav { 
+	margin-left: 15% !important;
+} 
 
 .dataTables_filter input[type="search"] {
     border: 1px solid #4AAAC4 !important;
@@ -86,6 +101,29 @@ label {
 
 em {
 	background-color: rgba(247, 151, 61, 0.35);
+}
+
+.platform_stats {
+	font-size: 10pt;
+}
+
+.notifications {
+	background: #222; 
+	position: absolute; 
+	right: 20%; 
+	z-index: 2; 
+/*	border-left: 1px solid #4AAAC4; */
+	border-bottom: 1px solid #4AAAC4;
+	border-radius: 3px;
+	font-size: 10pt;
+}
+
+.comment {
+	color: #F7973D;
+}
+
+.alert {
+	color: red;
 }
 
 .treecol {
@@ -136,6 +174,10 @@ em {
 }
 
 .endpoint_name {
+	color: #F7973D;
+}
+
+.case_name {
 	color: #F7973D;
 }
 

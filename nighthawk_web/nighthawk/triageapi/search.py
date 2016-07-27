@@ -19,7 +19,7 @@ class QueryES(CommonAttributes):
 		query = s.query(t)
 
 		try:
-			r = requests.post(self.es_host + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()))
+			r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			ret = {"connection_error": e.args[0]}
 			return ret
@@ -44,7 +44,7 @@ class QueryES(CommonAttributes):
 		query = s.query(t)
 
 		try:
-			r = requests.post(self.es_host + self.es_port + self.index + self.type_hostname + '/_search', data=json.dumps(query.to_dict()))
+			r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_hostname + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			ret = {"connection_error": e.args[0]}
 			return ret
@@ -68,7 +68,7 @@ class QueryES(CommonAttributes):
 		query = s.query(t)
 
 		try:
-			r = requests.post(self.es_host + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()))
+			r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			ret = {"connection_error": e.args[0]}
 			return ret
@@ -96,7 +96,7 @@ class QueryES(CommonAttributes):
 			query = s.query(t).filter('term', AuditType__Generator=data_type)
 
 		try:
-			r = requests.post(self.es_host + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()))
+			r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			ret = {"connection_error": e.args[0]}
 			return ret
@@ -121,7 +121,7 @@ class QueryES(CommonAttributes):
 		query = s.query(t)
 
 		try:
-			r = requests.post(self.es_host + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()))
+			r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			ret = {"connection_error": e.args[0]}
 			return ret

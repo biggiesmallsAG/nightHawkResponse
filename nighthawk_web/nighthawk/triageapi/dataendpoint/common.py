@@ -6,15 +6,23 @@ class CommonAttributes():
 			self.conf_data = json.load(config)
 
 		self.name = 'nightHawk'
-		self.nighthawk_version = 'v1.0.2'
+		self.nighthawk_version = 'v1.0.3'
 		self.nighthawk_stack = 'Stack'
 		self.nighthawk_stack_ver = 'v0.6'
 		self.nighthawk_timeline = 'Timeline'
 		self.nighthawk_timeline_ver = 'v0.2'
 		self.global_search = 'Global Search'
 		self.global_search_version = "v0.2"
-		self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
-		self.es_port = ':9200'
+
+		if self.conf_data['elastic']['elastic_ssl']:
+			self.es_host = "https://{0}".format(self.conf_data['elastic']['elastic_server'])
+			self.es_port = str(self.conf_data['elastic']['elastic_port'])
+		else:
+			self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
+			self.es_port = str(self.conf_data['elastic']['elastic_port'])
+
+		self.elastic_user = self.conf_data['elastic']['elastic_user']
+		self.elastic_pass = self.conf_data['elastic']['elastic_pass']
 		self.index = '/investigations'
 		self.type_hostname = '/hostname'
 		self.type_audit_type = '/audit_type'

@@ -23,7 +23,7 @@ class Home(View, CommonAttributes):
 	def get(self, request):
 	    assert isinstance(request, HttpRequest)
 	    return render(request, 'base.html',
-	                  context_instance=RequestContext(request, {"name": self.name, "version": self.nighthawk_version}))
+	                  context_instance=RequestContext(request, {"name": self.name, "version": self.nighthawk_version, "user": request.user}))
 
 	@method_decorator(csrf_protect)
 	def post(self, request):

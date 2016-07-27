@@ -1,7 +1,7 @@
 <div class="w32reg" ng-controller="w32services as w32r">
     <h5>
      Services: <span class="endpoint_name">{{hostname}}.</span><br> 
-	 Case: <span class="endpoint_name">{{case}}</span>
+	 Case: <span class="case_name" id="{{case}}">{{case}}</span>
     </h5>
 
 	<table datatable dt-options="w32r.dtOptions" dt-columns="w32r.dtColumns" class="table table-striped table-bordered"></table>

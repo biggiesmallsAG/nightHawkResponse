@@ -25,6 +25,6 @@ class UpdateDoc(View):
 		row_data = json.loads(request.body)
 		u = UpdateES()
 
-		data = u.UpdateDoc(row_data)
+		data = u.UpdateDoc(row_data, request.user)
 		
 		return JsonResponse(data, safe=False)

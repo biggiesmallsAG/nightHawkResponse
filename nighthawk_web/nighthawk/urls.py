@@ -1,5 +1,6 @@
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 
 from nighthawk.views.home import Home, HomeSearch
 from nighthawk.views.update_doc import UpdateDoc
@@ -7,6 +8,7 @@ from nighthawk.views.upload import Upload
 from nighthawk.views.comment import Comment
 from nighthawk.views.stack_framework import StackView, StackResponse
 from nighthawk.views.timeline import TimeLine, TimeLineResponse
+from nighthawk.views.platform_stats import PlatformStats
 
 from nighthawk.views.datatypes.w32registryraw import W32Registry
 from nighthawk.views.datatypes.w32services import W32Services
@@ -48,23 +50,28 @@ data_types = patterns('',
     url(r'^w32processes-tree_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32ProcessesTree.as_view(), name="w32ptree"),
 	)
 
+context_urls = patterns('',
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^errorpage/$', login_required(Home().Home404), name='home_404'),
+    url(r'^update_doc/$', login_required(UpdateDoc.as_view()), name="update_doc"),
+    url(r'^comments/get_comment_doc/dialog$', login_required(Comment().DocDiaglog), name="comments_doc_dialog"),
+    url(r'^comments/get_comment_doc/$', login_required(Comment().CommentDoc), name="comments_doc"),
+    url(r'^comments/$', login_required(Comment.as_view()), name="comments"),
+    url(r'^upload/$', login_required(Upload.as_view()), name="upload"),
+    url(r'^home/load_cases$', login_required(Home().LoadCaseTree), name="load_cases"),
+    url(r'^home/load_cases_audit$', login_required(Home().LoadCaseTreeAudit), name="load_cases_audit"),
+    url(r'^home/load_stack$', login_required(StackView().LoadStackTree), name="load_stack"),
+    url(r'^home/load_timeline$', login_required(TimeLine().LoadTLTree), name="load_timeline"),
+    url(r'^home/main_search/$', login_required(HomeSearch.as_view()), name="home_search"),
+    url(r'^stack_response/$', login_required(StackResponse.as_view()), name="stack_response"),
+    url(r'^stack/$', login_required(StackView.as_view()), name="stack_framework"),
+    url(r'^timeline_response/$', login_required(TimeLineResponse.as_view()), name="timeline_response"),
+    url(r'^timeline/$', login_required(TimeLine.as_view()), name="timeline"),
+    url(r'^platform_stats/$', login_required(PlatformStats.as_view()), name="platform_stats"),    
+    url(r'$', login_required(Home.as_view()), name="home"),
+    )
+
 urlpatterns = [
     url(r'^', include(data_types)),
-    url(r'^admin/$', admin.site.urls),
-    url(r'^errorpage/$', Home().Home404, name='home_404'),
-    url(r'^update_doc/$', UpdateDoc.as_view(), name="update_doc"),
-	url(r'^comments/get_comment_doc/dialog$', Comment().DocDiaglog, name="comments_doc_dialog"),
-    url(r'^comments/get_comment_doc/$', Comment().CommentDoc, name="comments_doc"),
-    url(r'^comments/$', Comment.as_view(), name="comments"),
-    url(r'^upload/$', Upload.as_view(), name="upload"),
-    url(r'^home/load_cases$', Home().LoadCaseTree, name="load_cases"),
-    url(r'^home/load_cases_audit$', Home().LoadCaseTreeAudit, name="load_cases_audit"),
-    url(r'^home/load_stack$', StackView().LoadStackTree, name="load_stack"),
-    url(r'^home/load_timeline$', TimeLine().LoadTLTree, name="load_timeline"),
-    url(r'^home/main_search/$', HomeSearch.as_view(), name="home_search"),
-    url(r'^stack_response/$', StackResponse.as_view(), name="stack_response"),
-    url(r'^stack/$', StackView.as_view(), name="stack_framework"),
-    url(r'^timeline_response/$', TimeLineResponse.as_view(), name="timeline_response"),
-    url(r'^timeline/$', TimeLine.as_view(), name="timeline"),
-    url(r'$', Home.as_view(), name="home"),
+    url(r'^', include(context_urls))
 ]

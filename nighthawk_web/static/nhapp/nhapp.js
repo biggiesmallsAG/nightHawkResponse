@@ -33,9 +33,19 @@ app = angular
 
 		$routeProvider.
 
+		when('/admin', {
+			templateUrl: function() {
+				return '/admin/'
+			}
+		}).
+
 		when('/UploadFile', {
 			templateUrl: '/upload/',
 			controller: 'uploadFile'
+		}).
+
+		when('/PlatformStats', {
+			templateUrl: '/platform_stats/'
 		}).
 
 		when('/w32system/:casename/:hostname', {

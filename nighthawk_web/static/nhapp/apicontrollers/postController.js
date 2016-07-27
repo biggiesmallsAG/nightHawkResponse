@@ -47,7 +47,6 @@
 	.controller('confirmController', ['$scope', function($scope){
 
 		$scope.comment = '';
-		$scope.analyst = '';
 		$scope.date = '';
 		$scope.falsepositive = false;
 		$scope.tag = '';
@@ -55,7 +54,6 @@
 		$scope.submitUpdate = function() {
 			return {
 				comment: $scope.comment,
-				analyst: $scope.analyst,
 				date: $scope.date,
 				falsepositive: $scope.falsepositive,
 				tag: $scope.tag, 
@@ -1491,7 +1489,7 @@
 	    .withColReorder()
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
-	    .withOption('order', [2, 'desc'])
+	    .withOption('order', [3, 'desc'])
 	    .withOption('scrollX', '100%')
 	    .withOption('scrollY', '65vh')
 	    .withOption('scrollCollapse', true);

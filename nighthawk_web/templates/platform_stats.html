@@ -1,0 +1,180 @@
+<body>
+	<div class="platform_stats">
+		<div class="col-md-3">
+			<div class="cpu_stats">
+
+					<div style="color: #F7973D"><b>CPU:</b></div>
+
+				<table class="stats table-striped">
+					<thead>
+						<tr>
+							<th>CPU:</th>
+							<th>User:</th>
+							<th>Sys:</th>
+							<th>Idle:</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				<!-- </ul> -->
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="memstats_stats">
+					<div style="color: #F7973D"><b>Memory:</b></div>
+				<table class="stats table-striped">
+					<thead>
+						<tr>
+							<th>Available:</th>
+							<th>Total:</th>
+							<th>Used:</th>
+							<th>Free:</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="disk_stats">
+					<div style="color: #F7973D"><b>Disk:</b></div>
+				<table class="stats table-striped">
+					<thead>
+						<tr>
+							<th>Device:</th>
+							<th>Mnt:</th>
+							<th>Total:</th>
+							<th>Free:</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="processes">
+					<div style="color: #F7973D"><b>Services:</b></div>
+				<table class="stats table-striped">
+					<thead>
+						<tr>
+							<th>Name:</th>
+							<th>Cmd:</th>
+							<th>Status:</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script>
+	function WebSocketTest()
+{
+  if ("WebSocket" in window)
+  {
+   console.log("WebSocket is supported by your Browser!");
+
+           // Let us open a web socket
+           var ws = new WebSocket("ws://" + window.location.host + "/ws/platform?subscribe-broadcast");
+           var heartbeat_msg = '--heartbeat--', heartbeat_interval = null, missed_heartbeats = 0;
+
+           ws.onopen = function()
+           {
+              // Web Socket is connected, send data using send()
+              //ws.send("hello2");
+              console.log("[!] WebSocket handshake complete, inside secure socket");
+              if (heartbeat_interval === null) {
+                missed_heartbeats = 0;
+                heartbeat_interval = setInterval(function() {
+                    try {
+                        missed_heartbeats++;
+                        if (missed_heartbeats >= 3)
+                            throw new Error("Too many missed heartbeats.");
+                        ws.send(heartbeat_msg);
+                        //console.log('[!] Sent heartbeat: '+heartbeat_msg)
+                    } catch(e) {
+                        clearInterval(heartbeat_interval);
+                        heartbeat_interval = null;
+                        console.warn("Closing connection. Reason: " + e.message);
+                        ws.close();
+                    }
+                }, 5000);
+              }
+          };
+
+          ws.onmessage = function (evt) 
+          { 
+
+             var received_msg = evt.data;
+             if (evt.data === heartbeat_msg) {
+               missed_heartbeats = 0;
+               return;
+           }
+
+        var stats = JSON.parse(received_msg)
+
+
+       	$('.memstats_stats table.stats tbody').html(
+        		"<tr><td>" + stats.mem.available + "</td>" + 
+        		"<td>" + stats.mem.total + "</td>" + 
+        		"<td>" + stats.mem.used + "</td>" + 
+        		"<td>" + stats.mem.free + "</td></tr>"
+       		) 	
+
+        // $('.disk_stats table.stats tbody tr').html('');
+
+        stats.disk.forEach(function (value, index, array){
+	        $('.disk_stats table.stats tbody').html(
+        		"<tr><td>" + stats.disk[index].device + "</td>" + 
+        		"<td>" + stats.disk[index].mountpoint + "</td>" + 
+        		"<td>" + stats.disk[index].usage.total + "</td>" + 
+        		"<td>" + stats.disk[index].usage.free + "</td></tr>")	
+        })
+
+        $('.cpu_stats table.stats tbody tr').html('');
+
+        stats.cpu.forEach(function (value, index, array){
+        	$('.cpu_stats table.stats tbody').append(
+        		"<tr><td>" + index + "</td>" + 
+        		"<td>" + value[0] + "</td>" + 
+        		"<td>" + value[2] + "</td>" + 
+        		"<td>" + value[3] + "</td></tr>"
+        		)
+        });
+
+        $('.processes table.stats tbody tr').html('');
+
+        stats.processes.forEach(function (value, index, array) {
+           	$('.processes table.stats tbody').append(
+	        		"<tr><td>" + stats.processes[index].service.name + "</td>" + 
+	        		"<td>" + stats.processes[index].service.cmdline[1] + "</td>" + 
+	        		"<td>" + stats.processes[index].service.status + "</td></tr>"
+           		) 	
+        })
+        
+    };
+    ws.onerror = function(evt) {
+       console.log('Error: '+evt);
+   }
+   ws.onclose = function(evt)
+   { 
+              // websocket is closed.
+              console.log("Connection is closed: "+evt.code); 
+          };
+      }
+
+      else
+      {
+           // The browser doesn't support WebSocket
+           console.log("WebSocket NOT supported by your Browser!");
+       }
+   }
+
+   WebSocketTest(); 
+</script>

@@ -8,7 +8,7 @@ class UploadForm(forms.Form):
 		('1', 'No')
 		)
 
-	upload_field = forms.FileField(label="Select .mans file", widget=forms.ClearableFileInput(attrs={'multiple': True}))
+	upload_field = forms.FileField(label="Select .zip file", widget=forms.ClearableFileInput(attrs={'multiple': True}))
 	case_number = forms.CharField(label="Case Number", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 20%','placeholder': 'ex. XXX-123'}))
 	concurrent = forms.ChoiceField(label="Concurrent (Multi Processing)?", choices=CONCURRENT_CHOICES)
 
@@ -27,7 +27,6 @@ class UpdateDoc(forms.Form):
 		)
 	form_name = "UpdateDocForm"
 	update_comment = forms.CharField(label="Comment", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 70%', 'ng-model': 'comment', 'ng-required': 'true'}))
-	update_analyst = forms.CharField(label="Analyst", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 50%', 'ng-model': 'analyst', 'ng-required': 'true'}))
 	update_date = forms.DateField(label="Date", widget=forms.TextInput(attrs={'class': 'form-control datepicker', 'style': 'width: 50%', 'ng-model': 'date', 'ng-required': 'true'}))
 	update_fp = forms.ChoiceField(label="False Positive", choices=LENGTH_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 30%', 'ng-model': 'falsepositive', 'ng-required': 'true'}))
 	update_tag = forms.ChoiceField(label="Tag", choices=TAG_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 30%', 'ng-model': 'tag', 'ng-required': 'true'}))
