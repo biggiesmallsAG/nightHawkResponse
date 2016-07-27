@@ -2,8 +2,6 @@
  *@package  main
  *@file     nightHawk.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.6
- *@updated  2016-06-25
  *
  *@description  nighHawk main execution file
  */
@@ -41,8 +39,7 @@ type RuntimeOptions struct {
 
 
 func ExitOnError(errmsg string, errcode int) {
-    fmt.Printf("%s - nightHawkTriage - ERROR - %s\n", time.Now().UTC(), errmsg)
-    os.Exit(errcode)
+    nightHawk.ExitOnError(errmsg, errcode)
 }
 
 func ConsoleMessage(level string, message string, verbose bool) {
@@ -97,6 +94,11 @@ func main() {
     if runopt.Filename == "" {
         ExitOnError("Triage file must be supplied", nightHawk.ERROR_NO_TRIAGE_FILE)
     }
+
+    if runopt.CaseName == runopt.ComputerName {
+        ExitOnError("CaseName and ComputerName can not be same", nightHawk.ERROR_SAME_CASE_AND_COMPUTERNAME)
+    }
+
     // __end_of_commandline_parsing
 
     var caseinfo = nightHawk.CaseInformation{CaseName: runopt.CaseName, CaseDate: runopt.CaseDate, CaseAnalyst: runopt.CaseAnalyst}
@@ -151,7 +153,7 @@ func LoadSingleAuditFile(caseinfo nightHawk.CaseInformation, computername string
 
     SzRlRecord := len(rlRecords)
 
-    cmsg := fmt.Sprintf("Processing %s::%s => %s : %d records\n", computername, auditname, auditfile, SzRlRecord)
+    cmsg := fmt.Sprintf("Processing %s::%s => %s : %d records", computername, auditname, auditfile, SzRlRecord)
     ConsoleMessage("INFO", cmsg, nightHawk.VERBOSE)
 
 
@@ -185,7 +187,7 @@ func LoadSingleAuditFile(caseinfo nightHawk.CaseInformation, computername string
 
     // Processing ProcessMemory Tree
     if auditname == "w32processes-memory" {
-        msg := fmt.Sprintf("Process %s::%s\n", auditname,auditfile)
+        msg := fmt.Sprintf("Process %s::%s", auditname,auditfile)
         ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
         jsonData := nightHawk.CreateProcessTree(caseinfo, computername, filename)
         esData := "{\"index\":{\"_type\":\"audit_type\", \"_parent\":\"" + computername + "\"}}" + "\n" + string(jsonData) + "\n"
@@ -239,7 +241,13 @@ func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, d
     if computername == "" {
         ExitOnError("Failed to get Computer Name from Audits", nightHawk.ERROR_READING_COMPUTERNAME)
     }
-    cmsg := fmt.Sprintf("Processing Redline audits for %s\n", computername)
+
+    // Check if Casename is same as computername
+    if caseinfo.CaseName == computername {
+        ExitOnError("CaseName and ComputerName can not be same", nightHawk.ERROR_SAME_CASE_AND_COMPUTERNAME)
+    }
+
+    cmsg := fmt.Sprintf("Processing Redline audits for %s", computername)
     ConsoleMessage("INFO", cmsg, nightHawk.VERBOSE)
 
     var rlwg sync.WaitGroup
@@ -289,7 +297,8 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     // Check if supplied path is directory
     fd,err := os.Open(filename)
     if err != nil {
-        panic(err.Error())
+        ExitOnError("Cannot open directory with Redline audit", nightHawk.ERROR_ACCESS_REDLINE_DIRECTORY)
+        //panic(err.Error())
     }
     defer fd.Close()
 
@@ -319,7 +328,12 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
         ExitOnError("Failed to get Computer Name from Audits", nightHawk.ERROR_READING_COMPUTERNAME)
     }
 
-    cmsg := fmt.Sprintf("Processing Redline audits for %s\n", computername)
+    // Check if Casename is same as computername
+    if caseinfo.CaseName == computername {
+        ExitOnError("CaseName and ComputerName can not be same", nightHawk.ERROR_SAME_CASE_AND_COMPUTERNAME)
+    }
+
+    cmsg := fmt.Sprintf("Processing Redline audits for %s", computername)
     ConsoleMessage("INFO", cmsg, nightHawk.VERBOSE)
 
     var rlwg sync.WaitGroup
@@ -345,7 +359,8 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     cmd := exec.Command("unzip", "-q", filename, "-d", targetDir)
     err := cmd.Run()
     if err != nil {
-        panic(err.Error())
+        ExitOnError("Error encountered extracting Redline file", nightHawk.ERROR_EXTRACTING_REDLINE_ARCHIVE)
+        //panic(err.Error())
     }
     return targetDir
  }
@@ -378,7 +393,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     // This block of code is used for debugging if requried
     // and timing test uploading each bulk data
     if nightHawk.VERBOSE && nightHawk.VERBOSE_LEVEL == 7 {
-        cmsg := fmt.Sprintf("Initiating %s::%s bulk upload start=>%d end=>%d\n", computername, auditname, start, stop)
+        cmsg := fmt.Sprintf("Initiating %s::%s bulk upload start=>%d end=>%d", computername, auditname, start, stop)
         ConsoleMessage("DEBUG", cmsg, nightHawk.VERBOSE)
     }
 
@@ -391,7 +406,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     // This block of code is used for debugging
     if nightHawk.VERBOSE && nightHawk.VERBOSE_LEVEL == 7 {
-        cmsg := fmt.Sprintf("Stopping %s::%s bulk upload start=>%d end=>%d\n", computername, auditname, start, stop)
+        cmsg := fmt.Sprintf("Stopping %s::%s bulk upload start=>%d end=>%d", computername, auditname, start, stop)
         ConsoleMessage("DEBUG", cmsg, nightHawk.VERBOSE)
     }
  }
@@ -406,7 +421,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     
     SzRlRecord := len(rlRecords)
 
-    msg := fmt.Sprintf("Process %s::%s with %d records\n", auditfile.AuditGenerator, auditfile.AuditFile, SzRlRecord)
+    msg := fmt.Sprintf("Process %s::%s with %d records", auditfile.AuditGenerator, auditfile.AuditFile, SzRlRecord)
     ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
 
     if SzRlRecord > nightHawk.BULKPOST_SIZE {
@@ -436,7 +451,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     // Processing ProcessMemory Tree
     if auditfile.AuditGenerator == "w32processes-memory" {
-        msg = fmt.Sprintf("Process %s::%s\n", nightHawk.PTGenerator, auditfile.AuditFile)
+        msg = fmt.Sprintf("Process %s::%s", nightHawk.PTGenerator, auditfile.AuditFile)
         ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
         jsonData := nightHawk.CreateProcessTree(caseinfo, computername, filepath.Join(targetDir,auditfile.AuditFile))
         esData := "{\"index\":{\"_type\":\"audit_type\", \"_parent\":\"" + computername + "\"}}" + "\n" + string(jsonData) + "\n"

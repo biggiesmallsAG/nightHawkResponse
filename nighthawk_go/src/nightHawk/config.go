@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     config.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.2
- *@updated  2016-07-8
  *
  *@description  nightHawk Response Configuration settings
  */
@@ -16,9 +14,10 @@
     "path/filepath"
     "io/ioutil"
     "encoding/json"
+    "encoding/base64"
  )
 
- const VERSION = "0.0.1"
+ const VERSION = "1.0.3"
 
 
  // Directory Settings for nightHawk 
@@ -56,6 +55,8 @@
  var ELASTIC_INDEX = ""
  var ELASTIC_SSL = false
  var ELASTIC_AUTHCODE = ""
+ var ELASTIC_USER = ""
+ var ELASTIC_PASS = ""
 
 
 
@@ -74,7 +75,9 @@ type nHElastic struct {
     ElasticHost         string `json:"elastic_server"`
     ElasticPort         int `json:"elastic_port"`
     ElasticIndex        string `json:"elastic_index"`
-    ElasticSsl          int `json:"elastic_ssl"`
+    ElasticSsl          bool `json:"elastic_ssl"`
+    ElasticUser         string `json:"elastic_user"`
+    ElasticPass         string `json:"elastic_pass"`
     Authcode            string `json:"authcode"`
 }
 
@@ -113,11 +116,15 @@ func LoadConfigFile(configfile string) bool {
     ELASTICPORT = nhconfig.Elastic.ElasticPort
     ELASTIC_INDEX = nhconfig.Elastic.ElasticIndex
     
-    if nhconfig.Elastic.ElasticSsl == 1 {
+    if nhconfig.Elastic.ElasticSsl {
         ELASTIC_SSL = true
     }
     
-    ELASTIC_AUTHCODE = nhconfig.Elastic.Authcode 
+    // added in ver1.0.3
+    ELASTIC_USER = nhconfig.Elastic.ElasticUser
+    ELASTIC_PASS = nhconfig.Elastic.ElasticPass 
+    //ELASTIC_AUTHCODE = nhconfig.Elastic.Authcode 
+    ELASTIC_AUTHCODE = base64.StdEncoding.EncodeToString([]byte(ELASTIC_USER+":"+ELASTIC_PASS))
 
     return true
 }

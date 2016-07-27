@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     manifest.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-17
  *
  *@description  This file contains structure and functions to process Redline audit manifest file
  */

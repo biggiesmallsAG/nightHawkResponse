@@ -1,11 +1,11 @@
 package winevt
 
 import (
-	"fmt"
-	"testing"
-	
-	"io/ioutil"
-	"encoding/xml"
+    "fmt"
+    "testing"
+    
+    "io/ioutil"
+    "encoding/xml"
     "encoding/json"
     
     //"encoding/hex"
@@ -60,7 +60,7 @@ func (eli *EventLogItem)PrintEventLogItem() {
 
 
 func TestHelloWorld(t *testing.T) {
-	var pidHex string = "0020"
+    var pidHex string = "0020"
     //pid,_ := hex.DecodeString(pidHex)
     pid,_ := strconv.ParseInt(pidHex, 16, 64)
     fmt.Println(pidHex, pid)
@@ -68,20 +68,20 @@ func TestHelloWorld(t *testing.T) {
 
 
 func TestEventLogParsing(t *testing.T) {
-	filename := "/Users/rmaskey/Downloads/RedlineAudit/w32eventlogs.5nvCp4kJTQadD3abegDuEJ"
-	xmlData,_ := ioutil.ReadFile(filename)
+    filename := "/Users/rmaskey/Downloads/RedlineAudit/w32eventlogs.5nvCp4kJTQadD3abegDuEJ"
+    xmlData,_ := ioutil.ReadFile(filename)
 
-	var rl RlEventLog
-	xml.Unmarshal(xmlData, &rl)
+    var rl RlEventLog
+    xml.Unmarshal(xmlData, &rl)
 
-	for _,el := range rl.EventList {
+    for _,el := range rl.EventList {
         el.MessageDetail = ProcessEventItem(el.Log, el.EID, el.Message)
         //if el.EID == 4624  || el.EID == 4648 || el.EID == 4688 {
-        //if el.EID == 4624 {
+        if el.EID == 4625 {
             //el.PrintEventLogItem()    
             j,_ := json.MarshalIndent(el,""," ")
             fmt.Println(string(j))
-        //}
+        }
         
-	}
+    }
 }

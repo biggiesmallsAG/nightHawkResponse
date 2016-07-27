@@ -2,8 +2,6 @@
  * @package     nightHawk
  * @file        elastic.go
  * @author      Daniel Eden, 0xredskull
- * @version     0.0.3
- * @updated     2016-07-08
  */
 
 package nightHawk

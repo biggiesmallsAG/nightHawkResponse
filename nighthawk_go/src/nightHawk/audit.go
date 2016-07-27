@@ -2,8 +2,6 @@
  * @package     nightHawk
  * @file        audit.go
  * @author      roshan maskey <roshanmaskey@gmail.com>
- * @version     0.0.1
- * @updated     2016-07-16
  *
  * @description 
  *              
@@ -359,6 +357,22 @@ func LoadAuditData(ret OutputDataType, computerName string, caseInfo CaseInforma
             rr.Record = ml 
 
             //jd,_ := json.MarshalIndent(rr, "", " ")
+            jd,_ := json.Marshal(rr)
+            rlRecord = append(rlRecord, jd)
+        }
+
+     case RL_EVENTLOGS:
+        var rl RlEventLog 
+        rl.ParseAuditData(computerName, caseInfo, auditInfo, xmlData)
+        intf = rl
+
+        for _,ml := range rl.EventList {
+            var rr RlRecord
+            rr.ComputerName = rl.ComputerName
+            rr.CaseInfo = rl.CaseInfo
+            rr.AuditType = rl.AuditType
+            rr.Record = ml 
+
             jd,_ := json.Marshal(rr)
             rlRecord = append(rlRecord, jd)
         }

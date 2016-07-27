@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     pstree.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-26
  *
  *@description  nightHawk Response ProcessTree
  */

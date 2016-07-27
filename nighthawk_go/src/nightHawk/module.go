@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     module.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-15
  *
  *@description  nightHawk Response module
  */
@@ -17,6 +15,9 @@ import (
     "encoding/xml"
     "fmt"
     "strings"
+
+    "nightHawk/modules/winevt"
+
 )
 
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -459,6 +460,29 @@ func (rl *RlRawFile) ParseAuditData(computername string, caseInfo CaseInformatio
 /* __end_of_w32rawfiles__ */
 
 
+// __start_of_w32eventlogs__ //
+
+func (rl *RlEventLog) ParseAuditData(computername string, caseInfo CaseInformation, auditInfo RlAuditType, xmlData []byte) {
+    rl.ComputerName = computername
+    rl.CaseInfo = caseInfo
+    rl.AuditType = auditInfo
+    xml.Unmarshal(xmlData, &rl)
+
+    // Fixing empty timestamp
+    for i := range rl.EventList {
+        if rl.EventList[i].GenTime == "" {
+            rl.EventList[i].GenTime = FixEmptyTimestamp()
+        }
+
+        if rl.EventList[i].WriteTime == "" {
+            rl.EventList[i].WriteTime = FixEmptyTimestamp()
+        }
+
+        rl.EventList[i].MessageDetail = winevt.ProcessEventItem(rl.EventList[i].Log, rl.EventList[i].EID, rl.EventList[i].Message)
+
+    }
+
+}
 
 
 

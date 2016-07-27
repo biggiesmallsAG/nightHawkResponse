@@ -2,15 +2,12 @@
  *@package  nightHawk
  *@file     nhtype.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-15
  *
  *@description  nightHawk Response Reline DataType in Gopher
  */
 
 
  package nightHawk
-
 
 
 type DataFileType int 
@@ -130,7 +127,7 @@ type FileItem struct {
     NHScore         int
     VTResults       []VirusTotal 
     Tag             string 
-    NhComment       NHComment `json:"Comment"`
+    NhComment       []NHComment `json:"Comment"`
 }
 
 type RegistryItem struct {
@@ -149,7 +146,7 @@ type RegistryItem struct {
     IsKnownKey      string
     NHScore         int
     Tag             string 
-    NhComment       NHComment `json:"Comment"`
+    NhComment       []NHComment `json:"Comment"`
 }
 
 type PersistenceItem struct {
@@ -172,7 +169,7 @@ type PersistenceItem struct {
     IsGoodPersistence   string 
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlPersistence struct {
@@ -202,10 +199,10 @@ type ServiceItem struct {
     Pid                         int `xml:"pid"`
     Type                        string `xml:"type"`
     IsGoodService               string
-    NHScore                 int
+    NHScore                     int
     VTResults                   []VirusTotal
     Tag                         string 
-    NhComment                   NHComment `json:"Comment"`
+    NhComment                   []NHComment `json:"Comment"`
 }
 
 type RlService struct {
@@ -230,7 +227,7 @@ type PortItem struct {
     IsGoodPort          string
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlPort struct {
@@ -259,7 +256,7 @@ type UserItem struct {
     PasswordRequired    bool `xml:"passwordrequired"`
     UserPasswordAge     string `xml:"userpasswordage"`
     Tag                 string 
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlUserAccount struct {
@@ -310,7 +307,7 @@ type TaskItem struct {
     TriggerList         []TaskTrigger `xml:"Trigger"`
     IsGoodTask          string 
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlTask struct {
@@ -332,7 +329,7 @@ type Handle struct {
     IsGoodHandle        string
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type MemorySection struct {
@@ -344,7 +341,7 @@ type MemorySection struct {
     IsGoodSection       string
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type ProcessItem struct {
@@ -366,7 +363,7 @@ type ProcessItem struct {
     IsGoodProcess       string
     NHScore             int
     Tag                 string 
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlProcessMemory struct {
@@ -396,7 +393,7 @@ type PrefetchItem struct {
     IsGoodPrefetch      string
     NHScore             int
     Tag                 string 
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlPrefetch struct {
@@ -492,7 +489,7 @@ type PartitionItem struct {
     PartitionLength     int
     PartitionType       string
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type DiskItem struct {
@@ -501,7 +498,7 @@ type DiskItem struct {
     DiskSize            string
     PartitionList       []PartitionItem `xml:"PartitionList>Partition"`
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlDisk struct {
@@ -513,22 +510,22 @@ type RlDisk struct {
 
 /* __start_of_w32volumes__ */
 type VolumeItem struct {
-    JobCreated          string `xml:"created,attr"`
-    VolumeName          string 
-    DevicePath          string
-    Type                string
-    Name                string
-    SerialNumber        string
-    FileSystemFlags     string
-    FileSystemName      string
-    ActualAvailableAllocationUnits int
-    TotalAllocationUnits int
-    BytesPerSector      int
-    SectorsPerAllocationUnit int
-    CreationTime        string
-    IsMounted           bool
-    Tag                 string
-    NhComment               NHComment `json:"Comment"`
+    JobCreated                      string `xml:"created,attr"`
+    VolumeName                      string 
+    DevicePath                      string
+    Type                            string
+    Name                            string
+    SerialNumber                    string
+    FileSystemFlags                 string
+    FileSystemName                  string
+    ActualAvailableAllocationUnits  int
+    TotalAllocationUnits            int
+    BytesPerSector                  int
+    SectorsPerAllocationUnit        int
+    CreationTime                    string
+    IsMounted                       bool
+    Tag                             string
+    NhComment                       []NHComment `json:"Comment"`
 }
 
 type RlVolume struct {
@@ -559,7 +556,7 @@ type UrlHistoryItem struct {
     IsNewDomain         string
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlUrlHistory struct {
@@ -594,7 +591,7 @@ type FileDownloadHistoryItem struct {
     IsGoodFile          string
     NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlFileDownloadHistory struct {
@@ -622,7 +619,7 @@ type DnsEntryItem struct {
     IsGoodEntry         string
     NHScore             int
     Tag                 string 
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlNetworkDns struct {
@@ -665,9 +662,9 @@ type RouteEntryItem struct {
     IsPublished         bool
     IsImortal           bool
     Origin              string
-    NHScore         int
+    NHScore             int
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlNetworkRoute struct {
@@ -694,7 +691,7 @@ type ArpEntryItem struct {
     LastUnreachable     string `xml:"LastUnreachable,omitempty"`
     NHScore             int 
     Tag                 string
-    NhComment           NHComment `json:"Comment"`
+    NhComment           []NHComment `json:"Comment"`
 }
 
 type RlNetworkArp struct {
@@ -743,7 +740,7 @@ type RawFileItem struct {
     NHScore         int
     VTResults       []VirusTotal 
     Tag             string 
-    NhComment       NHComment `json:"Comment"`
+    NhComment       []NHComment `json:"Comment"`
 }
 
 type RlRawFile struct {
@@ -751,4 +748,34 @@ type RlRawFile struct {
     CaseInfo            CaseInformation
     AuditType           RlAuditType
     FileList            []RawFileItem `xml:"FileItem"`
+}
+
+
+/* __start_of_w32eventlogs__ */
+
+
+type EventLogItem struct {
+    Log             string  `xml:"log"`
+    Source          string  `xml:"source"`
+    Index           int     `xml:"index"`
+    EID             int     `xml:"EID"`
+    Type            string  `xml:"type"`
+    GenTime         string  `xml:"genTime"`   
+    WriteTime       string  `xml:"writeTime"`
+    Machine         string  `xml:"machine"`
+    ExecutionProcessId int  `xml:"ExecutionProcessId"`
+    ExecutionThreadId int   `xml:"ExecutionThreadId"`
+    Message         string  `xml:"message"`
+    MessageDetail   interface{}
+    Category        string  `xml:"category"` 
+    NHScore         int 
+    Tag             string 
+    NhComment       []NHComment `json:"Comment"`
+}
+
+type RlEventLog struct {
+    ComputerName        string 
+    CaseInfo            CaseInformation
+    AuditType           RlAuditType
+    EventList           []EventLogItem  `xml:"EventLogItem"`
 }

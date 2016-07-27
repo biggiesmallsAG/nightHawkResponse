@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     common.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-15
  *
  *@description  nightHawk Response common
  */
@@ -42,13 +40,14 @@
     RL_HIVELIST         = "w32hivelist"
     RL_SYSTEMRESTORE    = "w32systemrestore"
     RL_KERNELHOOK       = "w32kernel-hookdetection"
+    RL_EVENTLOGS        = "w32eventlogs"
  )
 
 
  func ShowVersion () {
-    fmt.Printf("\tnightHawk ver %s\n", VERSION)
+    fmt.Printf("\tnightHawk Response ver %s\n", VERSION)
     fmt.Printf(">> Triage processor for Mandiant Redline\n")
-    fmt.Printf(">> by Daniel Eden and Roshan Maskey\n")
+    fmt.Printf(">> by Roshan Maskey and Daniel Eden\n")
  }
 
 
@@ -59,9 +58,14 @@
 
  func ConsoleMessage(level string, message string, verbose bool) {
     if verbose {
-        fmt.Printf("%s - nightHawk - %s - %s\n", time.Now().UTC().Format(Layout), level, message)
+        fmt.Printf("%s - %s - %s\n", time.Now().UTC().Format(Layout), level, message)
     }
  }
+
+func ExitOnError(errmsg string, errcode int) {
+    ConsoleMessage("ERROR", errmsg, true)
+    os.Exit(errcode)
+}
 
  func GenerateCaseName() string {
     part_a := strings.ToUpper(NewSessionDir(5))
@@ -87,7 +91,8 @@
     /// Checking if the supplied path is directory
     fd,err := os.Open(filename)
     if err != nil {
-        panic(err.Error())
+        ConsoleMessage("ERROR", "Failed to read "+filename, true)
+        os.Exit(ERROR_READING_TRIAGE_FILE)
     }
     defer fd.Close()
     finfo,_ := fd.Stat()

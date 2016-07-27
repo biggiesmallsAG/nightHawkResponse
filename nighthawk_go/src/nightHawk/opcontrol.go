@@ -2,8 +2,6 @@
  *@package  nightHawk
  *@file     opcontrol.go
  *@author   roshan maskey <roshanmaskey@gmail.com>
- *@version  0.0.1
- *@updated  2016-06-24
  *
  *@description  Control Output flow
  */
