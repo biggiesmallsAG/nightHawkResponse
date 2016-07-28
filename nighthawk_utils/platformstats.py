@@ -1,3 +1,7 @@
+## Platform stats helper by Daniel Eden
+## 26/07/2016 Update 
+## daniel.eden@gmail.com
+
 import psutil
 import time
 import json
