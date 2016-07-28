@@ -1,7 +1,7 @@
 /*
  *@package  main
  *@file     nightHawk.go
- *@author   roshan maskey <roshanmaskey@gmail.com>
+ *@author   roshan maskey <roshanmaskey@gmail.com>, Daniel eden <daniel.eden@gmail.com>
  *
  *@description  nighHawk main execution file
  */
@@ -35,6 +35,7 @@ type RuntimeOptions struct {
     Debug           string
     Version         bool
     Verbose         bool
+    Redis           bool
 }
 
 
@@ -60,6 +61,7 @@ func main() {
     flag.StringVar(&runopt.CaseAnalyst, "a", "", "Case analyst working with collected triage")
     flag.StringVar(&runopt.Filename, "f", "", "File containing triage file")
     flag.StringVar(&runopt.Debug, "d", "none", "Specify debug generator to be debugged. For list of available generator use \"-d list\" ")
+    flag.BoolVar(&runopt.Redis, "R", false, "Send stdout to Redis cache for websocket broadcast")
     flag.BoolVar(&runopt.Version, "V", false, "Display version information")
     flag.BoolVar(&runopt.Verbose, "v", false, "Show verbose message on console")
 
@@ -95,7 +97,12 @@ func main() {
         ExitOnError("Triage file must be supplied", nightHawk.ERROR_NO_TRIAGE_FILE)
     }
 
+    if runopt.Redis {
+        nightHawk.REDIS_PUB = true
+    }
+
     if runopt.CaseName == runopt.ComputerName {
+        nightHawk.RedisPublish("ERROR", runopt.CaseName + " is same as ComputerName. This is not allowed.", nightHawk.REDIS_PUB)
         ExitOnError("CaseName and ComputerName can not be same", nightHawk.ERROR_SAME_CASE_AND_COMPUTERNAME)
     }
 
@@ -189,6 +196,7 @@ func LoadSingleAuditFile(caseinfo nightHawk.CaseInformation, computername string
     if auditname == "w32processes-memory" {
         msg := fmt.Sprintf("Process %s::%s", auditname,auditfile)
         ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
+        nightHawk.RedisPublish("INFO", msg, nightHawk.REDIS_PUB)
         jsonData := nightHawk.CreateProcessTree(caseinfo, computername, filename)
         esData := "{\"index\":{\"_type\":\"audit_type\", \"_parent\":\"" + computername + "\"}}" + "\n" + string(jsonData) + "\n"
         nightHawk.ProcessOutput(computername, auditname, []byte(esData))
@@ -203,25 +211,30 @@ func LoadSingleAuditFile(caseinfo nightHawk.CaseInformation, computername string
 
 func LoadHxAuditFile(caseinfo nightHawk.CaseInformation, filename string, debugmodule string) int {
     ConsoleMessage("INFO", "Processing mans file", nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", "Processing mans file", nightHawk.REDIS_PUB)
     return LoadRedlineAuditFile(caseinfo, filename, debugmodule)
 }
 
 
 func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, debugmodule string) int {
     ConsoleMessage("INFO", "Processing redline file", nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", "Processing redline file", nightHawk.REDIS_PUB)
 
     targetDir := CreateSessionDirectory(filename)
     ConsoleMessage("INFO", "Session directory "+targetDir, nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", "Session directory "+targetDir, nightHawk.REDIS_PUB)
 
     // Fix for Redline audit file containing one-level sub folder
     if !IsRedlineAuditDirectory(targetDir) {
         ConsoleMessage("DEBUG", targetDir + " is not Redline Audit directory", nightHawk.VERBOSE)
+        nightHawk.RedisPublish("DEBUG", targetDir+" is not Redline Audit directory", nightHawk.REDIS_PUB)
         dirList, _ := filepath.Glob(filepath.Join(targetDir, "*"))
 
         for _,d := range dirList {
             if IsRedlineAuditDirectory(d) {
                 targetDir = d
                 ConsoleMessage("INFO", "Session directory updated to "+targetDir, nightHawk.VERBOSE)
+                nightHawk.RedisPublish("INFO", "Session directory updated to "+targetDir, nightHawk.REDIS_PUB)
                 break
             }
         }
@@ -249,6 +262,7 @@ func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, d
 
     cmsg := fmt.Sprintf("Processing Redline audits for %s", computername)
     ConsoleMessage("INFO", cmsg, nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", cmsg, nightHawk.REDIS_PUB)
 
     var rlwg sync.WaitGroup
 
@@ -264,6 +278,7 @@ func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, d
 
 func IsRedlineAuditDirectory(dirPath string) bool {
     ConsoleMessage("DEBUG", "Checking if " + dirPath + " is Redline Directory", nightHawk.VERBOSE)
+    nightHawk.RedisPublish("DEBUG", "Checking if " + dirPath + " is Redline Directory", nightHawk.REDIS_PUB)
 
     fList,err := filepath.Glob(filepath.Join(dirPath,"*"))
     if err != nil {
@@ -335,6 +350,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     cmsg := fmt.Sprintf("Processing Redline audits for %s", computername)
     ConsoleMessage("INFO", cmsg, nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", cmsg, nightHawk.REDIS_PUB)
 
     var rlwg sync.WaitGroup
     
@@ -395,6 +411,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     if nightHawk.VERBOSE && nightHawk.VERBOSE_LEVEL == 7 {
         cmsg := fmt.Sprintf("Initiating %s::%s bulk upload start=>%d end=>%d", computername, auditname, start, stop)
         ConsoleMessage("DEBUG", cmsg, nightHawk.VERBOSE)
+        nightHawk.RedisPublish("DEBUG", cmsg, nightHawk.REDIS_PUB)
     }
 
     var EsRlRecord string 
@@ -408,6 +425,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     if nightHawk.VERBOSE && nightHawk.VERBOSE_LEVEL == 7 {
         cmsg := fmt.Sprintf("Stopping %s::%s bulk upload start=>%d end=>%d", computername, auditname, start, stop)
         ConsoleMessage("DEBUG", cmsg, nightHawk.VERBOSE)
+        nightHawk.RedisPublish("INFO", cmsg, nightHawk.REDIS_PUB)
     }
  }
 
@@ -423,6 +441,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     msg := fmt.Sprintf("Process %s::%s with %d records", auditfile.AuditGenerator, auditfile.AuditFile, SzRlRecord)
     ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
+    nightHawk.RedisPublish("INFO", msg, nightHawk.REDIS_PUB)
 
     if SzRlRecord > nightHawk.BULKPOST_SIZE {
         rCount := SzRlRecord / nightHawk.BULKPOST_SIZE
@@ -453,6 +472,7 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     if auditfile.AuditGenerator == "w32processes-memory" {
         msg = fmt.Sprintf("Process %s::%s", nightHawk.PTGenerator, auditfile.AuditFile)
         ConsoleMessage("INFO", msg, nightHawk.VERBOSE)
+        nightHawk.RedisPublish("INFO", msg, nightHawk.REDIS_PUB)
         jsonData := nightHawk.CreateProcessTree(caseinfo, computername, filepath.Join(targetDir,auditfile.AuditFile))
         esData := "{\"index\":{\"_type\":\"audit_type\", \"_parent\":\"" + computername + "\"}}" + "\n" + string(jsonData) + "\n"
         nightHawk.ProcessOutput(computername, nightHawk.PTGenerator, []byte(esData))

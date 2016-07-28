@@ -1,5 +1,6 @@
 ## ElasticSearch Reindexer by Daniel Eden
-## 16/07/2016 
+## 28/07/2016 Update
+## - Fixed SSL based communications 
 ## daniel.eden@gmail.com
 
 import requests
@@ -16,8 +17,15 @@ class CommonAttributes():
 		with open('/opt/nighthawk/lib/elastic/ElasticMapping.json', 'r') as mapping:
 			self.mapping_file = json.load(mapping)
 
-		self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
-		self.es_port = ':{0}'.format(self.conf_data['elastic']['elastic_port'])
+		if self.conf_data['elastic']['elastic_ssl']:
+			self.es_host = "https://{0}".format(self.conf_data['elastic']['elastic_server'])
+			self.es_port = str(self.conf_data['elastic']['elastic_port'])
+		else:
+			self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
+			self.es_port = str(self.conf_data['elastic']['elastic_port'])
+
+		self.elastic_user = self.conf_data['elastic']['elastic_user']
+		self.elastic_pass = self.conf_data['elastic']['elastic_pass']
 		self.index = '/investigations'
 
 class SearchQuery(CommonAttributes):
@@ -54,7 +62,7 @@ class SearchQuery(CommonAttributes):
 
 		try:
 			print '[-] Sending mapping to new index'
-			r = requests.put("{0}{1}{2}{3}".format(self.es_host, self.es_port, self.index, index_num), data=json.dumps(self.mapping_file))
+			r = requests.put("{0}{1}{2}{3}".format(self.es_host, self.es_port, self.index, index_num), data=json.dumps(self.mapping_file), auth=(self.elastic_user, self.elastic_pass), verify=False)
 			try:
 				if r.json()['acknowledged']:
 					print '[+] Returned successfully, index created.'
@@ -81,7 +89,7 @@ class SearchQuery(CommonAttributes):
 					]
 				}
 
-				r = requests.post(self.es_host + self.es_port + '/_aliases', data=json.dumps(remove_alias))
+				r = requests.post(self.es_host + self.es_port + '/_aliases', data=json.dumps(remove_alias), auth=(self.elastic_user, self.elastic_pass), verify=False)
 				try:
 					if r.json()['acknowledged']:
 						print '[+] Returned successfully, alias removed.'
@@ -110,7 +118,7 @@ class SearchQuery(CommonAttributes):
 				}
 
 				print '[-] Large datasets will take a while, sit back and grab a coke....'
-				r = requests.post(self.es_host + self.es_port + '/_reindex', data=json.dumps(reindex))
+				r = requests.post(self.es_host + self.es_port + '/_reindex', data=json.dumps(reindex), auth=(self.elastic_user, self.elastic_pass), verify=False)
 
 				try:
 					if r.json()['created']:

@@ -48,7 +48,7 @@ class StatsConsumer(object):
 		self.disk_stats = disk_array
 
 	def GenerateProcess(self):
-		core_pids = ['nginx', 'uwsgi', 'java']
+		core_pids = ['nginx', 'uwsgi', 'java', 'nightHawk']
 		core_services = []
 		
 		try:

@@ -10,6 +10,7 @@ from nighthawk.triageapi.utility.validate import ValidateUserInput
 from nighthawk.forms import UploadForm
 from nighthawk import settings
 import subprocess
+import json
 
 class Upload(View, CommonAttributes):
 	def __init__(self):
@@ -38,9 +39,9 @@ class Upload(View, CommonAttributes):
 					processes = []
 					for f in files:
 						if case_id:
-							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
+							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-R", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
 						else:
-							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
+							processes.append(subprocess.Popen([settings.NIGHTHAWK_GO + "/./nightHawk", "-R", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT))
 					
 					for p in processes:
 						if p.poll() is not None:
@@ -53,11 +54,11 @@ class Upload(View, CommonAttributes):
 
 					for f in files: 
 						if case_id:
-							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
+							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-R", "-v", "-N", "{0}".format(case_id), "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
 						else:
-							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
+							subprocess.call([settings.NIGHTHAWK_GO + "/./nightHawk", "-R", "-v", "-f", "{0}/{1}".format(settings.MEDIA_DIR ,f)], stderr=subprocess.STDOUT)
 								
-				return HttpResponseRedirect('/')
+				return HttpResponseRedirect('/upload')
 
 			else:
 				return HttpResponseRedirect('/upload')

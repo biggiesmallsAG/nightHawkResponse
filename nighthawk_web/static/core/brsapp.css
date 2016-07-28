@@ -107,6 +107,11 @@ em {
 	font-size: 10pt;
 }
 
+.stats {
+	/*border-left: #2C2A2A solid 2px;*/
+	border: #2C2A2A solid 2px;
+}
+
 .notifications {
 	background: #222; 
 	position: absolute; 

@@ -43,7 +43,6 @@
     RL_EVENTLOGS        = "w32eventlogs"
  )
 
-
  func ShowVersion () {
     fmt.Printf("\tnightHawk Response ver %s\n", VERSION)
     fmt.Printf(">> Triage processor for Mandiant Redline\n")

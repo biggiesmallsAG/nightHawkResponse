@@ -48,6 +48,11 @@
  )
  var OPCONTROL = OP_DATASTORE_ONLY
 
+// Redis Configuration
+const REDIS_SERVER = "localhost"
+const REDIS_PORT = 6379
+const REDIS_CHAN = "broadcast:uploadstatus"
+var REDIS_PUB = false
 
 /// Elastic Configuration
  var ELASTICHOST = ""

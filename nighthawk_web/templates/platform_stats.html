@@ -1,80 +1,107 @@
 <body>
-	<div class="platform_stats">
-		<div class="col-md-3">
-			<div class="cpu_stats">
+  <div class="container platform_stats">
+    <div class="row">
+        <div class="col-md-4">
+      <div class="cpu_stats">
 
-					<div style="color: #F7973D"><b>CPU:</b></div>
+          <div style="color: #F7973D">
+            <b>CPU(s)</b>
+          </div>
 
-				<table class="stats table-striped">
-					<thead>
-						<tr>
-							<th>CPU:</th>
-							<th>User:</th>
-							<th>Sys:</th>
-							<th>Idle:</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-				<!-- </ul> -->
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="memstats_stats">
-					<div style="color: #F7973D"><b>Memory:</b></div>
-				<table class="stats table-striped">
-					<thead>
-						<tr>
-							<th>Available:</th>
-							<th>Total:</th>
-							<th>Used:</th>
-							<th>Free:</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="disk_stats">
-					<div style="color: #F7973D"><b>Disk:</b></div>
-				<table class="stats table-striped">
-					<thead>
-						<tr>
-							<th>Device:</th>
-							<th>Mnt:</th>
-							<th>Total:</th>
-							<th>Free:</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="processes">
-					<div style="color: #F7973D"><b>Services:</b></div>
-				<table class="stats table-striped">
-					<thead>
-						<tr>
-							<th>Name:</th>
-							<th>Cmd:</th>
-							<th>Status:</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>CPU:</th>
+              <th>User:</th>
+              <th>Sys:</th>
+              <th>Idle:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>          
+        </div>
+        <div class="col-md-4">
+      <div class="processes">
+          <div style="color: #F7973D">
+            <b>Services</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>Name:</th>
+              <th>Cmd:</th>
+              <th>Status:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>          
+        </div>
+        <div class="col-md-3">
+      <div class="memstats_stats">
+          <div style="color: #F7973D">
+            <b>Memory</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>Available:</th>
+              <th>Total:</th>
+              <th>Used:</th>
+              <th>Free:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    <br>
+      <div class="disk_stats">
+          <div style="color: #F7973D">
+            <b>Disk</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>Device:</th>
+              <th>Mnt:</th>
+              <th>Total:</th>
+              <th>Free:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>          
+        </div>
+    </div>
+    <div class="row">
+      <br>
+       <div class="upload_stats" style="overflow: auto; height:200px;">
+          <div style="color: #F7973D">
+            <b>Upload Logs</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>Time:</th>
+              <th>Level:</th>
+              <th>Message:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>           
+    </div>
+</div>
 </body>
 
 <script>
-	function WebSocketTest()
+	function WebSocketPlatform()
 {
   if ("WebSocket" in window)
   {
@@ -127,8 +154,6 @@
         		"<td>" + stats.mem.free + "</td></tr>"
        		) 	
 
-        // $('.disk_stats table.stats tbody tr').html('');
-
         stats.disk.forEach(function (value, index, array){
 	        $('.disk_stats table.stats tbody').html(
         		"<tr><td>" + stats.disk[index].device + "</td>" + 
@@ -176,5 +201,69 @@
        }
    }
 
-   WebSocketTest(); 
+   WebSocketPlatform(); 
+
+function WebSocketUpload()
+{
+  if ("WebSocket" in window)
+  {
+   console.log("WebSocket is supported by your Browser!");
+
+           var ws = new WebSocket("ws://" + window.location.host + "/ws/uploadstatus?subscribe-broadcast");
+           var heartbeat_msg = '--heartbeat--', heartbeat_interval = null, missed_heartbeats = 0;
+
+           ws.onopen = function()
+           {
+              console.log("[!] WebSocket handshake complete, inside secure socket");
+              if (heartbeat_interval === null) {
+                missed_heartbeats = 0;
+                heartbeat_interval = setInterval(function() {
+                    try {
+                        missed_heartbeats++;
+                        if (missed_heartbeats >= 3)
+                            throw new Error("Too many missed heartbeats.");
+                        ws.send(heartbeat_msg);
+                    } catch(e) {
+                        clearInterval(heartbeat_interval);
+                        heartbeat_interval = null;
+                        console.warn("Closing connection. Reason: " + e.message);
+                        ws.close();
+                    }
+                }, 5000);
+              }
+          };
+
+          ws.onmessage = function (evt) 
+          { 
+
+             var received_msg = evt.data;
+             if (evt.data === heartbeat_msg) {
+               missed_heartbeats = 0;
+               return;
+           }
+
+        upload_alert = JSON.parse(received_msg);
+        
+        $('.upload_stats table.stats tbody').append(
+            "<tr><td>" + upload_alert.Time + "</td>" + 
+            "<td>" + upload_alert.Level + "</td>" + 
+            "<td>" + upload_alert.Message + "</td></tr>"
+          )   
+    };
+    ws.onerror = function(evt) {
+       console.log('Error: '+evt);
+   }
+   ws.onclose = function(evt)
+   { 
+              console.log("Connection is closed: "+evt.code); 
+          };
+      }
+
+      else
+      {
+           console.log("WebSocket NOT supported by your Browser!");
+       }
+   }
+
+   WebSocketUpload(); 
 </script>

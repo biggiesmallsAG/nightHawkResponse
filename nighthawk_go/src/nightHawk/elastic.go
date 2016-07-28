@@ -105,8 +105,10 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
         }
 
         ConsoleMessage("INFO", "New parent created for "+computername, VERBOSE)
+        RedisPublish("INFO", "New parent created for "+computername, REDIS_PUB)
         if pres.StatusCode != 200 {
             ConsoleMessage("ERROR", "Error creating parent node "+computername, true)
+            RedisPublish("ERROR", "Error creating parent node "+computername, REDIS_PUB)
         }
         
      }
