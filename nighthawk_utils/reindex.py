@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ## ElasticSearch Reindexer by Daniel Eden
 ## 28/07/2016 Update
 ## - Fixed SSL based communications 

@@ -6,3 +6,4 @@ nightHawk.json
 log/nighthawk_django.log
 
 *.log
+nighthawk_go/pkg
