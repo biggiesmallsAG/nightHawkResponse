@@ -2,7 +2,7 @@
  *@package  main
  *@file     redis_client.go
  *@author   Daniel Eden <daniel.eden@gmail.com>
- *@date		27/07/2016
+ *@
  *@description  nighHawk Redis client PUB/SUB.
  */
 

@@ -64,7 +64,7 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
      *  Third: check if case date is same, if so dont update.
      *  Fourth: build child document and post to parent
      */
-     //var ElasticHost = fmt.Sprintf("http://%s:%d", ELASTICHOST, ELASTICPORT)
+
      var ElasticHost string 
      if ELASTIC_SSL {
          ElasticHost = fmt.Sprintf("https://%s:%d", ELASTICHOST, ELASTICPORT)
@@ -75,8 +75,6 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
      var HostnameIndex = fmt.Sprintf("%s/hostname", ELASTIC_INDEX)
 
      var parent ParentCheck
-     //var essuccess ESSuccess
-     //var eserr ESErrorCheck
 
      es_url := fmt.Sprintf("%s/%s/%s", ElasticHost, HostnameIndex, computername)
      
@@ -125,7 +123,11 @@ func ExportToElastic(computername string, auditgenerator string, data []byte) {
 
     prbody,_ := ioutil.ReadAll(pres.Body)
     if pres.StatusCode != 200 && pres.StatusCode != 201 {
-        fmt.Println(string(prbody))
+        esErr := &ESErrorCheck{}
+        json.Unmarshal(prbody, esErr)
+
+        ConsoleMessage("ERROR", esErr.Error.Reason, VERBOSE)
+        RedisPublish("ERROR", esErr.Error.Reason, REDIS_PUB)
     }       
 }
 

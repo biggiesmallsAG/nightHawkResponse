@@ -108,7 +108,6 @@ em {
 }
 
 .stats {
-	/*border-left: #2C2A2A solid 2px;*/
 	border: #2C2A2A solid 2px;
 }
 
@@ -117,7 +116,6 @@ em {
 	position: absolute; 
 	right: 20%; 
 	z-index: 2; 
-/*	border-left: 1px solid #4AAAC4; */
 	border-bottom: 1px solid #4AAAC4;
 	border-radius: 3px;
 	font-size: 10pt;

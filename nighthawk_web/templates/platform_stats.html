@@ -162,7 +162,7 @@
         		"<td>" + stats.disk[index].usage.free + "</td></tr>")	
         })
 
-        $('.cpu_stats table.stats tbody tr').html('');
+        $('.cpu_stats table.stats tbody').empty();
 
         stats.cpu.forEach(function (value, index, array){
         	$('.cpu_stats table.stats tbody').append(
@@ -173,7 +173,7 @@
         		)
         });
 
-        $('.processes table.stats tbody tr').html('');
+        $('.processes table.stats tbody').empty();
 
         stats.processes.forEach(function (value, index, array) {
            	$('.processes table.stats tbody').append(
@@ -244,11 +244,25 @@ function WebSocketUpload()
 
         upload_alert = JSON.parse(received_msg);
         
-        $('.upload_stats table.stats tbody').append(
-            "<tr><td>" + upload_alert.Time + "</td>" + 
-            "<td>" + upload_alert.Level + "</td>" + 
-            "<td>" + upload_alert.Message + "</td></tr>"
-          )   
+        switch (upload_alert.Level) {
+          case 'DEBUG': $('.upload_stats table.stats tbody').append(
+              "<tr><td>" + upload_alert.Time + "</td>" + 
+              "<td style='color:yellow'>" + upload_alert.Level + "</td>" + 
+              "<td>" + upload_alert.Message + "</td></tr>"
+            );
+            break;
+          case 'ERROR': $('.upload_stats table.stats tbody').append(
+              "<tr><td>" + upload_alert.Time + "</td>" + 
+              "<td style='color:red'>" + upload_alert.Level + "</td>" + 
+              "<td>" + upload_alert.Message + "</td></tr>"
+            );
+            break;
+          default: $('.upload_stats table.stats tbody').append(
+              "<tr><td>" + upload_alert.Time + "</td>" + 
+              "<td>" + upload_alert.Level + "</td>" + 
+              "<td>" + upload_alert.Message + "</td></tr>"
+            );
+        }
     };
     ws.onerror = function(evt) {
        console.log('Error: '+evt);
