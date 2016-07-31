@@ -47,14 +47,12 @@
 	.controller('confirmController', ['$scope', function($scope){
 
 		$scope.comment = '';
-		$scope.date = '';
 		$scope.falsepositive = false;
 		$scope.tag = '';
 
 		$scope.submitUpdate = function() {
 			return {
 				comment: $scope.comment,
-				date: $scope.date,
 				falsepositive: $scope.falsepositive,
 				tag: $scope.tag, 
 				rowId: $scope.ngDialogData._id,

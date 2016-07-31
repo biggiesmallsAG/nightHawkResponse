@@ -6,7 +6,7 @@ import elasticsearch
 from elasticsearch_dsl import Search, Q, A
 import json
 from nighthawk.triageapi.utility.validate import ValidateUserInput
-
+import datetime
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
@@ -19,14 +19,12 @@ class UpdateES(CommonAttributes):
 
 		if not ValidateUserInput(row_data['comment']).ValidateInputMixed():
 			return err
-		elif not ValidateUserInput(row_data['date']).ValidateInputMixedPunctual():
-			return err
 
 		query = {
 			"doc": {
 				"Record": {
 					"Comment": {
-						"Date": row_data['date'],
+						"Date": str(datetime.datetime.utcnow()),
 						"Analyst": str(user),
 						"Comment": row_data['comment']
 					},

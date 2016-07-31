@@ -92,7 +92,7 @@
                    </div>
                </body>
     <script>
-function WebSocketTest()
+function WebSocketComment()
 {
   if ("WebSocket" in window)
   {
@@ -135,7 +135,7 @@ function WebSocketTest()
         
         if ($('.case_name').attr('id') === comment_alert.case) {
             $('.notifications').html(
-                "<span class='comment'>Alert: </span>New Comment !<br>" + 
+                "<span class='comment' style='color:red'>Alert: </span>New Comment !<br>" + 
                 "<span class='comment'>Case: </span>" + comment_alert.case + "<br>" +
                 "<span class='comment'>Endpoint: </span>" + comment_alert.endpoint + "<br>" +
                 "<span class='comment'>Analyst: </span>" + comment_alert.analyst + "<br>" +
@@ -166,7 +166,7 @@ function WebSocketTest()
        }
    }
 
-   WebSocketTest(); 
+   WebSocketComment(); 
 
     function isInArray(value, array) {
         return array.indexOf(value) > -1;
