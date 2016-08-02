@@ -3,12 +3,16 @@
     opacity: 0;
     -webkit-transform: translateY(-40px);
     transform: translateY(-40px);
+      left: 50%;
+  transform: translateX(-50%);
   }
 
   100% {
     opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
+      left: 50%;
+  transform: translateX(-50%);
   }
 }
 
@@ -17,12 +21,16 @@
     opacity: 0;
     -webkit-transform: translateY(-40px);
     transform: translateY(-40px);
+      left: 50%;
+  transform: translateX(-50%);
   }
 
   100% {
     opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
+      left: 50%;
+  transform: translateX(-50%);
   }
 }
 
@@ -31,12 +39,16 @@
     opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
+      left: 50%;
+  transform: translateX(-50%);
   }
 
   100% {
     opacity: 0;
     -webkit-transform: translateY(-40px);
     transform: translateY(-40px);
+      left: 50%;
+  transform: translateX(-50%);
   }
 }
 
@@ -45,12 +57,16 @@
     opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
+      left: 50%;
+  transform: translateX(-50%);
   }
 
   100% {
     opacity: 0;
     -webkit-transform: translateY(-40px);
     transform: translateY(-40px);
+      left: 50%;
+  transform: translateX(-50%);
   }
 }
 
@@ -84,7 +100,10 @@
   max-width: 100%;
   padding: 1em;
   position: relative;
-  width: 400px;
+  overflow-y: auto;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .ngdialog.ngdialog-theme-default .ngdialog-close {
@@ -109,6 +128,7 @@
   text-align: center;
   top: 3px;
   width: 30px;
+
 }
 
 .ngdialog.ngdialog-theme-default .ngdialog-close:hover:before,
@@ -172,6 +192,7 @@
   margin: 0 0 0 .5em;
   padding: .75em 2em;
   text-transform: uppercase;
+
 }
 
 .ngdialog.ngdialog-theme-default .ngdialog-button:focus {

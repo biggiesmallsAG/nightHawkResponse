@@ -112,6 +112,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -196,6 +197,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -287,6 +289,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -385,6 +388,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -462,6 +466,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -549,6 +554,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -624,6 +630,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -702,6 +709,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -788,6 +796,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -862,6 +871,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -936,6 +946,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1013,6 +1024,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1088,6 +1100,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1160,6 +1173,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1233,6 +1247,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1305,6 +1320,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1416,6 +1432,7 @@
 			ngDialog.openConfirm({
 		            template: 'update_doc/',
 		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
 		            data: vm.message
 				})
 			.then(function (success) {
@@ -1513,7 +1530,6 @@
 			$http.post(nHResponse + 'comments/get_comment_doc/', JSON.stringify(vm.message)).then(function (doc_data){
 				ngDialog.open({
 			            template: 'comments/get_comment_doc/dialog',
-			            className: 'ngdialog-theme-default custom-width-800',
 			            data: doc_data.data
 					})			
 			})

@@ -137,7 +137,7 @@
 .json-formatter-dark.json-formatter-row .url {
   text-decoration: underline;
   color: #027BFF;
-  cursor: pointer;
+  cursor: none;
 }
 .json-formatter-dark.json-formatter-row .bracket {
   color: #9494FF;
