@@ -16,7 +16,8 @@ app = angular
 		'datatables.colreorder',
 		'datatables.buttons',
 		'datatables.bootstrap',
-		'datatables.columnfilter'
+		'datatables.columnfilter',
+		'jsonFormatter'
 		],
 	function($interpolateProvider, $httpProvider, $resourceProvider) 
 	{
