@@ -159,8 +159,6 @@
 	    .withOption('rowCallback', rowCallback)
 	    .withBootstrap()
 	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
-	    // .withButtons([
-	    // 	'columnsToggle'])
 	    .withOption('order', [0, 'desc'])
 	    .withColReorder()
 	    .withPaginationType('numbers')

@@ -1,15 +1,14 @@
 @font-face {
 
-  font-family: Panpro;
-  src: url(../core/panpro.ttf);
-  
+	font-family: Panpro;
+	src: url(../core/panpro.ttf);
+
 }
 
 html,body {
 	margin:0; 
 	padding:0; 
-	height:100vh;
-	width:100%;
+	height:100%;
 	color: #4AAAC4 !important;
 }
 
@@ -24,36 +23,92 @@ html,body {
 	letter-spacing: 0px;
 }
 
+header {
+	height: 60px;
+	position: relative;
+	/*padding: 10px;*/
+}
+
+* {
+	box-sizing: border-box;
+}
+
 .navbar-default {
 	background-color: #222 !important;
 	border: 0px #235460 solid !important;
 }
 
+.navbar-header {
+	position: absolute;
+	top: -15px;
+	/*left: 10px;*/
+	border-bottom: #2C2A2A solid 2px;
+	/*border-radius: 5px 15px*/
+}
+
+.large {
+	font-size: 18pt !important; 
+}
+
+.small {
+	font-size: 12pt !important;
+}
+
+.navbar-right {
+	position: absolute;
+	top: -30px;
+	right: 10px;
+	border-left: #2C2A2A solid 2px;
+	border-bottom: #2C2A2A dotted 2px;
+	background-color: rgba(44, 42, 42, 0.62);
+	border-radius: 5px 15px;
+}
+
+.navbar-center {
+	margin: 0 auto;
+	width: 400px;
+	border-right: #2C2A2A solid 2px;
+	border-bottom: #2C2A2A solid 2px;
+	border-radius: 15px 5px;
+}
+
+.navbar-center li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 20px;
+  /*float: left;*/
+}
 .navbar-default .navbar-brand {
 	font-family: Panpro;
-    color: #4AAAC4 !important;
-    line-height: 30px !important
+	color: #4AAAC4 !important;
+	line-height: 30px !important;
+}
+
+.maincontainer {
+	height: 100%;
+	margin-top: -60px;
+	padding-top : 60px;
 }
 
 .btn-default {
-    color: #F7973D !important;
-    background-color: #222 !important;
-    border-color: #303E43 !important;
+	color: #F7973D !important;
+	background-color: #222 !important;
+	border-color: #303E43 !important;
 }
 
 .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
-    border: 1px solid rgba(74, 170, 196, 0.16) !important;
+	border: 1px solid rgba(74, 170, 196, 0.16) !important;
 }
 
 .table-striped > tbody > tr:nth-of-type(2n+1) {
-    background-color: #2C2A2A !important;
+	background-color: #2C2A2A !important;
 }
 
 table.stats td, th {
-    padding: 0;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-right: 30px;
+	padding: 0;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 30px;
 }
 
 td {
@@ -64,39 +119,39 @@ li {
 	list-style: none;
 }
 
-nav .navbar-nav { 
-	margin-left: 15% !important;
-} 
+ol, ul {
+	padding: 0px !important;
+}
 
 .dataTables_filter input[type="search"] {
-    border: 1px solid #4AAAC4 !important;
-    border-radius: 3px !important;
+	border: 1px solid #4AAAC4 !important;
+	border-radius: 3px !important;
 }
 
 .dataTables_wrapper {
-    /*border: 1px solid #DDDDDD;*/
-    padding: 0rem 0 !important; 
+	/*border: 1px solid #DDDDDD;*/
+	padding: 0rem 0 !important; 
 }
 
 .form-control {
-    color: #F7973D !important;
-    background-color: #222 !important;
+	color: #F7973D !important;
+	background-color: #222 !important;
 }
 
 .pagination > li > a, .pagination > li > span {
-    color: #F7973D !important;
-    background-color: #222 !important;
-    border: 1px solid #28373c !important;
+	color: #F7973D !important;
+	background-color: #222 !important;
+	border: 1px solid #28373c !important;
 }
 
 .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
-    color: RGB(247, 151, 61) !important;
-    background-color: #2C2A2A !important;
-    border-color: #28373c !important;
+	color: RGB(247, 151, 61) !important;
+	background-color: #2C2A2A !important;
+	border-color: #28373c !important;
 }
 
 label {
-    color: #F7973D !important;
+	color: #F7973D !important;
 }
 
 em {
@@ -105,7 +160,14 @@ em {
 
 .platform_stats {
 	font-size: 10pt;
+	width: 100%;
+	position: relative;
 }
+
+/*.upload_stats {
+	height: 100%;
+	overflow: auto;
+}*/
 
 .stats {
 	border: #2C2A2A solid 2px;
@@ -130,29 +192,22 @@ em {
 }
 
 .treecol {
-	/*height: 100%;*/
+	height: 100%;
 	width: 16.666667% !important;
-	/*display: inline-block;*/
 	background-color: #222;
-	border-radius: 5px;
-	/*padding-top: 1%;*/
+	border-radius: 10px;
 	border-left: #2C2A2A solid 2px;
 	border-bottom: 2C2A2A solid 1px;
-
+	overflow-y: scroll;
+	overflow-x: scroll;
 }
 
 .midcol {
-	/*width: 3.333% !important;*/
-	/*background-color: rgba(212, 212, 212, 0.50) !important;*/
 	padding-left: 1px !important
 }
 
 .maincol {
-	/*height: 100%;*/
-	/*width: 80% !important;*/
-	/*border: 1px solid RGBA(61, 60, 68, 0.18);*/
-	/*border-radius: 5px;*/
-	/*padding-top: 1%;*/
+	height: 100%;
 }
 
 .maincolexpand {
@@ -160,9 +215,9 @@ em {
 }
 
 .dataTable {
-  overflow: hidden; /* this is what fixes the expansion */
-  text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
-  white-space: nowrap;
+	overflow: hidden; /* this is what fixes the expansion */
+	text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+	white-space: nowrap;
 }
 
 .updatedoc {
@@ -192,7 +247,7 @@ em {
 }
 
 .ngdialog.ngdialog-theme-default.custom-width-800 .ngdialog-content {
-    width: 400px;
+	width: 400px;
 }
 
 input.ng-invalid {
@@ -204,19 +259,19 @@ select.ng-invalid {
 }
 
 .svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%; /* aspect ratio */
+	vertical-align: top;
+	overflow: hidden;
 }
 
 .svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
+	display: inline-block;
+	position: absolute;
+	top: 10px;
+	left: 0;
 }
 
 div.tooltip {
@@ -224,12 +279,16 @@ div.tooltip {
 	text-align: left;
 	width: 230px;
 	/*height: 80px;*/
-	padding: 2px;
+	/*padding: 2px;*/
 	font: 12px;
 	background: #2C2A2A;
 	border: 0px;
 	border-radius: 8px;
 	pointer-events: none;
+}
+
+.function {
+	color: #F7973D;
 }
 
 .node {

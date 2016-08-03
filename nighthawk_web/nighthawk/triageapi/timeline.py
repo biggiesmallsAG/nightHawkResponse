@@ -26,12 +26,12 @@ class TimeLineES(CommonAttributes):
 			return ret
 
 		data = [{
-			"id": "timeline", "parent": "#", "text": "Timeline"
+			"id": "timeline", "parent": "#", "text": "Timeline", "type": "root"
 		}]
 
 		for x in r.json()['aggregations']['casenum']['buckets']:
 			data.append({
-				"id" : x['key'], "parent": "timeline", "text": x['key'], "children": True
+				"id" : x['key'], "parent": "timeline", "text": x['key'], "children": True, "type": "case"
 			})
 
 		return data
@@ -52,7 +52,7 @@ class TimeLineES(CommonAttributes):
 
 		for x in r.json()['hits']['hits']:
 			data.append({
-					"id" : x['_id'], "parent": child_id, "text": x['_id'].upper()
+					"id" : x['_id'], "parent": child_id, "text": x['_id'].upper(), "type": "endpoint"
 				})
 
 		return data
@@ -79,6 +79,16 @@ class TimeLineES(CommonAttributes):
 						"file_accessed": x['fields']['Record.File.Accessed'],
 						"file_modified": x['fields']['Record.File.Modified'],
 						"file_changed": x['fields']['Record.File.Changed']
+					})
+
+			elif generator == 'w32rawfiles':
+				data.append({
+						"time": x['fields']['Record.TlnTime'], 
+						"path": x['fields']['Record.Path'], 
+						"generator": x['fields']['AuditType.Generator'],
+						"file_accessed": x['fields']['Record.FilenameAccessed'],
+						"file_modified": x['fields']['Record.FilenameModified'],
+						"file_changed": x['fields']['Record.FilenameChanged']
 					})
 
 			elif generator == 'urlhistory':

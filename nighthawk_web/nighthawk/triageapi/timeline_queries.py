@@ -11,16 +11,24 @@ def GetGeneratorQuery(case, endpoint_id, start, length, str_query, sort, order):
 				    "Record.File.Accessed",
 				    "Record.File.Modified",
 				    "Record.File.Changed",
+				    "Record.FilenameChanged",
+				    "Record.FilenameModified",
+				    "Record.FilenameAccessed",
 				    "AuditType.Generator"
 				])
 
 	order_dict = {
-		"0": "TlnTime"
+		"0": "Record.TlnTime",
+		"1": "AuditType.Generator",
+		"2": "Record.File.Modified",
+		"3": "Record.File.Accessed",
+		"4": "Record.File.Changed",
+		"5": "Record.Path"
 	}
 
 	if str_query == "":
 		_sort = {
-			"Record.{0}".format(order_dict[str(sort)]): {
+			"{0}".format(order_dict[str(sort)]): {
 				"order": order
 			}
 		}
@@ -30,7 +38,7 @@ def GetGeneratorQuery(case, endpoint_id, start, length, str_query, sort, order):
 
 	else:
 		_sort = {
-			"Record.{0}".format(order_dict[str(sort)]): {
+			"{0}".format(order_dict[str(sort)]): {
 				"order": order
 			}
 		}

@@ -27,17 +27,17 @@ class StackES(CommonAttributes):
 			return ret
 
 		data = [{
-			"id": "stackable", "parent": "#", "text": "Stackable Data"
+			"id": "stackable", "parent": "#", "text": "Stackable Data", "type": "root"
 		}]
 
-		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch', 'w32network-dns', 'urlhistory']
+		i = ['w32services', 'w32tasks', 'w32scripting-persistence', 'w32prefetch', 'w32network-dns', 'urlhistory', 'filedownloadhistory']
 
 		for x in r.json()['aggregations']['datatypes']['buckets']:
 			if x['key'] not in i:
 				pass
 			else:
 				data.append({
-					"id" : x['key'], "parent": "stackable", "text": x['key'], "children": True
+					"id" : x['key'], "parent": "stackable", "text": x['key'], "children": True, "type": "stack"
 				})
 
 		return data
@@ -62,7 +62,7 @@ class StackES(CommonAttributes):
 
 		for x in r.json()['aggregations']['endpoints']['buckets']:
 			data.append({
-				"id": x['key'].upper(), "parent": child_id, "text": x['key'].upper(), "a_attr": {"href": "#" + x['key'].upper() + "/" + child_id}
+				"id": x['key'].upper(), "parent": child_id, "text": x['key'].upper(), "type": "endpoint", "a_attr": {"href": "#" + x['key'].upper() + "/" + child_id}
 			})
 
 		return data

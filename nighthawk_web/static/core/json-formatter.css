@@ -123,7 +123,7 @@
   color: #00FF9C;
 }
 .json-formatter-dark.json-formatter-row .null {
-  color: #EEC97D;
+  color: #7F72DB;
 }
 .json-formatter-dark.json-formatter-row .undefined {
   color: #ef8fbe;
@@ -132,7 +132,7 @@
   color: #FD48CB;
 }
 .json-formatter-dark.json-formatter-row .date {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #222;
 }
 .json-formatter-dark.json-formatter-row .url {
   text-decoration: underline;

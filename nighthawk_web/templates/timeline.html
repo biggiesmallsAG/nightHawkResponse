@@ -26,62 +26,75 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
-            <nav class="navbar navbar-default">
-            	<div class="container-fluid">
-            		<!-- Brand and toggle get grouped for better mobile display -->
-            		<div class="navbar-header">
-            			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            				<span class="sr-only">Toggle navigation</span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-            				<span class="icon-bar"></span>
-            			</button>
-            			<a class="navbar-brand" href="/timeline/"><b>{{name}}</b>: {{timeline}} {{timeline_ver}}</a>
-            		</div>
+            <header>
+              <nav class="navbar navbar-default">
 
-            		<!-- Collect the nav links, forms, and other content for toggling -->
-            		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li><a href=""><button type="button" title="Collapse Root Tree" class="btn btn-default btn-sm" id="menuhide">
-                                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                            </button></a></li>
-                            <li><a href="{% url 'home_search' %}"><button type="button" title="Global Search" class="btn btn-default btn-sm" id="menuhide">
-                                <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                            </button></a></li>
-                            <li><a href="{% url 'stack_framework' %}">                  
-                                <button type="button" title="Stacking Framework" class="btn btn-default btn-sm" id="menuhide">
-                                    <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
-                                </button></a></li>
-                            <li><a href="{% url 'home' %}">                  
-                                <button type="button" title="Triage Framework" class="btn btn-default btn-sm" id="menuhide">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                </button></a></li>
-                                <li><a href="/home#Comment">                 
-                                    <button type="button" title="Comments and Tags" class="btn btn-default btn-sm" id="menuhide">
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </button></a></li>
-                                    <li><a href="/home#UploadFile">
-                                        <button type="button" title="Upload Collection" class="btn btn-default btn-sm" id="menuhide">
-                                            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-                                        </button>
-                                    </a></li>
-                                    
-
-                                </ul>
-                            <ul class="navbar navbar-right">
-                                <div class="container-fluid">
-                                    <div class="navbar-header">
-                                        <a href="/admin/" class="navbar-brand">Logged in as: <span style="color: #F7973D">{{user}}</span></a>
-                                    </div>
-                                </div>
-                            </ul>
-                            </div><!-- /.navbar-collapse -->
-                        </div><!-- /.container-fluid -->
-                    </nav>
+                <div class="navbar-header">
+                 <a class="navbar-brand large" href="/"><b>{{name}}</b>: <span class="function">{{timeline}} </span> {{timeline_ver}}</a>
+               </div>
+               <div class="navbar-center">
+                 <ul>
+                  <li>
+                    <a href="">
+                      <button type="button" title="Collapse Root Tree" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'home_search' %}">
+                      <button type="button" title="Global Search" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'timeline' %}">
+                      <button type="button" title="Timeline" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'stack_framework' %}">                  
+                      <button type="button" title="Stacking Framework" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'home' %}#Comment">                 
+                      <button type="button" title="Comments and Tags" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'home' %}#UploadFile">
+                      <button type="button" title="Upload Collection" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{% url 'home' %}#PlatformStats">
+                      <button type="button" title="Platform Status" class="btn btn-default btn-sm" id="menuhide">
+                        <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
+                      </button>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="navbar-right">
+                <a href="/admin/" class="navbar-brand small">Logged in as: <span style="color: #F7973D">{{user}}</span></a>
+              </div>
+            </nav>
+          </header>
+          <div class="maincontainer">
                     <div class="col-md-2 treecol">
-                        <div style="padding: 20px 20px; overflow: auto; height:600px;">
+
                             <div id="jstree">
-                            </div>  
+
                         </div>
                     </div>
                     <div class="col-md-10 maincol">
@@ -116,6 +129,7 @@
                      </div>
                  </div>
              </div>
+           </div>
          </body>
          <script>
 
@@ -147,7 +161,21 @@
               "checkbox" : {
               "keep_selected_style" : false
           },
-            "plugins" : []
+          'types': {
+                'root': {
+                  'icon': 'glyphicon glyphicon-expand'
+                },
+                'endpoint': {
+                  'icon': 'glyphicon glyphicon-blackboard'
+                },
+                'case': {
+                  'icon': 'glyphicon glyphicon-leaf'
+                },
+                'audit': {
+                  'icon': 'glyphicon glyphicon-log-in'
+                }
+              },
+            "plugins" : ["types"]
           });
 
         var timeline_data = {};

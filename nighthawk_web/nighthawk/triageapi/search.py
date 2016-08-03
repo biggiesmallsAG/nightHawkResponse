@@ -25,14 +25,14 @@ class QueryES(CommonAttributes):
 			return ret
 
 		data = [{
-			"id": "current_inv", "parent": "#", "text": "Current Investigations"
+			"id": "current_inv", "parent": "#", "text": "Current Investigations", "type": "root"
 		}, {
-			"id": "comp_inv", "parent": "#", "text": "Completed Investigations"
+			"id": "comp_inv", "parent": "#", "text": "Completed Investigations", "type": "root"
 		}]
 
 		for x in r.json()['aggregations']['casenum']['buckets']:
 			data.append({
-				"id": x['key'], "parent": "current_inv", "text": x['key'], "children": True
+				"id": x['key'], "parent": "current_inv", "text": x['key'], "children": True, "type": "case"
 			})
 
 		return data
@@ -53,7 +53,7 @@ class QueryES(CommonAttributes):
 
 		for x in r.json()['hits']['hits']:
 			data.append({
-					"id" : x['_id'], "parent": child_id, "text": x['_id'].upper(), "children": True
+					"id" : x['_id'], "parent": child_id, "text": x['_id'].upper(), "children": True, "type": "endpoint"
 				})
 
 		return data
@@ -79,7 +79,7 @@ class QueryES(CommonAttributes):
 		for y in r.json()['aggregations']['datatypes']['buckets']:
 			if not y['key'] in exclude:
 				data.append({
-						"id": y['key'], "parent": child_id, "text": y['key'], "a_attr": {"href": "#" + y['key'] + '/' + parent_id + "/" + child_id }
+						"id": y['key'], "parent": child_id, "text": y['key'], "type": "audit", "a_attr": {"href": "#" + y['key'] + '/' + parent_id + "/" + child_id }
 					})
 
 		return data

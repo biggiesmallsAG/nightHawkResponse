@@ -28,7 +28,7 @@ def GetAuditGenerator(endpoints):
 	elif generator == 'w32network-dns':
 		aggs_gen = A('terms', field='Record.RecordName.raw', size=0)
 
-	elif generator == 'urlhistory':
+	elif generator in ('urlhistory', 'filedownloadhistory'):
 		aggs_gen = A('terms', field='Record.UrlDomain.raw', size=0)
 
 	elif generator == 'w32registryraw':
