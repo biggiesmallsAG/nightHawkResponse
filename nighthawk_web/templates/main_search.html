@@ -149,7 +149,9 @@
             contentType: 'application/json; charset=utf-8',
             data: data,
             success: function(result){
-            	console.log(result)
+                var maincol = parseInt($('.maincol').height())
+                var stackin = parseInt($('.stack_inst').height())
+                var setheight = maincol - stackin - 220
                 $("#stack_table").dataTable({
                     bDestroy: true,
                     data: result,
@@ -163,7 +165,7 @@
                     order: [[
                             1, 'asc'
                         ]],
-                    scrollY: '50vh',
+                    scrollY: String(setheight) + 'px',
                     scrollX: '100%',
                     iDisplayLength: 200,
                     // sDom: '<"top"flp>rt<"bottom"i><"clear">',

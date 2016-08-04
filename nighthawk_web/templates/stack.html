@@ -198,7 +198,12 @@
       }});
 
     $(".submit").click(function(){
+        var maincol = parseInt($('.maincol').height())
+        var stackin = parseInt($('.stack_inst').height())
+        var setheight = maincol - stackin - 220
         var data = JSON.stringify(stack_data)
+
+        console.log(maincol, stackin)
         $(".loader").show()
         $.ajax({
             type: "POST",
@@ -219,7 +224,7 @@
                     order: [[
                             1, 'asc'
                         ]],
-                    scrollY: '50vh',
+                    scrollY: String(setheight) + 'px',
                     scrollX: '100%',
                     iDisplayLength: 200,
                     fnDrawCallback: function (oSettings, json) {

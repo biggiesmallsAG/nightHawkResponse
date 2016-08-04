@@ -147,23 +147,26 @@
                return;
            }
 
-        var stats = JSON.parse(received_msg)
+        var stats = JSON.parse(received_msg);
 
+        $('.memstats_stats table.stats tbody').empty();
 
-       	$('.memstats_stats table.stats tbody').html(
+       	$('.memstats_stats table.stats tbody').append(
         		"<tr><td>" + stats.mem.available + "</td>" + 
         		"<td>" + stats.mem.total + "</td>" + 
         		"<td>" + stats.mem.used + "</td>" + 
         		"<td>" + stats.mem.free + "</td></tr>"
-       		) 	
+       		); 	
+
+        $('.disk_stats table.stats tbody').empty();
 
         stats.disk.forEach(function (value, index, array){
-	        $('.disk_stats table.stats tbody').html(
+	        $('.disk_stats table.stats tbody').append(
         		"<tr><td>" + stats.disk[index].device + "</td>" + 
         		"<td>" + stats.disk[index].mountpoint + "</td>" + 
         		"<td>" + stats.disk[index].usage.total + "</td>" + 
         		"<td>" + stats.disk[index].usage.free + "</td></tr>")	
-        })
+        });
 
         $('.cpu_stats table.stats tbody').empty();
 

@@ -42,8 +42,7 @@ header {
 	position: absolute;
 	top: -15px;
 	/*left: 10px;*/
-	border-bottom: #2C2A2A solid 2px;
-	/*border-radius: 5px 15px*/
+	/*border-bottom: #2C2A2A solid 2px;*/
 }
 
 .large {
@@ -56,7 +55,7 @@ header {
 
 .navbar-right {
 	position: absolute;
-	top: -30px;
+	top: -20px;
 	right: 10px;
 	border-left: #2C2A2A solid 2px;
 	border-bottom: #2C2A2A dotted 2px;
@@ -69,7 +68,7 @@ header {
 	width: 400px;
 	border-right: #2C2A2A solid 2px;
 	border-bottom: #2C2A2A solid 2px;
-	border-radius: 15px 5px;
+	border-radius: 15px 0px;
 }
 
 .navbar-center li {
@@ -164,11 +163,6 @@ em {
 	position: relative;
 }
 
-/*.upload_stats {
-	height: 100%;
-	overflow: auto;
-}*/
-
 .stats {
 	border: #2C2A2A solid 2px;
 }
@@ -195,7 +189,7 @@ em {
 	height: 100%;
 	width: 16.666667% !important;
 	background-color: #222;
-	border-radius: 10px;
+	/*border-radius: 10px;*/
 	border-left: #2C2A2A solid 2px;
 	border-bottom: 2C2A2A solid 1px;
 	overflow-y: scroll;

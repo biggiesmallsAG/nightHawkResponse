@@ -38,6 +38,8 @@
 
 	.controller('w32disks', GetDataDisks)
 
+	.controller('w32evtlogs', GetDataEvtLogs)
+
 	.controller('stackView', GetStackResponse)
 
 	.controller('searchAllDocs', GetSearchAllDocs)
@@ -188,7 +190,88 @@
 		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
 		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
 		    
-	    ];		
+	    ];
+
+	    function ClickHandler(info) {
+	        vm.message = info;
+
+			ngDialog.openConfirm({
+		            template: 'update_doc/',
+		            controller: 'confirmController',
+		            className: 'ngdialog-theme-default custom-width-800',
+		            data: vm.message
+				})
+			.then(function (success) {
+
+					$http.post(nHResponse + 'update_doc/', JSON.stringify(success)).then(function (data){
+						ngDialog.open({
+					            template: '<p><center>Document Updated Successfully.</center></p>',
+					            plain: true
+							})			
+					})
+				})
+	    }
+
+	    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+	        $('td', nRow).unbind('click');
+	        $('td', nRow).bind('click', function() {
+	            $scope.$apply(function() {
+	                vm.ClickHandler(aData);
+	            });
+	        });
+	        return nRow;
+	    }
+	}
+
+	function GetDataEvtLogs($scope, ngDialog, DTOptionsBuilder, DTColumnBuilder, DTDefaultOptions, $http, $routeParams, $cookies) {
+	    var vm = this;
+	    vm.message = '';
+	    vm.ClickHandler = ClickHandler;
+
+	    vm.dtOptions = DTOptionsBuilder.newOptions()
+	        .withOption('ajax', {
+	         url: nHResponse + 'w32evtlogs_anchor/' + $routeParams.casename + '/' + $routeParams.hostname,
+	         type: 'POST',
+	         data: {
+	         	data: 'data',
+	         	csrfmiddlewaretoken: $cookies.get('csrftoken')
+	         }
+	     })
+        .withOption('processing', true)
+        .withOption('serverSide', true)
+        .withLanguage({
+        	"sProcessing": '<img src="static/images/loader.gif">'
+        })
+	    .withOption('rowCallback', rowCallback)
+	    .withBootstrap()
+	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
+	    .withOption('order', [0, 'desc'])
+	    .withColReorder()
+	    .withPaginationType('numbers')
+	    .withDisplayLength(200)
+	    .withOption('scrollX', '100%')
+	    .withOption('scrollY', '65vh')
+	    .withOption('scrollCollapse', true);
+
+	    vm.dtColumns = [
+		    DTColumnBuilder.newColumn('_source.Record.GenTime').withTitle('Generate Time'),
+		    DTColumnBuilder.newColumn('_source.Record.Source').withTitle('Source'),
+		    DTColumnBuilder.newColumn('_source.Record.EID').withTitle('EID'),
+		    DTColumnBuilder.newColumn('_source.Record.Index').withTitle('Index'),
+		    DTColumnBuilder.newColumn('_source.Record.ExecutionProcessId').withTitle('ExecutionProcessId'),
+		    DTColumnBuilder.newColumn('_source.Record.ExecutionThreadId').withTitle('ExecutionThreadId'),
+		    DTColumnBuilder.newColumn('_source.Record.Message').withTitle('Message'),
+		    DTColumnBuilder.newColumn('_source.Record.Category').withTitle('Category'),
+		    DTColumnBuilder.newColumn('_source.Record.Tag').withTitle('Tag'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Date').withTitle('Comment Date'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Analyst').withTitle('Comment Analyst'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Comment').withTitle('Comment'),
+		    DTColumnBuilder.newColumn('_source.Record.NHScore').withTitle('nHScore'),
+		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
+		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
+		    
+	    ];
+	
 	    function ClickHandler(info) {
 	        vm.message = info;
 

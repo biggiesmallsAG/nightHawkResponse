@@ -28,6 +28,7 @@ from nighthawk.views.datatypes.w32volumes import W32Volumes
 from nighthawk.views.datatypes.w32apifiles import W32APIFiles
 from nighthawk.views.datatypes.w32rawfiles import W32RAWFiles
 from nighthawk.views.datatypes.w32system import W32System
+from nighthawk.views.datatypes.w32evtlog import W32EvtLog
 
 data_types = patterns('',
     url(r'^filedownloadhistory_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', FiledownloadHistory.as_view(), name="filedownloadhistory"),
@@ -48,6 +49,7 @@ data_types = patterns('',
     url(r'^w32scripting-persistence_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32ScriptingFilePersistence.as_view(), name="w32network_dns"),
     url(r'^stateagentinspector_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', StateagentInspector.as_view(), name="stateagentinspector"),
     url(r'^w32processes-tree_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32ProcessesTree.as_view(), name="w32ptree"),
+    url(r'^w32evtlogs_anchor/(?P<case>[^/]+)/(?P<hostname>\w+)$', W32EvtLog.as_view(), name="w32evtlogs"),
 	)
 
 context_urls = patterns('',

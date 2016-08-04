@@ -11,7 +11,7 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 			"1": "Path",
 			"2": "Type",
 			"3": "Text",
-			"4": "Bytes",
+			"4": "ReportedLengthInBytes",
 			"5": "Hive",
 			"6": "Username",
 			"7": "JobCreated",
@@ -41,6 +41,42 @@ def GetGeneratorQuery(auditgenerator_type, str_query, case, endpoint_id, start, 
 			}
 
 			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Path", "Record.Username", "Record.ValueName", "Record.Text", "Record.Tag", "Record.Comment"], query="{0}".format(str_query))
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		return query
+
+	elif auditgenerator_type == "w32eventlogs":
+		order_dict = {
+			"0": "GenTime",
+			"1": "Source",
+			"2": "EID",
+			"3": "Index",
+			"4": "ExecutionProcessId",
+			"5": "ExecutionThreadId",
+			"6": "Message",
+			"7": "Category",
+			"8": "Tag",
+			"9": "Comment",
+			"10": "nHscore"
+		}
+		if str_query == "":
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case)
+			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
+
+		else:
+			_sort = {
+				"Record.{0}".format(order_dict[str(sort)]): {
+					"order": order
+				}
+			}
+
+			t = Q('query_string', default_field="ComputerName.raw", query=endpoint_id) & Q('query_string', default_field="CaseInfo.case_name", query=case) & Q('query_string', fields=["Record.Message", "Record.EID", "Record.Source", "Record.Index", "Record.ExecutionProcessId", "Record.ExecutionThreadId"], query="{0}".format(str_query))
 			query = s.query(t).filter('term', AuditType__Generator=auditgenerator_type).sort(_sort)
 
 		return query

@@ -85,7 +85,7 @@ class QueryES(CommonAttributes):
 		return data
 
 	def GetAuditData(self, case, child_id, data_type, start=None, length=None, str_query=None, sort=None, order=None):
-		q = ['w32registryraw', 'filedownloadhistory', 'urlhistory', 'timeline', 'w32apifiles', 'w32rawfiles']
+		q = ['w32registryraw', 'filedownloadhistory', 'urlhistory', 'timeline', 'w32apifiles', 'w32rawfiles', 'w32eventlogs']
 
 		if data_type in q:
 			query = search_queries.GetGeneratorQuery(data_type, str_query, case, child_id, start, length, sort, order)

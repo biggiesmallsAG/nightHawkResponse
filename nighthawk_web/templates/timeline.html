@@ -196,6 +196,9 @@
         }});
 
         $(".submit").click(function(){
+            var maincol = parseInt($('.maincol').height())
+            var stackin = parseInt($('.stack_inst').height())
+            var setheight = maincol - stackin - 220
             var data = timeline_data
             $(".loader").show()
             $("#stack_table").dataTable({
@@ -224,7 +227,7 @@
                 order: [[
                     0, 'desc'
                 ]],
-                scrollY: '50vh',
+                scrollY: String(setheight) + 'px',
                 scrollX: '100%',
                 iDisplayLength: 200,
                 fnDrawCallback: function (oSettings, json) {

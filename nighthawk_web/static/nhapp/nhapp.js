@@ -55,6 +55,12 @@ app = angular
 			}
 		}).
 
+		when('/w32eventlogs/:casename/:hostname', {
+			templateUrl: function(urlattr) {
+				return '/w32evtlogs_anchor/' + urlattr.casename + '/' + urlattr.hostname;
+			}
+		}).
+
 		when('/w32registryraw/:casename/:hostname', {
 			templateUrl: function(urlattr) {
 				return '/w32registryraw_anchor/' + urlattr.casename + '/' + urlattr.hostname;

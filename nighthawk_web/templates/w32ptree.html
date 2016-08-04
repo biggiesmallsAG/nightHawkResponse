@@ -28,8 +28,11 @@ $.ajax({
         
        
 // ************** Generate the tree diagram	 *****************
+var divw = $('.stateinspector').width();
+var divh = $('.stateinspector').height()
+
 var margin = {top: 20, right: 120, bottom: 20, left: 40},
-	width = 1050 - margin.right - margin.left,
+	width = divw - margin.right - margin.left,
 	height = 600 - margin.top - margin.bottom;
 	
 var i = 0,
