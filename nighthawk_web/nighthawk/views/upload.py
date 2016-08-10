@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from nighthawk.triageapi.dataendpoint.common import CommonAttributes
 from nighthawk.triageapi.utility.validate import ValidateUserInput
-from nighthawk.forms import UploadForm
+from nighthawk.triageapi.delete import DeleteCaseObj
+from nighthawk.forms import UploadForm, DeleteCase, DeleteEndpoint
 from nighthawk import settings
 import subprocess
 import json
@@ -19,7 +20,12 @@ class Upload(View, CommonAttributes):
 	def get(self, request):
 	    assert isinstance(request, HttpRequest)
 	    return render(request, 'upload.html', 
-	    	context_instance=RequestContext(request, {"request": request, "UploadForm": UploadForm}))
+	    	context_instance=RequestContext(request, {
+	    		"request": request, 
+	    		"UploadForm": UploadForm, 
+	    		"DeleteEndpoint": DeleteEndpoint,
+	    		"DeleteCase": DeleteCase
+	    		}))
 
 	def post(self, request):
 		if request.method == 'POST':
@@ -67,3 +73,23 @@ class Upload(View, CommonAttributes):
 	    with open(settings.MEDIA_DIR + '/{0}'.format(f), 'wb+') as destination:
 	        for chunk in f.chunks():
 	            destination.write(chunk)
+	
+
+	def DeleteCaseList(self, request):
+		if request.is_ajax():
+			d = DeleteCaseObj()
+			data = d.BuildCaseList()
+			return JsonResponse(data, safe=False)
+
+	def DeleteEndpointList(self, request):
+		if request.is_ajax():
+			d = DeleteCaseObj()
+			data = d.BuildEndpointList()
+			return JsonResponse(data, safe=False)
+
+	def Delete(self, request):
+		if request.is_ajax():
+			data = json.loads(request.body)
+			d = DeleteCaseObj()
+			data = d.Delete(data)
+			return JsonResponse(data, safe=False)

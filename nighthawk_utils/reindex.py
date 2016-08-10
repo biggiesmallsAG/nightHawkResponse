@@ -37,7 +37,7 @@ class SearchQuery(CommonAttributes):
 	def CheckAliases(self):
 		print "\n[+] Obtaining latest index alias to determine index number"
 		try:
-			r = requests.get(self.es_host + self.es_port + '/_aliases')
+			r = requests.get(self.es_host + self.es_port + '/_aliases', auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			print '[!] Error connecting to {0}{1}'.format(self.es_host, self.es_port)
 

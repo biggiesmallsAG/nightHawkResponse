@@ -41,8 +41,7 @@ app = angular
 		}).
 
 		when('/UploadFile', {
-			templateUrl: '/upload/',
-			controller: 'uploadFile'
+			templateUrl: '/upload/'
 		}).
 
 		when('/PlatformStats', {

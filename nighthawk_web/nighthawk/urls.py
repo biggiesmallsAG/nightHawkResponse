@@ -70,6 +70,9 @@ context_urls = patterns('',
     url(r'^timeline_response/$', login_required(TimeLineResponse.as_view()), name="timeline_response"),
     url(r'^timeline/$', login_required(TimeLine.as_view()), name="timeline"),
     url(r'^platform_stats/$', login_required(PlatformStats.as_view()), name="platform_stats"),    
+    url(r'^delete_case/$', login_required(Upload().DeleteCaseList), name="del_case_list"),   
+    url(r'^delete_endpoint/$', login_required(Upload().DeleteEndpointList), name="del_endpoint_list"),
+    url(r'^delete/$', login_required(Upload().Delete), name="del_endpoint_list"),    
     url(r'$', login_required(Home.as_view()), name="home"),
     )
 

@@ -67,7 +67,7 @@ class StatsConsumer(object):
 								"status": p.status()
 							} 
 						})
-		except psutil.ZombieProcess:
+		except (psutil.ZombieProcess, psutil.AccessDenied, psutil.NoSuchProcess):
 			pass
 
 		self.processes = core_services
@@ -87,7 +87,7 @@ class StatsBroadcaster(StatsConsumer):
 			"disk": disk_stats,
 			"processes": processes
 		}
-
+		
 		self.redis_publisher.publish_message(RedisMessage(json.dumps(os_stats)))
 
 def main():
