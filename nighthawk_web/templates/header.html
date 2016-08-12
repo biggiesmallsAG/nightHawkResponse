@@ -1,0 +1,43 @@
+
+		<div class="navbar-center">
+			<ul>
+				<li>
+					<button type="button" title="Collapse Root Tree" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'home_search' %}'" title="Global Search" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'timeline' %}'" title="Timeline" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'stack_framework' %}'" title="Stacking Framework" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'home' %}#Comment'" title="Comments and Tags" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'home' %}#UploadFile'" title="Upload and Delete" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li>
+					<button type="button" onclick="location.href='{% url 'home' %}#PlatformStats'" title="Platform Status" class="btn btn-default btn-sm" id="menuhide">
+						<span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
+					</button>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+			<a href="/admin/" class="navbar-brand small">Logged in as: <span style="color: #F7973D">{{user}}</span></a>
+		</div>

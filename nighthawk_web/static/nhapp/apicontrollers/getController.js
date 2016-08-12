@@ -14,6 +14,83 @@ angular
 
 	}])
 
+	.controller('mainTreeController', ['$scope', 'getApiServices', function($scope, getApiServices) {
+
+		$scope.dataurl = "home/load_cases";
+
+		$scope.dataurlaudit = "home/load_cases_audit";
+
+		$scope.types = {
+                        'root': {
+                          'icon': 'glyphicon glyphicon-expand'
+                        },
+                        'endpoint': {
+                          'icon': 'glyphicon glyphicon-blackboard'
+                        },
+                        'case': {
+                          'icon': 'glyphicon glyphicon-leaf'
+                        },
+                        'audit': {
+                          'icon': 'glyphicon glyphicon-log-in'
+                        }
+                      }
+
+        $scope.plugins = ["sort", "types"];
+
+        $scope.selectnode = "mainview"
+
+	}])
+
+	.controller('timelineTreeController', ['$scope', 'getApiServices', function($scope, getApiServices) {
+
+		$scope.dataurl = "/home/load_timeline";
+
+		$scope.types = {
+	                'root': {
+	                  'icon': 'glyphicon glyphicon-expand'
+	                },
+	                'endpoint': {
+	                  'icon': 'glyphicon glyphicon-blackboard'
+	                },
+	                'case': {
+	                  'icon': 'glyphicon glyphicon-leaf'
+	                },
+	                'audit': {
+	                  'icon': 'glyphicon glyphicon-log-in'
+	                }
+	              }
+
+        $scope.plugins = ["sort", "types"];
+
+        $scope.selectnode = "timelineview"
+
+	}])
+
+	.controller('stackTreeController', ['$scope', 'getApiServices', function($scope, getApiServices) {
+
+		$scope.dataurl = "/home/load_stack";
+
+		$scope.types = {
+	            'root': {
+	              'icon': 'glyphicon glyphicon-expand'
+	            },
+	            'endpoint': {
+	              'icon': 'glyphicon glyphicon-blackboard'
+	            },
+	            'stack': {
+	              'icon': 'glyphicon glyphicon-fire'
+	            },
+	            'audit': {
+	              'icon': 'glyphicon glyphicon-log-in'
+	            }
+	          }
+
+        $scope.plugins = ["sort", "types", "checkbox"];
+
+        $scope.selectnode = "stackview"
+
+	}])
+
 	.controller('deleteController', ['$scope', 'getApiServices', 'postApiServices', 'ngDialog', function($scope, getApiServices, postApiServices, ngDialog) {
 
 		$scope.cases = getApiServices.query({api_path: 'delete_case/'});

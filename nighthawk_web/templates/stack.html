@@ -32,53 +32,18 @@
                 <div class="navbar-header">
                  <a class="navbar-brand large" href="/"><b>{{name}}</b>: <span class="function">{{stack}} </span> {{stack_ver}}</a>
                </div>
-               <div class="navbar-center">
-                 <ul>
-                  <li>
-                      <button type="button" title="Collapse Root Tree" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'home_search' %}'"  title="Global Search" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'timeline' %}'" title="Timeline" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'stack_framework' %}'"  title="Stacking Framework" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'home' %}#Comment'" title="Comments and Tags" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'home' %}#UploadFile'" title="Upload Collection" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                  <li>
-                      <button type="button" onclick="location.href='{% url 'home' %}#PlatformStats'" title="Platform Status" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
-                      </button>
-                  </li>
-                </ul>
-              </div>
-              <div class="navbar-right">
-                <a href="/admin/" class="navbar-brand small">Logged in as: <span style="color: #F7973D">{{user}}</span></a>
-              </div>
+              {% include 'header.html' %}
             </nav>
           </header>
           <div class="maincontainer">
             <div class="col-md-2 treecol">
-                <div id="jstree">
+              <div ng-controller="stackTreeController">
+                <jstree
+                  dataurl="dataurl"
+                  selectnode="selectnode"
+                  types="types"
+                  plugins="plugins">
+                </jstree>
             </div>
         </div>
             <div class="col-md-10 maincol">
@@ -117,66 +82,6 @@
             }
         }
     }
-
-	$('#jstree').jstree({
-	    'core' : {
-	        'data' : {
-	            'url' : "{% url 'load_stack' %}",
-	            'contentType': "application/json; charset=utf-8",
-			    'data': function (data) {
-			    	return { "id": data.id, "parent": data.parent, "text": data.text }
-			      }
-	        },
-            'themes': {
-                'name': 'default-dark'
-            }
-	    },
-    	"checkbox" : {
-    		"keep_selected_style" : false
-    	},
-      'types': {
-            'root': {
-              'icon': 'glyphicon glyphicon-expand'
-            },
-            'endpoint': {
-              'icon': 'glyphicon glyphicon-blackboard'
-            },
-            'stack': {
-              'icon': 'glyphicon glyphicon-fire'
-            },
-            'audit': {
-              'icon': 'glyphicon glyphicon-log-in'
-            }
-          },
-    	"plugins" : ["checkbox", "types"]
-	});
-
-    var stack_data = {};
-
-	$("#jstree").bind("select_node.jstree", function (event, data) {
-		 event.preventDefault()
-	     var parent = data.node.id
-	     var audittype = data.node.a_attr.id.split("_")[0]
-
-         if (!isInDict(parent, stack_data)) {
-            stack_data[parent] = data.node.children
-         }
-         else {
-            // do nothing
-         }
-	});
-
-    $("#jstree").bind("deselect_node.jstree", function (event, data) {
-         event.preventDefault()
-         var audittype = data.node.a_attr.id.split("_")[0]
-
-         if (audittype in stack_data) {
-            delete stack_data[audittype]
-         }
-         else {
-            //do nothing
-         }
-    });
  
     $.ajaxSetup({beforeSend: function(xhr, settings){
         xhr.setRequestHeader('X-CSRFToken', 
@@ -187,9 +92,8 @@
         var maincol = parseInt($('.maincol').height())
         var stackin = parseInt($('.stack_inst').height())
         var setheight = maincol - stackin - 220
-        var data = JSON.stringify(stack_data)
+        var data = localStorage.getItem('stack_data')
 
-        console.log(maincol, stackin)
         $(".loader").show()
         $.ajax({
             type: "POST",
