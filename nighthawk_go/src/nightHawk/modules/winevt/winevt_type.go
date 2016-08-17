@@ -113,3 +113,17 @@ type EventNewProcess struct {
 }
 
 
+// Struct for Window EventID 4697
+// A service was installed in the system
+// Thanks for Phil Kealy for suggesting to include it
+type EventServiceInstall struct {
+    Subject                 AccountInfo     `json:"Subject"`
+    ServiceName             string 
+    ServiceFileName         string 
+    ServiceType             string 
+    ServiceTypeDesc         string 
+    ServiceStartType        string 
+    ServiceStartTypeDesc    string 
+    ServiceAccount          string 
+}
+

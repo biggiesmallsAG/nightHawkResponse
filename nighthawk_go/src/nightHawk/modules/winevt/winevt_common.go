@@ -16,6 +16,7 @@ const (
     EVENT_LOGON_FAILED              = 4625
     EVENT_EXPLICIT_CRED             = 4648
     EVENT_NEW_PROCESS               = 4688
+    EVENT_SERVICE_INSTALLED         = 4697
 )
 
 
@@ -43,7 +44,13 @@ func ProcessEventItem(LogSource string, EventId int, Message string) interface{}
             var ev EventNewProcess 
             ev.ParseEventMessage(Message)
             return ev 
+
+        case EVENT_SERVICE_INSTALLED:
+            var ev EventServiceInstall 
+            ev.ParseEventMessage(Message)
+            return ev 
         }
+
     }
     return nil 
 }

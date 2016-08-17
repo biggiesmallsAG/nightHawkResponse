@@ -77,7 +77,7 @@ func TestEventLogParsing(t *testing.T) {
     for _,el := range rl.EventList {
         el.MessageDetail = ProcessEventItem(el.Log, el.EID, el.Message)
         //if el.EID == 4624  || el.EID == 4648 || el.EID == 4688 {
-        if el.EID == 4625 {
+        if el.EID == 4697 {
             //el.PrintEventLogItem()    
             j,_ := json.MarshalIndent(el,""," ")
             fmt.Println(string(j))
