@@ -122,6 +122,10 @@ ol, ul {
 	padding: 0px !important;
 }
 
+.row {
+	margin-top: 10px !important;
+}
+
 .dataTables_filter input[type="search"] {
 	border: 1px solid #4AAAC4 !important;
 	border-radius: 3px !important;
@@ -172,7 +176,7 @@ em {
 	position: absolute; 
 	right: 20%; 
 	z-index: 2; 
-	border-bottom: 1px solid #4AAAC4;
+	border-bottom: 1px solid #28373c;
 	border-radius: 3px;
 	font-size: 10pt;
 }
@@ -191,7 +195,6 @@ em {
 	background-color: #222;
 	/*border-radius: 10px;*/
 	border-left: #2C2A2A solid 2px;
-	border-bottom: 2C2A2A solid 1px;
 	overflow-y: scroll;
 	overflow-x: scroll;
 }
@@ -202,6 +205,7 @@ em {
 
 .maincol {
 	height: 100%;
+	overflow-y: scroll;
 }
 
 .maincolexpand {
@@ -233,11 +237,43 @@ em {
 	color: #F7973D;
 }
 
+.service_highlight {
+	color: rgb(98, 247, 61);
+}
+
+.loader {
+	display: none;
+}
+
 .doc_dialog {
 	background-color: rgba(255, 255, 255, 0.99) ;
 	font-size: 8pt;
 	color: #1F1E22;
 	padding: 5%;
+}
+
+.upload_form {
+	border-left: #2C2A2A solid 2px;
+	border-bottom: #2C2A2A solid 2px;
+	border-radius: 0px 15px;
+}
+
+.upload_form_inner {
+	margin: 5%
+}
+
+.delete_form {
+	border-bottom: #2C2A2A solid 2px;
+	border-left: #2C2A2A solid 2px;
+	border-radius: 0px 15px;
+}
+
+.delete_form_inner {
+	margin: 5%
+}
+
+.bordered {
+	border-top: #2C2A2A solid 2px;
 }
 
 .ngdialog.ngdialog-theme-default.custom-width-800 .ngdialog-content {

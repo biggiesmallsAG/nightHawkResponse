@@ -1,7 +1,7 @@
 <body>
   <div class="platform_stats">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
       <div class="cpu_stats">
           <div style="color: #F7973D">
             <b>CPU(s)</b>
@@ -20,8 +20,9 @@
         </table>
       </div>          
         </div>
-        <div class="col-md-4">
-      <div class="processes">
+
+        <div class="col-md-6">
+      <div class="processes" style="height:300px;overflow-y:scroll">
           <div style="color: #F7973D">
             <b>Services</b>
           </div>
@@ -38,7 +39,9 @@
         </table>
       </div>          
         </div>
-        <div class="col-md-3">
+    </div>
+    <div class="row">
+      <div class="col-md-3">
       <div class="memstats_stats">
           <div style="color: #F7973D">
             <b>Memory</b>
@@ -74,11 +77,9 @@
           </tbody>
         </table>
       </div>          
-        </div>
-    </div>
-    <div class="row">
+      </div>
 
-      <div class="col-md-8">
+      <div class="col-md-9">
        <div class="upload_stats" style="height:300px;overflow-y:scroll">
           <div style="color: #F7973D">
             <b>Upload Logs</b>
@@ -95,9 +96,6 @@
           </tbody>
         </table>
       </div>           
-      </div>
-      <div class="col-md-4">
-        
       </div>
     </div>
 </div>
@@ -161,6 +159,7 @@
         $('.disk_stats table.stats tbody').empty();
 
         stats.disk.forEach(function (value, index, array){
+
 	        $('.disk_stats table.stats tbody').append(
         		"<tr><td>" + stats.disk[index].device + "</td>" + 
         		"<td>" + stats.disk[index].mountpoint + "</td>" + 
@@ -182,11 +181,31 @@
         $('.processes table.stats tbody').empty();
 
         stats.processes.forEach(function (value, index, array) {
-           	$('.processes table.stats tbody').append(
-	        		"<tr><td>" + stats.processes[index].service.name + "</td>" + 
-	        		"<td>" + stats.processes[index].service.cmdline[1] + "</td>" + 
-	        		"<td>" + stats.processes[index].service.status + "</td></tr>"
-           		) 	
+          switch (value.service.name) {
+            case 'uwsgi':
+              $('.processes table.stats tbody').append(
+              "<tr><td class='service_highlight'>" + stats.processes[index].service.name + "</td>" + 
+              "<td>" + stats.processes[index].service.cmdline[1] + "</td>" + 
+              "<td>" + stats.processes[index].service.status + "</td></tr>"
+              );
+              break;
+
+            case 'nginx':
+            $('.processes table.stats tbody').append(
+              "<tr><td class='service_highlight'>" + stats.processes[index].service.name + "</td>" + 
+              "<td>" + stats.processes[index].service.cmdline[0] + "</td>" + 
+              "<td>" + stats.processes[index].service.status + "</td></tr>"
+              );
+              break;
+
+            default: 
+              $('.processes table.stats tbody').append(
+              "<tr><td class='service_highlight'>" + stats.processes[index].service.name + "</td>" + 
+              "<td>" + stats.processes[index].service.cmdline[1] + "</td>" + 
+              "<td>" + stats.processes[index].service.status + "</td></tr>"
+              );            
+          }
+
         })
         
     };

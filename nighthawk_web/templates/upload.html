@@ -1,19 +1,97 @@
-<div class="uploads" ng-controller="uploadFile">
-    <h4>
-        To begin an investigation, please select a .zip(s) file for processing. To view ingest logs goto <a href="#PlatformStats">Platform Stats.</a>
-    </h4>
+<div class="uploads">
 
-    <form method="post" action="upload/" enctype="multipart/form-data">
-    	{{UploadForm.as_p}}
-		{% csrf_token %}
-        <p>If supplying a casename, the only accepted special characters are '-' or '_'</p>
-    <h5>
-    	<i>
-    	<span style="color: #F7973D">Disclaimer: **EXPERIMENTAL**</span>
-    	 <br> <br>Choosing concurrent processing limits 5 files (configurable) in batch. 
-    	 <br> If this option is not selected, processing is
-    	sequential and there are no limits. </i>
-    </h5>
-		<input type="submit" value="Upload">
-    </form>
+    <div class="row bordered">
+        <div class="col-md-4">
+            <h4>
+                <center>To begin an investigation, please select a .zip(s) file for processing. <br>
+                    <br>
+
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true" style="font-size:80px"></span>
+                    <br>
+                    
+                </center>
+            </h4>
+        </div>
+
+        <div class="col-md-4">
+            <div class="upload_form">
+                <div class="upload_form_inner">
+                    <form method="post" action="upload/" enctype="multipart/form-data">
+                        {{UploadForm.as_p}}
+                        {% csrf_token %}
+
+                        <input type="submit" value="Upload">
+                    </form>
+                    <br>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                    
+                    <h5>
+                        <p>If supplying a casename, the only accepted special characters are '-' or '_'</p>
+                        <i>
+                            <span style="color: #F7973D">Disclaimer: **EXPERIMENTAL**</span>
+                            <br> <br>Choosing concurrent processing limits 5 files (configurable) in batch. 
+                            If this option is not selected, processing is
+                            sequential and there are no limits. </i>
+                        </h5><br>
+                        <h5>
+                            <span style="color: #F7973D">To view ingest logs goto <a href="#PlatformStats">Platform Stats.</a></span>
+                        </h5>
+                        
+            </div>
+        </div>
+        <div class="row bordered">
+            <div class="col-md-4">
+            <h4>
+                <center>To delete a case or endpoint use the selector. <br>
+                    <br>
+
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:80px"></span>
+
+                </center>
+            </h4>
+            </div>
+            <div class="col-md-4">
+               <div class="delete_form" ng-controller="deleteController">
+                    <div class="delete_form_inner">
+                        {{DeleteCase.as_p}}
+                        
+                        <span class="input_hide"><input type="submit" value="Delete Case" ng-click="postDelete(selected)"></span>
+                        <span class="loader">Delete in progress.. Please Wait</span>
+                        <br>
+                    </div>
+                    <div class="delete_form_inner">
+                        {{DeleteEndpoint.as_p}}
+
+                        <span class="input_hide"><input type="submit" value="Delete Endpoint" ng-click="postDelete(selected)"></span>
+                        <span class="loader">Delete in progress.. Please Wait</span>
+                        <br><br>
+                        <label for="">Delete Single Endpoint from case:</label><br>
+
+                        <span class="input_hide"><input type="submit" value="Delete Singluar" ng-click="postDelete(selected)"></span>
+                        <span class="loader">Delete in progress.. Please Wait</span>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-4">
+            <h5>
+                <span style="color: #F7973D">The delete API works on single request and joined requests.</span>
+            </h5>
+            <h5>
+                If you need to delete a whole case select that case and leave the endpoint selector empty.
+            </h5>
+            <br>
+            <h5>
+                If you need to delete an endpoint only (will delete all aspects in any case it resides in)
+                select that endpoint and leave the case selector empty.
+            </h5>
+            <br>
+            <h5>
+                If you need to delete a specific endpoint from a specific case, select them both and hit delete single.
+            </h5>
+        </div>
+    </div>
 </div>

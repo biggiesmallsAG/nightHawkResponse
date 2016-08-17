@@ -32,70 +32,19 @@
                 <div class="navbar-header">
                  <a class="navbar-brand large" href="/"><b>{{name}}</b>: <span class="function">{{timeline}} </span> {{timeline_ver}}</a>
                </div>
-               <div class="navbar-center">
-                 <ul>
-                  <li>
-                    <a href="">
-                      <button type="button" title="Collapse Root Tree" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'home_search' %}">
-                      <button type="button" title="Global Search" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'timeline' %}">
-                      <button type="button" title="Timeline" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'stack_framework' %}">                  
-                      <button type="button" title="Stacking Framework" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'home' %}#Comment">                 
-                      <button type="button" title="Comments and Tags" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'home' %}#UploadFile">
-                      <button type="button" title="Upload Collection" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{% url 'home' %}#PlatformStats">
-                      <button type="button" title="Platform Status" class="btn btn-default btn-sm" id="menuhide">
-                        <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>
-                      </button>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div class="navbar-right">
-                <a href="/admin/" class="navbar-brand small">Logged in as: <span style="color: #F7973D">{{user}}</span></a>
-              </div>
+              {% include 'header.html' %}
             </nav>
           </header>
           <div class="maincontainer">
                     <div class="col-md-2 treecol">
-
-                            <div id="jstree">
-
-                        </div>
+                      <div ng-controller="timelineTreeController">
+                        <jstree
+                          dataurl="dataurl"
+                          selectnode="selectnode"
+                          types="types"
+                          plugins="plugins">
+                        </jstree>
+                    </div>
                     </div>
                     <div class="col-md-10 maincol">
                         <div class="stack_inst">
@@ -145,51 +94,6 @@
             }
         }
 
-        $('#jstree').jstree({
-           'core' : {
-               'data' : {
-                   'url' : "{% url 'load_timeline' %}",
-                   'contentType': "application/json; charset=utf-8",
-                   'data': function (data) {
-                    return { "id": data.id, "parent": data.parent, "text": data.text }
-                }
-            },
-            'themes': {
-                'name': 'default-dark'
-            }
-            },
-              "checkbox" : {
-              "keep_selected_style" : false
-          },
-          'types': {
-                'root': {
-                  'icon': 'glyphicon glyphicon-expand'
-                },
-                'endpoint': {
-                  'icon': 'glyphicon glyphicon-blackboard'
-                },
-                'case': {
-                  'icon': 'glyphicon glyphicon-leaf'
-                },
-                'audit': {
-                  'icon': 'glyphicon glyphicon-log-in'
-                }
-              },
-            "plugins" : ["types"]
-          });
-
-        var timeline_data = {};
-
-        $("#jstree").bind("select_node.jstree", function (event, data) {
-         event.preventDefault()
-         var endpoint = data.node.id
-
-         timeline_data = {
-            "case": data.node.parent,
-            "endpoint": endpoint
-        }
-    });
-
         $.ajaxSetup({beforeSend: function(xhr, settings){
             xhr.setRequestHeader('X-CSRFToken', 
                '{{ csrf_token }}');
@@ -199,7 +103,7 @@
             var maincol = parseInt($('.maincol').height())
             var stackin = parseInt($('.stack_inst').height())
             var setheight = maincol - stackin - 220
-            var data = timeline_data
+            var data = localStorage.getItem('timeline_data')
             $(".loader").show()
             $("#stack_table").dataTable({
                 bDestroy: true,
@@ -208,7 +112,7 @@
                 ajax: {
                     url: "{% url 'timeline_response' %}",
                     type: "POST",
-                    data: data
+                    data: JSON.parse(data)
                 },
                 oLanguage: {
                     sProcessing: "<img src={% static 'images/loader.gif' %}>"

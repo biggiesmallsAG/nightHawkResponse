@@ -87,7 +87,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -166,7 +166,7 @@
 	    .withPaginationType('numbers')
 	    .withDisplayLength(200)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 	    vm.dtColumns = [
@@ -250,7 +250,7 @@
 	    .withPaginationType('numbers')
 	    .withDisplayLength(200)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 	    vm.dtColumns = [
@@ -332,7 +332,7 @@
 	    .withPaginationType('numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 	    vm.dtColumns = [
@@ -424,7 +424,7 @@
 	    .withPaginationType('numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 	    vm.dtColumns = [
@@ -513,7 +513,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -593,7 +593,7 @@
         })
         .withOption('rowCallback', rowCallback)
 	    .withBootstrap()
-	    .withDOM('frtp')
+	    .withDOM('<"top"flp>rt<"bottom"><"clear">')
 	    // .withButtons([
 	    // 	'columnsToggle'])
 	    .withColReorder()
@@ -601,7 +601,7 @@
 	    .withDisplayLength(200)
 	    .withOption('order', [0, 'desc'])
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -680,7 +680,7 @@
 	    .withOption('order', [0, 'desc'])
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -755,7 +755,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -844,7 +844,7 @@
 	    .withPaginationType('numbers')
 	    .withDisplayLength(200)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -922,7 +922,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -997,7 +997,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1072,7 +1072,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1150,7 +1150,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1226,7 +1226,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1299,7 +1299,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1373,7 +1373,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1446,7 +1446,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1488,7 +1488,7 @@
 			// DTColumnBuilder.newColumn('_source.Record.File.NHScore').withTitle('File.nHScore'),
 		    DTColumnBuilder.newColumn('_source.Record.File.Tag').withTitle('File.Tag'),
 		    DTColumnBuilder.newColumn('_source.Record.File.VTResults').withTitle('File.VTResults'),
-		    DTColumnBuilder.newColumn('_source.Record.File.Comment').withTitle('File.Comment'),
+		    DTColumnBuilder.newColumn('_source.Record.File.Comment.Comment').withTitle('File.Comment'),
 			DTColumnBuilder.newColumn('_source.Record.Registry.KeyPath').withTitle('Registry.KeyPath'),
 			DTColumnBuilder.newColumn('_source.Record.Registry.Type').withTitle('Registry.Type'),
 		    DTColumnBuilder.newColumn('_source.Record.Registry.Modified').withTitle('Registry.Modified'),
@@ -1502,7 +1502,10 @@
 			DTColumnBuilder.newColumn('_source.Record.Registry.IsKnownKey').withTitle('Registry.IsKnownKey'),
 			// DTColumnBuilder.newColumn('_source.Record.Registry.NHScore').withTitle('Registry.nHScore'),
 		    DTColumnBuilder.newColumn('_source.Record.Registry.Tag').withTitle('Registry.Tag'),
-		    DTColumnBuilder.newColumn('_source.Record.Registry.Comment').withTitle('Registry.Comment'),
+		    DTColumnBuilder.newColumn('_source.Record.Registry.Comment.Comment').withTitle('Registry.Comment'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Date').withTitle('Comment Date'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Analyst').withTitle('Comment Analyst'),
+		    DTColumnBuilder.newColumn('_source.Record.Comment.Comment').withTitle('Comment'),
 		    DTColumnBuilder.newColumn('_id').withTitle('doc_id').notVisible(),
 		    DTColumnBuilder.newColumn('_parent').withTitle('parent').notVisible(),
 		    
@@ -1554,7 +1557,7 @@
 	    .withPaginationType('full_numbers')
 	    .withDisplayLength(100)
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
@@ -1587,7 +1590,7 @@
 	    .withDisplayLength(100)
 	    .withOption('order', [3, 'desc'])
 	    .withOption('scrollX', '100%')
-	    .withOption('scrollY', '65vh')
+	    .withOption('scrollY', '70vh')
 	    .withOption('scrollCollapse', true);
 
 
