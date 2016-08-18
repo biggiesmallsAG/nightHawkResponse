@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ws4redis',
+    'nighthawk',
 ]
 
 MIDDLEWARE_CLASSES = [

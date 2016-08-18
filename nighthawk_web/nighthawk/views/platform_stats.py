@@ -1,4 +1,3 @@
-# Analyst Home view
 import json
 from django.views.generic.edit  import View
 from django.shortcuts import render

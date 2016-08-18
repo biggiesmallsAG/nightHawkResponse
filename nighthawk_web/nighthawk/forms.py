@@ -9,7 +9,7 @@ class UploadForm(forms.Form):
 		)
 
 	upload_field = forms.FileField(label="Select .zip file", widget=forms.ClearableFileInput(attrs={'multiple': True}))
-	case_number = forms.CharField(label="Case Number", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 30%','placeholder': 'ex. XXX-123'}))
+	case_number = forms.CharField(label="Case Number", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 70%','placeholder': 'ex. XXX-123'}))
 	concurrent = forms.ChoiceField(label="Concurrent (Multi Processing)?", choices=CONCURRENT_CHOICES)
 
 class UpdateDoc(forms.Form):
@@ -48,3 +48,37 @@ class DeleteEndpoint(forms.Form):
 		'ng-change': 'update()', 
 		'ng-options': "endpointx.endpoint for endpointx in endpoints| orderBy:'name'"
 		}))
+
+class TasksForm(forms.Form):
+	URGENCY_CHOICES = (
+		('urgent', 'Urgent'),
+		('one_hour', 'One Hour'),
+		('five_hours', 'Five Hours')
+		)
+
+	task_name = forms.CharField(label="Task", widget=forms.TextInput(attrs={
+			"class": "form-control",
+			"placeholder": "Task name?",
+			"ng-model": "task_name",
+			"ng-required": "true"
+		}))
+
+	task_endpoint = forms.CharField(label="Endpoint", widget=forms.TextInput(attrs={
+			"class": "form-control",
+			"placeholder": "Endpoint(s)",
+			"ng-model": "endpoints",
+			"ng-required": "true"
+		}))
+
+	task_urgency = forms.ChoiceField(label="Urgency", widget=forms.RadioSelect(attrs={
+			"ng-model": "urgency",
+			"ng-required": "true"
+		}), choices=URGENCY_CHOICES)
+
+	task_assignee = forms.ChoiceField(label="Assigned To", widget=forms.Select(attrs={
+			"ng-options": "x for x in assignee.assignee",
+			"ng-model": "assigned",
+			"ng-change": "update()",
+			"ng-required": "true"
+		}))
+

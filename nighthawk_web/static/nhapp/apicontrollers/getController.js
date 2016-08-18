@@ -91,6 +91,63 @@ angular
 
 	}])
 
+	.controller('taskController', ['$scope', 'getApiServicesObject', 'getApiServices', 'postGetArray', function($scope, getApiServicesObject, getApiServices, postGetArray) {
+
+		$scope.tasks = getApiServices.query({api_path: 'tasks/active'});
+		$scope.analyst = getApiServicesObject.query({api_path: 'tasks/analyst'});
+		$scope.assignee = $scope.analyst;
+
+		$scope.addTask = function() {
+			$scope.tasks.push({
+				"datetime": "Pending save..",
+				"id": "-",
+				"endpoints": $scope.endpoints,
+				"task_name": $scope.task_name,
+				"urgency": $scope.urgency,
+				"task_analyst": $scope.analyst.analyst,
+				"task_assignee": $scope.assigned,
+				"task_inactive": false,
+				"task_done": false
+			});
+
+			$scope.task_name = '';
+			$scope.endpoints = '';
+			$scope.urgency = '';
+
+		};
+
+		$scope.update = function (){
+			
+		};
+
+		$scope.saveTasks = function(){
+			for (var i = 0; i < $scope.tasks.length; i++) {
+				if ($scope.tasks[i].id === '-') {
+					var newTask = [];
+					newTask.push($scope.tasks[i])
+
+					postGetArray.save({api_path: 'tasks'}, newTask, function (success){
+						$scope.tasks = getApiServices.query({api_path: 'tasks/active'});
+					})
+				}
+			}
+		};
+
+		$scope.removeTask = function(){
+			for (var i = 0; i < $scope.tasks.length; i++) {
+				if ($scope.tasks[i].task_inactive) {
+					var removeTasks = [];
+					removeTasks.push($scope.tasks[i])
+
+					postGetArray.save({api_path: 'tasks'}, removeTasks, function (success){
+						$scope.tasks = getApiServices.query({api_path: 'tasks/active'});
+					})
+				}
+			}
+		};
+
+	}])
+
 	.controller('deleteController', ['$scope', 'getApiServices', 'postApiServices', 'ngDialog', function($scope, getApiServices, postApiServices, ngDialog) {
 
 		$scope.cases = getApiServices.query({api_path: 'delete_case/'});

@@ -8,20 +8,29 @@ import time
 import json
 import sys
 import os 
+import requests
+from requests import ConnectionError
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+import elasticsearch
+from elasticsearch_dsl import Search, A
 
 sys.path.append('/Users/biggiesmalls/Documents/brstriage/nightHawkResponse/nighthawk_web')
 os.environ.update(DJANGO_SETTINGS_MODULE='nighthawk.settings')
+from nighthawk.triageapi.dataendpoint.common import CommonAttributes
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
 sleep_cycle = 2
 
-class StatsConsumer(object):
+class StatsConsumer(object, CommonAttributes):
 	def __init__(self):
+		CommonAttributes.__init__(self)
 		self.cpu_stats = ''
 		self.mem_stats = ''
 		self.disk_stats = ''
 		self.processes = ''
+		self.es_stats = ''
 
 	def GenerateCPU(self):
 		self.cpu_stats = psutil.cpu_times_percent(percpu=True)
@@ -72,6 +81,58 @@ class StatsConsumer(object):
 
 		self.processes = core_services
 			
+	def GetEsStats(self):
+		req = True
+		while req:
+			try:
+				try:
+					r = requests.get(self.es_host + ":" + self.es_port + '/_cluster/stats', verify=False, auth=(self.elastic_user, self.elastic_pass))
+				except ConnectionError as e:
+					return {"connection_error": e.args[0]}
+
+				data = r.json()
+				s = Search()
+
+				aggs_cases = A('terms', field='CaseInfo.case_name', size=0)
+				s.aggs.bucket('cases', aggs_cases)
+				query = s.query()
+
+				try:
+					r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
+				except ConnectionError as e:
+					return {"connection_error": e.args[0]}
+
+				aggs = r.json()
+				cases = aggs['aggregations']['cases']['buckets']
+				
+				s = Search()
+
+				aggs_endpoints = A('terms', field="ComputerName.raw", size=0)
+				s.aggs.bucket('endpoints', aggs_endpoints)
+				query = s.query()
+
+				try:
+					r = requests.post(self.es_host + ":" + self.es_port + self.index + self.type_audit_type + '/_search', data=json.dumps(query.to_dict()), auth=(self.elastic_user, self.elastic_pass), verify=False)
+				except ConnectionError as e:
+					return {"connection_error": e.args[0]}
+
+				aggs = r.json()
+				endpoints = aggs['aggregations']['endpoints']['buckets']
+
+				self.es_stats = {
+					"docs": data['indices']['docs']['count'],
+					"status": data['status'],
+					"cluster_name": data['cluster_name'],
+					"indices": data['indices']['count'],
+					"nodes": data['nodes'],
+					"cases": len(cases),
+					"endpoints": len(endpoints)
+				}
+
+				req = False
+			except ValueError:
+				pass
+				
 	def GetFloatGB(self, number):
 		return float((((number/1024)/1024)/1024))
 
@@ -80,14 +141,15 @@ class StatsBroadcaster(StatsConsumer):
 		StatsConsumer.__init__(self)
 		self.redis_publisher = RedisPublisher(facility='platform', broadcast=True)
 
-	def BroadCast(self, cpu_stats, mem_stats, disk_stats, processes):
+	def BroadCast(self, cpu_stats, mem_stats, disk_stats, processes, es_stats):
 		os_stats = {
 			"cpu": cpu_stats,
 			"mem": mem_stats,
 			"disk": disk_stats,
-			"processes": processes
+			"processes": processes,
+			"es_stats": es_stats
 		}
-		
+
 		self.redis_publisher.publish_message(RedisMessage(json.dumps(os_stats)))
 
 def main():
@@ -100,8 +162,9 @@ def main():
 		s.GenerateMem()
 		s.GenerateDisk()
 		s.GenerateProcess()
+		s.GetEsStats()
 
-		b.BroadCast(s.cpu_stats, s.mem_stats, s.disk_stats, s.processes)
+		b.BroadCast(s.cpu_stats, s.mem_stats, s.disk_stats, s.processes, s.es_stats)
 		time.sleep(sleep_cycle)
 
 if __name__ == '__main__':

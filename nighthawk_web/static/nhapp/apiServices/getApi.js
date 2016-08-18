@@ -11,5 +11,14 @@ angular
 				
 	}])
 
+	.factory('getApiServicesObject', ['$resource', function($resource) {
+
+			return $resource(API_PATH+':api_path', {api_path: '@api_path'}, { query: {
+					isArray: false
+					}
+				});
+				
+	}])
+
 })();
 

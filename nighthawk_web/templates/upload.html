@@ -17,7 +17,11 @@
             <div class="upload_form">
                 <div class="upload_form_inner">
                     <form method="post" action="upload/" enctype="multipart/form-data">
-                        {{UploadForm.as_p}}
+                        <table class="upload_form_tbl">
+                            <tbody>
+                                {{UploadForm.as_table}}
+                            </tbody>
+                        </table>
                         {% csrf_token %}
 
                         <input type="submit" value="Upload">
@@ -30,16 +34,19 @@
             <div class="col-md-4">
                     
                     <h5>
-                        <p>If supplying a casename, the only accepted special characters are '-' or '_'</p>
-                        <i>
-                            <span style="color: #F7973D">Disclaimer: **EXPERIMENTAL**</span>
-                            <br> <br>Choosing concurrent processing limits 5 files (configurable) in batch. 
-                            If this option is not selected, processing is
-                            sequential and there are no limits. </i>
-                        </h5><br>
-                        <h5>
-                            <span style="color: #F7973D">To view ingest logs goto <a href="#PlatformStats">Platform Stats.</a></span>
-                        </h5>
+                        <span style="color: #F7973D">Uploading: </span><br><br>
+                        If supplying a casename, the only accepted special characters are '-' or '_'<br><br>
+                         <span style="color: #F7973D">Sequential uploading:</span> <br>Choose your files to upload and turn off concurrent uploads.
+                        <br><br>
+                         <span style="color: #F7973D">Concurrent uploading (**EXPERIMENTAL**):</span> 
+                        <br>Choosing concurrent processing limits 5 files (configurable) in batch. 
+                        If this option is not selected, processing is
+                        sequential and there are no limits. <br><br>
+                        
+                    </h5>
+                    <h5>
+                        <span style="color: #F7973D">To view ingest logs goto <a href="#PlatformStats">Platform Stats.</a></span>
+                    </h5>
                         
             </div>
         </div>
@@ -48,7 +55,6 @@
             <h4>
                 <center>To delete a case or endpoint use the selector. <br>
                     <br>
-
                         <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:80px"></span>
 
                 </center>
@@ -57,15 +63,17 @@
             <div class="col-md-4">
                <div class="delete_form" ng-controller="deleteController">
                     <div class="delete_form_inner">
-                        {{DeleteCase.as_p}}
-                        
+                        <ul>
+                            {{DeleteCase.as_ul}}
+                        </ul>
                         <span class="input_hide"><input type="submit" value="Delete Case" ng-click="postDelete(selected)"></span>
                         <span class="loader">Delete in progress.. Please Wait</span>
                         <br>
                     </div>
                     <div class="delete_form_inner">
-                        {{DeleteEndpoint.as_p}}
-
+                        <ul>
+                            {{DeleteEndpoint.as_ul}}
+                        </ul>
                         <span class="input_hide"><input type="submit" value="Delete Endpoint" ng-click="postDelete(selected)"></span>
                         <span class="loader">Delete in progress.. Please Wait</span>
                         <br><br>

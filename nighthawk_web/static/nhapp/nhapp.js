@@ -41,6 +41,12 @@ app = angular
 			}
 		}).
 
+		when('/Tasks', {
+			templateUrl: function()  {
+				return '/tasks/'
+			}
+		}).
+
 		when('/UploadFile', {
 			templateUrl: '/upload/'
 		}).

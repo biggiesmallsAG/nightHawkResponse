@@ -1,0 +1,54 @@
+<div ng-controller="taskController">
+	<div class="col-md-9">
+		<h4>
+			Active Tasks: 
+			<span class="clear_completed"><input type="submit" value="Remove Tasks" ng-click="removeTask()"></span>
+			<span class="clear_completed"><input type="submit" value="Save Tasks" ng-click="saveTasks()"></span>
+		</h4>
+		<div class="active_tasks" ng-if="tasks[0]">
+			<table class="task_table table-striped">
+				<thead>
+					<tr>
+						<th class="tasks">Datetime</th>
+						<th class="tasks">ID</th>
+						<th class="tasks">Task</th>
+						<th class="tasks">Endpoint(s)</th>
+						<th class="tasks">Urgency</th>
+						<th class="tasks">Analyst</th>	
+						<th class="tasks">Assigned To</th>
+						<th class="tasks_completed">Completed</th>					
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="task in tasks">
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.datetime]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.id]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.task_name]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.endpoints]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.urgency]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.task_analyst]]</td>
+						<td class="tasklist" ng-if="!task.task_done" ng-class="{'task_done':task.task_inactive}">[[task.task_assignee]]</td>
+						<td class="completed" ng-if="!task.task_done"><input type="checkbox" ng-model="task.task_inactive" ng-change="update()"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="tasks">
+			<div class="tasks_inner">
+				<form name="taskform" ng-submit="addTask()">
+					<table class="task_form">
+						<tbody>
+							{{TaskForm.as_table}}
+						</tbody>
+					</table>
+					<h4>
+						<span><button type="submit" ng-disabled="taskform.$invalid" value="Submit Task">Submit Task</button></span>
+					</h4>
+				</form>
+			</div>
+		</div>		
+	</div>
+</div>
+

@@ -1,26 +1,24 @@
 <body>
   <div class="platform_stats">
     <div class="row">
-        <div class="col-md-6">
-      <div class="cpu_stats">
+      <div class="col-md-6">
+       <div class="upload_stats" style="height:300px;overflow-y:scroll">
           <div style="color: #F7973D">
-            <b>CPU(s)</b>
+            <b>Upload Logs</b>
           </div>
         <table class="stats table-striped">
           <thead>
             <tr>
-              <th>CPU:</th>
-              <th>User:</th>
-              <th>Sys:</th>
-              <th>Idle:</th>
+              <th>Time:</th>
+              <th>Level:</th>
+              <th>Message:</th>
             </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
-      </div>          
-        </div>
-
+      </div>           
+      </div>
         <div class="col-md-6">
       <div class="processes" style="height:300px;overflow-y:scroll">
           <div style="color: #F7973D">
@@ -41,7 +39,47 @@
         </div>
     </div>
     <div class="row">
-      <div class="col-md-3">
+        <div class="col-md-3">
+      <div class="cpu_stats">
+          <div style="color: #F7973D">
+            <b>CPU(s)</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>CPU:</th>
+              <th>User:</th>
+              <th>Sys:</th>
+              <th>Idle:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>          
+        </div>
+      <div class="col-md-7">
+      <div class="es_stats">
+          <div style="color: #F7973D">
+            <b>Elastic Stats</b>
+          </div>
+        <table class="stats table-striped">
+          <thead>
+            <tr>
+              <th>Cluster Name:</th>
+              <th>Status:</th>
+              <th>Indices:</th>
+              <th>Doc Count:</th>
+              <th>Nodes:</th>
+              <th>Endpoints:</th>
+              <th>Cases:</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <br>
       <div class="memstats_stats">
           <div style="color: #F7973D">
             <b>Memory</b>
@@ -76,26 +114,7 @@
           <tbody>
           </tbody>
         </table>
-      </div>          
-      </div>
-
-      <div class="col-md-9">
-       <div class="upload_stats" style="height:300px;overflow-y:scroll">
-          <div style="color: #F7973D">
-            <b>Upload Logs</b>
-          </div>
-        <table class="stats table-striped">
-          <thead>
-            <tr>
-              <th>Time:</th>
-              <th>Level:</th>
-              <th>Message:</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>           
+      </div>     
       </div>
     </div>
 </div>
@@ -146,6 +165,35 @@
            }
 
         var stats = JSON.parse(received_msg);
+
+        $('.es_stats table.stats tbody').empty();
+
+        switch (stats.es_stats.status) {
+          case "green":
+            var status = "<td class='service_highlight'>" + 
+                          stats.es_stats.status + "</td>"
+            break;
+
+          case "yellow": 
+            var status = "<td style='color:yellow'>" + 
+                          stats.es_stats.status + "</td>"
+            break;    
+
+          case "red": 
+            var status = "<td style='color:red'>" + 
+                          stats.es_stats.status + "</td>"
+            break;                  
+        };
+
+        $('.es_stats table.stats tbody').append(
+            "<tr><td>" + stats.es_stats.cluster_name + "</td>" + 
+            status + 
+            "<td>" + stats.es_stats.indices + "</td>" + 
+            "<td>" + stats.es_stats.docs + "</td>" +
+            "<td>" + stats.es_stats.nodes.count.total + "</td>" + 
+            "<td>" + stats.es_stats.endpoints + "</td>" +
+            "<td>" + stats.es_stats.cases + "</td></tr>"
+          );  
 
         $('.memstats_stats table.stats tbody').empty();
 
