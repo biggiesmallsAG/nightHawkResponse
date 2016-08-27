@@ -5,7 +5,7 @@ function WebSocketComment()
   {
    console.log("WebSocket is supported by your Browser!");
 
-           var ws = new WebSocket("ws://" + window.location.host + "/ws/comments?subscribe-broadcast");
+           var ws = new WebSocket("wss://" + window.location.host + "/ws/comments?subscribe-broadcast");
            var heartbeat_msg = '--heartbeat--', heartbeat_interval = null, missed_heartbeats = 0;
 
            ws.onopen = function()
