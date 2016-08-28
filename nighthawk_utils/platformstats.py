@@ -76,7 +76,7 @@ class StatsConsumer(object, CommonAttributes):
 								"status": p.status()
 							} 
 						})
-		except (psutil.ZombieProcess, psutil.AccessDenied, psutil.NoSuchProcess):
+		except:
 			pass
 
 		self.processes = core_services
