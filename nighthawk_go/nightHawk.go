@@ -242,11 +242,11 @@ func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, d
 
     manifest, err := nightHawk.GetAuditManifestFile(targetDir)
     if err != nil {
-        ConsoleMessage("DEBUG", "Manifest file not found", nightHawk.VERBOSE)
-        panic(err.Error())
+        ConsoleMessage("DEBUG", "Manifest file not found in session directory", nightHawk.VERBOSE)
+        manifest = nightHawk.GenerateAuditManifestFile(targetDir)
     }
 
-
+    
     var rlman nightHawk.RlManifest
     rlman.ParseAuditManifest(filepath.Join(targetDir, manifest))
     auditfiles := rlman.Payloads2(targetDir)

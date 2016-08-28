@@ -15,6 +15,8 @@ import (
     "strings"
     "path/filepath"
     "errors"
+    "os"
+    "regexp"
 )
 
 type AuditResult struct {
@@ -29,9 +31,9 @@ type AuditGenerator struct {
 }
 
 type RlManifest struct {
-    SysInfo             RlSystemInfo
-    Type                string 
-    Version             string 
+    SysInfo             RlSystemInfo `json:"sysinfo"`
+    Type                string `json:"type"`
+    Version             string `json:"version"`
     Audits              []AuditGenerator `json:"audits"`
 }
 
@@ -153,4 +155,95 @@ func GetAuditManifestFile(session_dir string) (string,error) {
     return manifest_file, errors.New("Error no manifest file")
 }
 
+
+
+/// This function generates manifest file. This function is 
+/// typically used for audits generated using MIR (Mandiant Intelligence Response)
+/// The manifest file created by this function is different that Redline/HX manifest
+
+func GenerateAuditManifestFile(session_dir string) string { 
+    var manfilename string = "nh_manifest.json"
+
+    var rlman RlManifest
+    rlman.Type = "audit_manifest"
+    rlman.Version = "1.0"
+
+
+    filelist, err := filepath.Glob(filepath.Join(session_dir,"*"))
+    if err != nil {panic(err.Error())}
+
+    for _,file := range filelist {
+        if IsRegularFile(file) {
+
+            fh, err := os.Open(file)
+            if err != nil {panic(err.Error())}
+            defer fh.Close()
+
+            buf := make([]byte, 500)
+            fh.Read(buf)
+
+            strbuf := string(buf)
+
+            // No processing file containig Redline or MIR issues
+            if strings.Contains(strbuf, "issue.xsd") {
+                continue   
+            }
+
+            /// Begin creating manifest audits
+            var ar AuditResult
+            var ag AuditGenerator
+
+            ar.Payload = filepath.Base(file)
+            ar.PayloadType = "application/xml"
+        
+            re := regexp.MustCompile("generator=\"(.*)\" generatorVersion=\"([0-9.]+)\" ")
+            match := re.FindStringSubmatch(strbuf)
+
+            if len(match) > 2 {
+                ag.Generator = match[1]
+                ag.GeneratorVersion = match[2]
+
+                // HX audit failed audit contains "FireEye Agent" as generator.
+                // Ignoring audits with issue.
+                if ag.Generator != "FireEye Agent" {
+                    ag.AuditResults = append(ag.AuditResults, ar)
+                    rlman.Audits = append(rlman.Audits, ag)    
+                }
+                    
+            }
+            
+
+        }
+    }
+
+    manJsonData,_ := json.MarshalIndent(&rlman,"", " ")
+
+    ConsoleMessage("INFO", "Generating manifest file " + manfilename, VERBOSE)
+    
+    err = ioutil.WriteFile(filepath.Join(session_dir,manfilename), manJsonData, 0644)
+    if err != nil {
+        ConsoleMessage("ERROR", "Error writing " + manfilename + " to session directory " + session_dir, VERBOSE)
+        return ""
+    }
+
+    return manfilename
+}
+
+
+func IsRegularFile(file string) bool {
+    fh, err := os.Open(file)
+    if err != nil {
+        ConsoleMessage("ERROR", "Error opening file " + file, true)
+        return false
+    }
+
+    defer fh.Close()
+
+    fi,_ := fh.Stat()
+
+    if fi.Mode().IsRegular() {
+        return true
+    }
+    return false
+}
 
