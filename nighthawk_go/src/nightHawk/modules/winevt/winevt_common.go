@@ -52,7 +52,7 @@ func ProcessEventItem(LogSource string, EventId int, Message string) interface{}
         }
 
     }
-    return nil 
+    return ""  
 }
 
 
