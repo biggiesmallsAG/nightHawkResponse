@@ -34,7 +34,9 @@ func main() {
 
     resp, err := nightHawk.HttpOperation("GET", esIndexUrl, nightHawk.ELASTIC_AUTHCODE, nightHawk.ELASTIC_SSL, nil)
     if err != nil {
-        panic(err.Error())
+        nightHawk.ConsoleMessage("ERROR", "Error occured connecting to Elasticsearch Instance ["+esIndexUrl+"]", true)
+        os.Exit(1)
+        //panic(err.Error())
     }
     
     if resp.StatusCode == 200 || resp.StatusCode == 201 {
@@ -48,7 +50,9 @@ func main() {
             // Delete current index
             resp, err := nightHawk.HttpOperation("DELETE", esIndexUrl, nightHawk.ELASTIC_AUTHCODE, nightHawk.ELASTIC_SSL, nil)
             if err != nil {
-                panic(err.Error())
+                nightHawk.ConsoleMessage("ERROR", "Error deleting default index investigation1 ["+esIndexUrl+"]", true)
+                //panic(err.Error())
+                os.Exit(1)
             }
 
             if resp.StatusCode != 200 && resp.StatusCode != 201 {
@@ -83,7 +87,9 @@ func CreateElasticIndex(esIndexUrl string, data []byte) {
 
     resp, err := nightHawk.HttpOperation("POST", esIndexUrl, nightHawk.ELASTIC_AUTHCODE, nightHawk.ELASTIC_SSL, postData)
     if err != nil {
-        panic(err.Error())
+        nightHawk.ConsoleMessage("ERROR", "Error occured posting data to Elasticsearch instance ["+esIndexUrl+"]", true)
+        //panic(err.Error())
+        os.Exit(1)
     }
     
     if resp.StatusCode != 200 && resp.StatusCode != 201 {
@@ -94,7 +100,9 @@ func CreateElasticIndex(esIndexUrl string, data []byte) {
     
     err = ioutil.WriteFile("/opt/nighthawk/var/run/elasticsearch/elastic.init", []byte(time.Now().UTC().String()), 0644)
     if err != nil {
-        panic(err.Error())
+        nightHawk.ConsoleMessage("ERROR", "Failed to write elastic init file", true)
+        //panic(err.Error())
+        os.Exit(2)
     }
     os.Chown("/opt/nighthawk/var/run/elasticsearch/elastic.init", 3728, 3728)
 }
