@@ -14,6 +14,7 @@ import (
     "encoding/xml"
     "strings"
     "path/filepath"
+    "errors"
 )
 
 type AuditResult struct {
@@ -130,20 +131,26 @@ func GetAuditManifestFile(session_dir string) (string,error) {
  
     var manifest_file string = ""
     for _,file := range filelist {
+        manifest_file = ""
         _,filename := filepath.Split(file)
 
+        lwrFilename := strings.ToLower(filename)
         // Checking keyword manifest in filename and file extension .json
-        if strings.Contains(filename, "manifest") && strings.HasSuffix(filename,"json") {
+        if strings.Contains(lwrFilename, "manifest") && strings.HasSuffix(lwrFilename,"json") {
             manifest_file = filename
             break
-        } else if strings.HasSuffix(filename, "json") {
+        } else if strings.HasSuffix(lwrFilename, "json") {
             // This is loose checking for manifest file. Just checking for json file if keyword is not found
             manifest_file = filename
         }
     }
 
     /// Something to do in future. Validate that json file is correct auditmanifest file by unmarshaling
-    return manifest_file, nil
+    if len(manifest_file) > 2 {
+        return manifest_file, nil    
+    }
+
+    return manifest_file, errors.New("Error no manifest file")
 }
 
 

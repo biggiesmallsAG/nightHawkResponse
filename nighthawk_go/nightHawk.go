@@ -242,8 +242,10 @@ func LoadRedlineAuditFile(caseinfo nightHawk.CaseInformation, filename string, d
 
     manifest, err := nightHawk.GetAuditManifestFile(targetDir)
     if err != nil {
+        ConsoleMessage("DEBUG", "Manifest file not found", nightHawk.VERBOSE)
         panic(err.Error())
     }
+
 
     var rlman nightHawk.RlManifest
     rlman.ParseAuditManifest(filepath.Join(targetDir, manifest))
@@ -288,10 +290,30 @@ func IsRedlineAuditDirectory(dirPath string) bool {
         return false
     }
     
+    // Read all the files header. w32system file must be available.
+    // Continue checking until w32system audit is found.
     for _,f := range fList {
-        if strings.Contains(f, "manifest") {
-            return true
+        // Session directory may contain subfolder. Ignore the subfolders
+        // 7za e should extract all the important component in session directory
+        //fmt.Println("I am here " + f)
+        fh, err := os.Open(f)
+        if err != nil {panic(err.Error())}
+        defer fh.Close()
+
+        fi,_ := fh.Stat()
+
+        if fi.Mode().IsRegular() {
+            // Read the audit file
+            buf := make([]byte, 500)
+            _,err := fh.Read(buf)
+            if err != nil {panic(err.Error())}
+            
+            if strings.Contains(string(buf), "audit_manifest") || strings.Contains(string(buf), "w32system") {
+                return true
+            }
+
         }
+
     }
 
     return false
@@ -330,14 +352,17 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     manifest, err := nightHawk.GetAuditManifestFile(targetDir)
     if err != nil {
-        panic(err.Error())
+        ConsoleMessage("DEBUG", "Manifest not found in " + targetDir, nightHawk.VERBOSE)
+        ConsoleMessage("DEBUG", "Generating manifest file for " + targetDir, nightHawk.VERBOSE)
     }
+
 
     var rlman nightHawk.RlManifest
     rlman.ParseAuditManifest(filepath.Join(targetDir, manifest))
     auditfiles := rlman.Payloads2(targetDir)
-    
     computername := rlman.SysInfo.SystemInfo.Machine
+
+    
     if computername == "" {
         ExitOnError("Failed to get Computer Name from Audits", nightHawk.ERROR_READING_COMPUTERNAME)
     }
@@ -352,18 +377,17 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
     nightHawk.RedisPublish("INFO", cmsg, nightHawk.REDIS_PUB)
 
     var rlwg sync.WaitGroup
-    
 
     for _,auditfile := range auditfiles {   
         rlwg.Add(1)
-        go GoLoadAudit(&rlwg, computername, caseinfo, targetDir, auditfile)
+        go GoLoadAudit(&rlwg, computername, caseinfo, targetDir, auditfile) 
     }
     rlwg.Wait()
     return 0
 }
 
 
-/// This function will create and extract supplied archive audit files
+/// This function will create and extract supplied archive audit file
  /// and returns the full path of the file
  func CreateSessionDirectory(filename string) (string) {
     sessionDir := nightHawk.NewSessionDir(nightHawk.SESSIONDIR_SIZE)
@@ -371,12 +395,33 @@ func LoadRedlineAuditDirectory(caseinfo nightHawk.CaseInformation, filename stri
 
     os.MkdirAll(targetDir, 0755)
 
-    cmd := exec.Command("unzip", "-q", filename, "-d", targetDir)
-    err := cmd.Run()
+    //cmd := exec.Command("unzip", "-q", filename, "-d", targetDir)
+    
+    //_rm> 2016-08-28 start_test_block
+    cwd, err := os.Getwd()
+    if err != nil {panic(err.Error())}
+    ConsoleMessage("INFO", "Current working directory "+cwd, nightHawk.VERBOSE)
+    err = os.Chdir(targetDir)
+    if err != nil {panic(err.Error())}
+
+    cwd1, err := os.Getwd()
+    if err != nil {panic(err.Error())}
+    ConsoleMessage("INFO", "Changing working directory to "+cwd1, nightHawk.VERBOSE)
+
+    cmd := exec.Command("/usr/bin/7za", "e", filename)
+    //_rm> 2016-08028 stop_test_block
+
+    err = cmd.Run()
     if err != nil {
         ExitOnError("Error encountered extracting Redline file", nightHawk.ERROR_EXTRACTING_REDLINE_ARCHIVE)
         //panic(err.Error())
     }
+
+    err = os.Chdir(cwd)
+    if err != nil {panic(err.Error())}
+    cwd2,err := os.Getwd() 
+    if err != nil {panic(err.Error())} 
+    ConsoleMessage("INFO", "Changing working directory to "+cwd2, nightHawk.VERBOSE)
     return targetDir
  }
 
