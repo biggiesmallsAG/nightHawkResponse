@@ -57,10 +57,10 @@ header {
 	position: absolute;
 	top: -20px;
 	right: 10px;
-	border-left: #2C2A2A solid 2px;
+/*	border-left: #2C2A2A solid 2px;
 	border-bottom: #2C2A2A dotted 2px;
 	background-color: rgba(44, 42, 42, 0.62);
-	border-radius: 5px 15px;
+	border-radius: 5px 15px;*/
 }
 
 .navbar-center {
