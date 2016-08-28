@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 ## Platform stats helper by Daniel Eden
-## 26/07/2016 Update 
+## 28/08/2016 Update 
+## Version: 0.2
 ## daniel.eden@gmail.com
 
 import psutil
@@ -15,13 +16,13 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import elasticsearch
 from elasticsearch_dsl import Search, A
 
-sys.path.append('/Users/biggiesmalls/Documents/brstriage/nightHawkResponse/nighthawk_web')
+sys.path.append('/opt/nighthawk/web')
 os.environ.update(DJANGO_SETTINGS_MODULE='nighthawk.settings')
 from nighthawk.triageapi.dataendpoint.common import CommonAttributes
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
-sleep_cycle = 2
+sleep_cycle = 10
 
 class StatsConsumer(object, CommonAttributes):
 	def __init__(self):
@@ -130,7 +131,7 @@ class StatsConsumer(object, CommonAttributes):
 				}
 
 				req = False
-			except ValueError:
+			except:
 				pass
 				
 	def GetFloatGB(self, number):
