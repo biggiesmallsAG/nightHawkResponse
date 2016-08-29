@@ -1,43 +1,27 @@
 #!/usr/bin/env python
 ## ElasticSearch Reindexer by Daniel Eden
-## 28/07/2016 Update
+## 29/08/2016 Update
 ## - Fixed SSL based communications 
 ## daniel.eden@gmail.com
 
 import requests
 from requests import ConnectionError
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import json
 import re
 import sys
-
-class CommonAttributes():
-	def __init__(self):
-		with open('/opt/nighthawk/etc/nighthawk.json', 'r') as config:
-			self.conf_data = json.load(config)
-
-		with open('/opt/nighthawk/lib/elastic/ElasticMapping.json', 'r') as mapping:
-			self.mapping_file = json.load(mapping)
-
-		if self.conf_data['elastic']['elastic_ssl']:
-			self.es_host = "https://{0}".format(self.conf_data['elastic']['elastic_server'])
-			self.es_port = str(self.conf_data['elastic']['elastic_port'])
-		else:
-			self.es_host = "http://{0}".format(self.conf_data['elastic']['elastic_server'])
-			self.es_port = str(self.conf_data['elastic']['elastic_port'])
-
-		self.elastic_user = self.conf_data['elastic']['elastic_user']
-		self.elastic_pass = self.conf_data['elastic']['elastic_pass']
-		self.index = '/investigations'
+sys.path.append('/opt/nighthawk/web')
+from nighthawk.triageapi.dataendpoint.common import CommonAttributes
 
 class SearchQuery(CommonAttributes):
 	def __init__(self):
 		CommonAttributes.__init__(self)
 
-
 	def CheckAliases(self):
-		print "\n[+] Obtaining latest index alias to determine index number"
+		print "[+] Obtaining latest index alias to determine index number"
 		try:
-			r = requests.get(self.es_host + self.es_port + '/_aliases', auth=(self.elastic_user, self.elastic_pass), verify=False)
+			r = requests.get(self.es_host + ":" + self.es_port + '/_aliases', auth=(self.elastic_user, self.elastic_pass), verify=False)
 		except ConnectionError as e:
 			print '[!] Error connecting to {0}{1}'.format(self.es_host, self.es_port)
 
@@ -63,7 +47,7 @@ class SearchQuery(CommonAttributes):
 
 		try:
 			print '[-] Sending mapping to new index'
-			r = requests.put("{0}{1}{2}{3}".format(self.es_host, self.es_port, self.index, index_num), data=json.dumps(self.mapping_file), auth=(self.elastic_user, self.elastic_pass), verify=False)
+			r = requests.put("{0}:{1}{2}{3}".format(self.es_host, self.es_port, self.index, index_num), data=json.dumps(self.mapping_file), auth=(self.elastic_user, self.elastic_pass), verify=False)
 			try:
 				if r.json()['acknowledged']:
 					print '[+] Returned successfully, index created.'
@@ -90,7 +74,7 @@ class SearchQuery(CommonAttributes):
 					]
 				}
 
-				r = requests.post(self.es_host + self.es_port + '/_aliases', data=json.dumps(remove_alias), auth=(self.elastic_user, self.elastic_pass), verify=False)
+				r = requests.post(self.es_host + ":" + self.es_port + '/_aliases', data=json.dumps(remove_alias), auth=(self.elastic_user, self.elastic_pass), verify=False)
 				try:
 					if r.json()['acknowledged']:
 						print '[+] Returned successfully, alias removed.'
@@ -119,7 +103,7 @@ class SearchQuery(CommonAttributes):
 				}
 
 				print '[-] Large datasets will take a while, sit back and grab a coke....'
-				r = requests.post(self.es_host + self.es_port + '/_reindex', data=json.dumps(reindex), auth=(self.elastic_user, self.elastic_pass), verify=False)
+				r = requests.post(self.es_host + ":" + self.es_port + '/_reindex', data=json.dumps(reindex), auth=(self.elastic_user, self.elastic_pass), verify=False)
 
 				try:
 					if r.json()['created']:
@@ -134,9 +118,14 @@ class SearchQuery(CommonAttributes):
 			print '[!] Returned op_code 1, error in index creation and mapping. Exiting now'
 			sys.exit(1)
 
+	def Version(self):
+		print "-- Reindexing automation by Daniel Eden (nightHawk Response team)."
+		print "-- Version 1.0.3. 29/08/2016\n"
+
 def main():
 
 	s = SearchQuery()
+	s.Version()
 	index = s.CheckAliases()
 	op_code, index_num = s.GetMappingAndCreateIndex(index)
 	op_code = s.RemoveOldAlias(op_code, index_num)

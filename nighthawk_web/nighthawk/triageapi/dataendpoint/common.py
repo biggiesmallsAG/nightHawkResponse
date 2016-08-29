@@ -5,6 +5,9 @@ class CommonAttributes():
 		with open('/opt/nighthawk/etc/nighthawk.json', 'r') as config:
 			self.conf_data = json.load(config)
 
+		with open('/opt/nighthawk/lib/elastic/ElasticMapping.json', 'r') as mapping:
+			self.mapping_file = json.load(mapping)
+
 		self.name = 'nightHawk'
 		self.nighthawk_version = 'v1.0.3'
 		self.nighthawk_stack = 'Stack'

@@ -108,14 +108,14 @@ table.stats td, th {
 	padding: 0;
 	padding-top: 2px !important;
 	padding-bottom: 2px !important;
-	padding-right: 30px !important;
+	padding-right: 15px !important;
 }
 
 table.task_table td.tasklist, th.tasks {
 	padding-left: 5px !important; 
 	padding-top: 5px !important;
 	padding-bottom: 5px !important;
-	padding-right: 30px !important;
+	padding-right: 15px !important;
 	font-size: 10pt;
 }
 
