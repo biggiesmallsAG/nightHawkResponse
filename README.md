@@ -11,17 +11,18 @@ To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher appli
 
 # Build
 
-16/07/16 : Version 1.0.2 <br>
+01/09/2016: Version 1.0.3 <br>
 
-- Bug fixes (tokenization and mapping updates) <br>
-- Global Search error handling, keyword highlighting <br>
-- Stacking on URL Domain and DNS, fixed stacking registry <br>
-- Reindex data utility added (see <a href="https://github.com/biggiesmallsAG/nightHawkResponse/wiki/Reindexing-data">wiki article</a> for usage) <br>
-- Upgrade feature added, you can now update the sourcecode from yum without downloading a new iso (see <a href="https://github.com/biggiesmallsAG/nightHawkResponse/wiki/Upgrading-to-latest-source">wiki article</a> for usage) <br>
-- Rotate /media folder to remove old collections after 1 day (or > 2GB foldersize) <br>
-- Added w32system (system info) <br>
-- Removed static mapping in postController for hostname <br>
-- Fixed issue with building audit aggs where default_field was not being passed to ES. <br>
+- User context and user accounts added (login with nighthawk/nighthawk), see wiki article <br>
+- Platform statistics and upload information on websockets added <br>
+- Delete cases, delete endpoints, delete endpoints from cases added <br>
+- Task workflow section on websocket added, see wiki article for guide <br>
+- Comments/Tagging are now expandable objects with highlighting enabled <br>
+- Comments are now alerts on websocket, see wiki for notes <br>
+- Bug in CaseName = Endpoint name resolved <br>
+- Zipped audits from Mac/Windows/Linux resolved <br>
+- Responsive design upgrade features <br>
+- w32system added as audit type <br>
 
 <b>Features:</b>
 
@@ -65,11 +66,13 @@ _Pending_: User based storage setup for large scale instances. If you desire to 
 
 <b>Installation</b>:
 
-Download ISO: <a href="https://drive.google.com/open?id=0B7rD-z1KKpYZS3A2MVVnZVlOdjQ">nightHawk v1.0.2</a>
+Download ISO: <a href="https://drive.google.com/open?id=0B-Eozyt1N6W-b1F6RzAtbFJ6d3c">nightHawk v1.0.3</a>
 
 Configure the hardware, mount the ISO into the VM, start the installtion script. <br> 
 
 Once complete, in your browser (Chrome/FireFox), goto; `https://192.168.42.173`. <br>
+
+Log into the system with 'nighthawk/nighthawk' - click "goto site" to get into application <br>
 
 If you need to access Kibana, goto; `https://192.168.42.173:8443`. <br>
 
