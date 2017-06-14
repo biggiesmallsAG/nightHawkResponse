@@ -11,6 +11,8 @@ To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher appli
 
 # Build
 
+**NEW VERSION (1.0.4) is on the way. Start of July, heaps of new features/design !**
+
 01/09/2016: Version 1.0.3 <br>
 
 - User context and user accounts added (login with nighthawk/nighthawk), see wiki article <br>
