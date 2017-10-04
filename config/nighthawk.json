@@ -1,0 +1,21 @@
+{
+ "nighthawk": {
+  "max_procs": 2,
+  "max_goroutine": 100,
+  "bulk_post_size": 1000,
+  "opcontrol": 2,
+  "sessiondir_size": 8,
+  "check_hash": false,
+  "check_stack": false,
+  "verbose": true,
+  "verbose_level": 4
+ },
+ "elastic": {
+  "elastic_server": "127.0.0.1",
+  "elastic_port": 9200,
+  "elastic_index": "investigations",
+  "elastic_ssl": false,
+  "elastic_user": "",
+  "elastic_pass": ""
+ }
+}
