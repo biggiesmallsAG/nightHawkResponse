@@ -1,0 +1,182 @@
+@import 'vars'
+
+html,
+body 
+    margin: 0px 
+    padding: 0px 
+    height: 100%
+    color: $nh-body !important
+    background-color: $nh-dgrey !important
+    overflow: hidden
+
+*:focus
+    outline: none
+    
+.container 
+    background-color: rgba(29, 42, 60, 0.08)
+
+.smallcontainer
+    background-color: $nh-dgrey
+    border-radius: 2px
+    border: 1px solid $nh-dgrey
+
+.largecontainer
+    background-color: $nh-dgrey
+    border-radius: 2px
+    border: 1px solid $nh-dgrey
+    padding: 10px
+
+.rowpadded
+    padding-top: 1% !important
+
+.greytext 
+    color: $greytext !important
+    cursor: pointer !important
+
+.limetext 
+    color: $limetext !important
+    cursor: default !important
+
+.ambertext 
+    color: $ambertext !important
+    cursor: default !important
+
+.nhorange
+    color: $nh-orange
+
+.nhblue
+    color: $nh-blue
+
+.rawjson
+    .renderjson
+        background-color: $nh-dgrey
+        border: 0px
+        span .key
+            color: $nh-orange
+        span .string
+            color: #9e9e9e
+        span .syntax
+            color: $nh-orange
+        span .object
+            color: $nh-blue
+        span .number
+            color: $limetext
+        a
+            color: $nh-orange
+
+.btn, 
+.btn-large 
+    text-decoration: none
+    color: $greytext
+    background-color: $nh-dgrey
+    text-align: center
+    letter-spacing: .5px
+    -webkit-transition: .2s ease-out
+    transition: .2s ease-out
+    cursor: pointer
+
+input:not([type]), 
+input[type=text], 
+input[type=password], 
+input[type=email], 
+input[type=url], 
+input[type=time], 
+input[type=date], 
+input[type=datetime], 
+input[type=datetime-local], 
+input[type=tel], 
+input[type=number], 
+input[type=search],
+textarea.materialize-textarea 
+    background-color: transparent
+    border: none
+    border-bottom: 1px solid $nh-treegrey
+    border-radius: 0
+    outline: none
+    height: 3rem
+    width: 100%
+    font-size: 1rem
+    margin: 0 0 20px 0
+    padding: 0
+    box-shadow: none
+    box-sizing: content-box
+    -webkit-transition: all 0.3s
+    transition: all 0.3s
+
+input:not([type]):focus:not([readonly]), 
+input[type=text]:focus:not([readonly]), 
+input[type=password]:focus:not([readonly]), 
+input[type=email]:focus:not([readonly]), 
+input[type=url]:focus:not([readonly]), 
+input[type=time]:focus:not([readonly]), 
+input[type=date]:focus:not([readonly]), 
+input[type=datetime]:focus:not([readonly]), 
+input[type=datetime-local]:focus:not([readonly]), 
+input[type=tel]:focus:not([readonly]), 
+input[type=number]:focus:not([readonly]), 
+input[type=search]:focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly])
+    border-bottom: 1px solid $nh-blue
+    box-shadow: 0 1px 0 0 $nh-blue
+
+.material-tooltip 
+    background-color: $nh-treegrey !important
+    color: $nh-blue !important
+
+.backdrop
+    background-color: $nh-treegrey !important
+
+.select-wrapper span.caret
+    color: $nh-orange !important
+
+.caret
+    display: none !important
+
+.select-wrapper input.select-dropdown
+    background-color: $nh-treegrey !important
+    border-bottom: 1px solid $nh-blue !important
+    text-align: center !important
+
+.ag-dark .ag-body 
+    background-color: $grid-background !important
+
+.ag-dark .ag-header 
+    color: $nh-orange !important
+    background: $grid-greybg !important
+    border-bottom: 1px solid $grid-border !important
+    font-weight: normal !important
+
+.ag-dark .ag-ltr .ag-header-group-cell 
+    border-right: 1px solid $grid-innerborder !important
+
+.ag-dark .ag-row
+    cursor: pointer !important
+
+// .ag-dark .ag-row-selected
+//     background-color: $grid-selectedrow !important
+
+.ag-dark .ag-row-even 
+    background-color: $grid-greybg !important
+
+.ag-dark .ag-row-odd 
+    background-color: $grid-background !important
+
+.ag-dark .ag-header-group-cell-with-group 
+    border-bottom: 1px solid $grid-border !important
+
+.ag-dark .ag-ltr .ag-header-cell 
+    border-right: 1px solid $grid-border !important
+
+.ag-dark .ag-root 
+    border: 1px solid $grid-border !important
+
+.ag-dark .ag-ltr .ag-cell-no-focus 
+    border-right: 1px dotted $grid-border !important
+    border-left: 1px solid transparent !important
+
+.ag-dark .ag-ltr .ag-header-group-cell-label 
+    padding-left: 0px !important
+    text-align: center !important
+    
+.ag-dark .ag-cell-focus
+    border: 0px !important

@@ -1,0 +1,25 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"urlhistory"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "urlua": {
+      "terms": {
+        "field": "Record.BrowserName.keyword"
+      },
+      "aggs": {
+        "computer": {
+          "terms": {
+            "field":"ComputerName.keyword"
+          }
+        }
+      }
+    }
+  }
+}

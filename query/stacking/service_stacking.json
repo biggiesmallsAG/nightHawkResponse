@@ -1,0 +1,36 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32services"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "svcname": {
+      "terms": {
+        "field": "Record.Name.raw",
+        "size": 100,
+        "order": {
+          "_count": "asc"
+        }
+      },
+      "aggs": {
+        "svcpath": {
+          "terms": {
+            "field": "Record.Path.raw"
+          },
+          "aggs": {
+            "computer": {
+              "terms": {
+                "field":"ComputerName.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

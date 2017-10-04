@@ -1,0 +1,33 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32ports"}},
+        {"match":{"Record.State.keyword": "LISTENING"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "lport": {
+      "terms": {
+        "field": "Record.LocalPort"
+      },
+      "aggs": {
+        "procname": {
+          "terms": {
+            "field":"Record.Process.keyword"
+          },
+          "aggs": {
+            "computer": {
+              "terms": {
+                "field": "ComputerName.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<app-nh-tree [isVisible]="showCases"></app-nh-tree>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="grid">
+		<button class="btn-default-blue" (click)='showHideCases()' title="Collapse Cases">
+			<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+		</button>
+		<span>{{pageTitle}}</span>
+		<button class="btn-default" routerLink="/config" routerLinkActive="active" title="User Settings">
+			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+		</button>
+	</div>
+</nav>

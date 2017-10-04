@@ -1,0 +1,64 @@
+{
+	"server": {
+		"host": "localhost",
+		"port": 5672,
+		"protocol": "amqp",
+		"user": "guest",
+		"password": "guest"
+	},
+	"nighthawk_logexchange": {
+		"name": "nighthawk_logexchange",
+		"type": "topic",
+		"durable": true,
+		"auto_delete:": false,
+		"internal": false,
+		"no_wait": false
+	},
+        "nighthawk_workexchange": {
+                "name": "nighthawk_workexchange",
+                "type": "topic",
+                "durable": true,
+                "auto_delete:": false,
+                "internal": false,
+                "no_wait": false
+        },
+	"worker": {
+		"process": 5,
+		"name": "nighthawk_worker",
+		"routing_key": "#",
+		"exchange": "nighthawk_workexchange",
+		"auto_ack": true,
+		"exclusive": false,
+		"wait": false,
+		"lock": false
+	},
+	"jobqueue": {
+		"processes": 1,
+		"name": "nighthawk_jobqueue",
+		"routing_key": "nighthawk.jobqueue",
+		"exchange": "nighthawk_logexchange",
+		"auto_ack": true,
+		"exclusive": false,
+		"wait": false,
+		"lock": false
+	},
+	"hunter": {
+		"process": 2,
+		"routing_key": "hunt_worker",
+		"exchange": "",
+		"auto_ack": true,
+		"exclusive": false,
+		"wait": false,
+		"lock": false
+	},
+	"logger": {
+		"process": 1,
+		"name": "nighthawk_logger",
+		"routing_key": "#",
+		"exchange": "nighthawk_logexchange",
+		"auto_ack": true,
+		"exclusive": false,
+		"wait": false,
+		"lock": false
+	}
+}

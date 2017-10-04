@@ -1,0 +1,32 @@
+GET investigations/_search?pretty
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"urlhistory"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "urlhost": {
+      "terms": {
+        "field": "Record.UrlHostname.keyword",
+        "size":100,
+        "order":{"_count": "asc"}
+      },
+      "aggs": {
+        "computer": {
+          "terms": {
+            "field":"ComputerName.keyword",
+            "size": 10,
+            "order": {
+              "_term": "asc"
+            }
+          }
+        }
+      }
+    }
+  }
+}

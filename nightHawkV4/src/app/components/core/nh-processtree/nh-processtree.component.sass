@@ -1,0 +1,44 @@
+@import 'src/app/styles/mixin';
+@import 'src/app/styles/vars';
+
+.gridcontent
+	height: 100%
+	
+.gridcontent svg 
+	width: 100%
+	height: inherit
+
+.link
+	stroke: rgba(51, 122, 183, 0.23)
+	stroke-width: 1.5px
+	fill: none
+
+.node circle
+	fill: $nh-blue
+
+.node text
+	fill: #d3d3d3
+
+.title line 
+	color: $nh-blue
+	
+.smallcontainer
+	padding-top: 20px
+h1
+  +_header_style
+
+form h1
+ +_header_form_style
+
+div.tooltip
+	position: absolute	
+	padding: 2px
+	font-size: 14px
+	color: $nh-orange
+	background: $nh-vdgrey
+	border: 0px		
+	border-radius: 4px		
+	pointer-events: none
+
+span.tooltiphighlight
+	color: $nh-blue

@@ -1,0 +1,32 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32prefetch"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "app_fullpath": {
+      "terms": {
+        "field": "Record.ApplicationFullPath.keyword"
+      },
+      "aggs": {
+        "pf_path": {
+          "terms": {
+            "field": "Record.Path.raw"
+          },
+          "aggs": {
+            "computer": {
+              "terms": {
+                "field":"ComputerName.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

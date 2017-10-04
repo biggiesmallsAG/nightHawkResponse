@@ -1,0 +1,32 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32processes-memory"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "procname": {
+      "terms": {
+        "field": "Record.Name.raw"
+      },
+      "aggs": {
+        "procargs": {
+          "terms": {
+            "field": "Record.Arguments.keyword"
+          },
+          "aggs": {
+            "computer": {
+              "terms": {
+                "field":"ComputerName.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

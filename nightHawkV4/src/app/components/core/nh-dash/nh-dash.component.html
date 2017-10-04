@@ -1,0 +1,41 @@
+<div class="largecontainer">
+	<div class="row">
+		<div class="col s3"></div>
+		<div class="col s6">
+			<div class="row">
+				<form action="">
+					<h1>RULE MATCH ALERTS</h1>
+				</form>
+			</div>
+		</div>
+		<div class="col s3"></div>
+	</div>
+	<div class="row gridrow">
+		<div class="col s12 calcheight">
+			<div class="row gridrow">
+				<div class="col s12 m12 l12 gridrow">
+					<div class="row gridrow" *ngIf="watcherResults">
+						<div class="col s12 m12 l12 gridrow">
+							<ag-grid-angular #agGrid style="height: 100%; width: 100%" class="ag-dark"
+							[gridOptions]="gridOptions"
+							(selectionChanged)="getWatcherMatchById()"
+							enableColResize
+							enableSorting
+							enableFilter>
+						</ag-grid-angular>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="modal1" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions" class="modal bottom-sheet modal-fixed-footer">
+	<div class="modal-content" *ngIf="resultDoc">
+		<div class="rawjson tabcontent" RenderJson [jsonObject]="resultDoc"></div>
+	</div>
+	<div class="modal-footer">
+		<a class="waves-effect btn-flat ambertext" (click)="destroyModalObject()">Close</a>
+	</div>
+</div>

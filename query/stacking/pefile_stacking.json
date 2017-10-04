@@ -1,0 +1,33 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"wildcard": {"AuditType.Generator":"w32*files"}},
+        {"match": {"Record.FileExtension": "dll exe sys"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "path": {
+      "terms": {
+        "field": "Record.Path.raw"
+      },
+      "aggs": {
+        "md5": {
+          "terms": {
+            "field": "Record.Md5sum.keyword"
+          },
+          "aggs": {
+            "computer": {
+              "terms": {
+                "field":"ComputerName.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

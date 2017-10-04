@@ -1,0 +1,46 @@
+{
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32scripting-persistence"}},
+        {"match": {"Record.PersistenceType.keyword": "Registry"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}},
+        {"wildcard": {"Record.RegPath.keyword": "*Run*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "reg_key": {
+      "terms": {
+        "field": "Record.StackPath.keyword",
+        "size": 100,
+        "order": {
+          "_count": "asc"
+        }
+      },
+      "aggs": {
+        "reg_val": {
+          "terms": {
+            "field": "Record.Registry.Text.keyword",
+            "size": 100,
+            "order": {
+              "_count": "asc"
+            }
+          },
+          "aggs": {
+            "filemd5": {
+              "terms": {
+                "field": "Record.Md5sum.keyword",
+                "size": 100,
+                "order": {
+                  "_count": "asc"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

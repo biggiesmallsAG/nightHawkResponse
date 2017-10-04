@@ -1,0 +1,27 @@
+{
+  "size":2000,
+  "sort": [
+    {"Record.TlnTime": {"order": "desc"}}
+  ],
+  "query": {
+    "bool": {
+      "must": [
+        {"wildcard": {"CaseInfo.case_name": "*"}},
+        {"wildcard": {"AuditType.Generator":"*"}},
+        {
+          "terms": {
+            "ComputerName.keyword": ["COMPUTER-A","COMPUTER-B"]
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "Record.TlnTime": {
+            "gte":"2012-11-21T03:22:00Z",
+            "lte": "2014-11-21T03:22:00Z"
+          }
+        }
+      }
+    }
+  }
+}

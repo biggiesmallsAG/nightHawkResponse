@@ -1,0 +1,38 @@
+{ 
+  "size":0,
+  "query":{
+    "bool": {
+      "must": [
+        {"match": {"AuditType.Generator":"w32network-dns"}},
+        {"wildcard": {"CaseInfo.case_name": "*"}},
+        {"match": {"Record.RecordType.keyword": "A"}}
+      ],
+      "must_not": [
+        {"wildcard": {"Record.Host.keyword": "_kerberos._tcp.*"}},
+        {"wildcard": {"Record.Host.keyword": "_ldap._tcp.*"}}
+      ]
+    }
+  },
+  "aggs": {
+    "dns_host": {
+      "terms": {
+        "field": "Record.Host.keyword",
+        "size": 100,
+        "order": {
+          "_count": "asc"
+        }
+      },
+      "aggs": {
+        "ipaddr": {
+          "terms": {
+            "field": "Record.RecordDataList.Ipv4Address.keyword",
+            "size": 100,
+            "order": {
+              "_count": "asc"
+            }
+          }
+        }
+      }
+    }
+  }
+}
