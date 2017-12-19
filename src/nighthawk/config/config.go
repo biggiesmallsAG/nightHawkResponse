@@ -170,7 +170,7 @@ func LoadNighthawkConfig() error {
 	}
 	if CheckStack() {
 		fmt.Println("LoadNighthawkConfig - Initialzing StackDb")
-		sdconfig.Initialize()
+		//sdconfig.Initialize()
 	}
 
 	// default return

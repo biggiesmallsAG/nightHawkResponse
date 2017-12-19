@@ -31,7 +31,7 @@ type AuditParserConfig struct {
 }
 
 func (pc *AuditParserConfig) SetDefault() {
-	pc.agentstate = false
+	pc.agentstate = true
 	pc.arp = true
 	pc.disk = true
 	pc.dns = true

@@ -2,14 +2,14 @@ package stack
 
 import (
 	"database/sql"
-	"fmt"
-	"os"
+	//"fmt"
+	//"os"
 
-	nhc "nighthawk/common"
+	//nhc "nighthawk/common"
 	nhconfig "nighthawk/config"
 	nhlog "nighthawk/log"
 
-	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 var CAList []string
@@ -24,13 +24,16 @@ func init() {
 		return
 	}
 	//db = openStackDatabase("/opt/nighthawk/etc/nighthawk.db")
+	/*
 	db = nhconfig.StackDbObject()
 	if db == nil {
 		fmt.Println("Stack::init - db is nil")
 	}
+	*/
 	CAList = dbGetCaList()
 }
 
+/*
 func openStackDatabase(dbfile string) *sql.DB {
 	sdb, err := sql.Open("sqlite3", dbfile)
 	if err != nil {
@@ -39,10 +42,12 @@ func openStackDatabase(dbfile string) *sql.DB {
 	}
 	return sdb
 }
+*/
 
 func dbGetCaList() []string {
 	var calist []string
 
+	/*
 	sqlQuery := fmt.Sprintf("SELECT CertIssuer FROM KnownIssuer")
 	rows, err := db.Query(sqlQuery)
 	if err != nil {
@@ -56,6 +61,7 @@ func dbGetCaList() []string {
 		rows.Scan(&ci)
 		calist = append(calist, ci)
 	}
+	*/
 	return calist
 }
 
@@ -81,6 +87,7 @@ func IsCommonStackItem(audit string, name string, path string, regpath string, a
 		return false
 	}
 
+	/*
 	sqlQuery := "SELECT Id FROM Stack WHERE"
 	if audit == "" {
 		nhlog.LogMessage("IsCommonStackItem", "ERROR", "AuditType value missing. This is mandatory field")
@@ -124,6 +131,6 @@ func IsCommonStackItem(audit string, name string, path string, regpath string, a
 		}
 	}
 	rows.Close()
-
+	*/
 	return false
 }

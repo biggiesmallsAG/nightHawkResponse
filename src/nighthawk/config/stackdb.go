@@ -1,11 +1,11 @@
 package config
 
 import (
-	"database/sql"
-	"fmt"
+	//"database/sql"
+	//"fmt"
 	"path/filepath"
 
-	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 type StackDbConfig struct {
@@ -24,8 +24,10 @@ func (config *StackDbConfig) LoadDefaultConfig() {
 	config.LookupChecked = false
 }
 
+/*
 func (config *StackDbConfig) Initialize() {
 	//sdconfig.Path = filepath.Join(CONFDIR, sdconfig.Index)
+
 	tDb, err := sql.Open("sqlite3", config.Path)
 	if err != nil {
 		//sdconfig.LookupAvailable = false
@@ -40,10 +42,13 @@ func (config *StackDbConfig) Initialize() {
 	config.LookupChecked = true
 	nhdb = tDb
 }
+*/
 
+/*
 func StackDbObject() *sql.DB {
 	return nhdb
 }
+*/
 
 func StackDbIndex() string {
 	return sdconfig.Index
