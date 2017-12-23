@@ -17,6 +17,15 @@ import (
  	nhconfig "nighthawk/config"
 )
 
+// Output Control constants
+const (
+	OP_CTRL_CONSOLE		= 0x0001
+	OP_CTRL_ELASTIC		= 0x0002
+	OP_CTRL_FILE		= 0x0004
+	OP_CTRL_SPLUNK		= 0x0008
+	OP_CTRL_CSV			= 0x0010
+)
+
 func ProcessOutput(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, rlrecords []nhs.RlRecord) {
 
 	OPCONTROL := nhconfig.OpControl()
@@ -26,15 +35,15 @@ func ProcessOutput(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, rlreco
 
 	nhlog.LogMessage("ProcessOutput", "INFO", fmt.Sprintf("Uploading %s: %s %d items", caseinfo.ComputerName, auditinfo.Generator, len(rlrecords)))
 
-	if OPCONTROL == nhconfig.OP_CONSOLE_ONLY {
+	if OPCONTROL & OP_CTRL_CONSOLE == OP_CTRL_CONSOLE {
 		fmt.Println(rlrecords)
-	} else if OPCONTROL == nhconfig.OP_DATASTORE_ONLY {
+	} 
+	
+	if OPCONTROL & OP_CTRL_ELASTIC == OP_CTRL_ELASTIC {
 		ExportToElasticsearch(caseinfo.ComputerName, auditinfo.Generator, rlrecords)
-	} else if OPCONTROL == nhconfig.OP_CONSOLE_DATASTORE {
-		fmt.Println(rlrecords)
-		ExportToElasticsearch(caseinfo.ComputerName, auditinfo.Generator, rlrecords)
-		
-	} else if OPCONTROL == nhconfig.OP_SPLUNK_FILE {
+	} 
+	
+	if OPCONTROL & OP_CTRL_FILE == OP_CTRL_FILE {
 
 		nhlog.LogMessage("ProcessOutput", "INFO", fmt.Sprintf("Starting writing %s to file", auditinfo.Generator))
 		//opfilename := fmt.Sprintf("%s_%s_%s.json", caseinfo.CaseName, caseinfo.ComputerName, auditinfo.Generator)
@@ -63,7 +72,13 @@ func ProcessOutput(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, rlreco
 		//nhlog.ConsoleMessage("INFO", "Complete writing " + auditinfo.Generator +" to file", nhconfig.VERBOSE)
 		nhlog.LogMessage("ProcessOutput", "INFO", fmt.Sprintf("Complete writing %s to file", auditinfo.Generator))
 		fd.Close()
-	} else if OPCONTROL == nhconfig.OP_SPLUNK {
+	} 
+	
+	if OPCONTROL & OP_CTRL_SPLUNK == OP_CTRL_SPLUNK {
 		UploadToSplunk(caseinfo.ComputerName, auditinfo.Generator, rlrecords)
+	}
+
+	if OPCONTROL & OP_CTRL_CSV == OP_CTRL_CSV {
+		GenerateAuditCsv(caseinfo.ComputerName, auditinfo.Generator, rlrecords)
 	}
 }

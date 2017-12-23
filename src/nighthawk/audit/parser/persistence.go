@@ -88,9 +88,10 @@ func ParsePersistence(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, aud
 				item.Registry.TlnTime = item.Registry.Modified
 				item.StackPath = item.Registry.KeyPath + item.Registry.ValueName
 
-				item.IsWhitelisted = false
+				item.IsWhitelisted = analyze.PersistenceIsWhitelisted(&item)
+				item.IsBlacklisted = analyze.PersistenceIsBlacklisted(&item)
  
-				fStatus,fVerdict := analyze.FileIsVerified(item.File) 
+				fStatus,fVerdict := analyze.PersistenceIsVerified(&item) 
 				if fStatus {
 					item.File.IsGoodHash = "true"
 					item.File.NhComment.Date = nhutil.CurrentTimestamp()

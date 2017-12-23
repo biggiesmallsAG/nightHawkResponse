@@ -8,6 +8,7 @@ package audit
 
 import (
 	"fmt"
+	"strings"
 	"nighthawk/audit/audittype"
 	"nighthawk/audit/parser"
 	nhlog "nighthawk/log"
@@ -15,7 +16,7 @@ import (
 )
 
 func ParseAuditFile(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, auditfile string) {
-	switch auditinfo.Generator {
+	switch strings.ToLower(auditinfo.Generator) {
 	case audittype.RL_AGENTSTATE:
 		parser.ParseAgentStateInspection(caseinfo, auditinfo, auditfile)
 
@@ -40,16 +41,13 @@ func ParseAuditFile(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, audit
 	case audittype.RL_TASKS:
 		parser.ParseTasks(caseinfo, auditinfo, auditfile)
 
-	case audittype.RL_PROCESSMEMORY:
+	case audittype.RL_PROCESSMEMORY, audittype.RL_PROCESS_API:
 		parser.ParseProcessMemory(caseinfo, auditinfo, auditfile)
 
 	case audittype.RL_REGRAW:
 		parser.ParseRegistry(caseinfo, auditinfo, auditfile)
 
-	case audittype.RL_SYSTEM:
-		parser.ParseSystemInfo(caseinfo, auditinfo, auditfile)
-
-	case audittype.RL_SYSINFO:
+	case audittype.RL_SYSTEM, audittype.RL_SYSINFO:
 		parser.ParseSystemInfo(caseinfo, auditinfo, auditfile)
 
 	case audittype.RL_DISKS:
@@ -78,6 +76,9 @@ func ParseAuditFile(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, audit
 
 	case audittype.RL_NETWORKARP:
 		parser.ParseNetworkArp(caseinfo, auditinfo, auditfile)
+
+	case audittype.RL_DRIVER_MODULES:
+		parser.ParseDriverModules(caseinfo, auditinfo, auditfile)
 
 	default:
 		// _rm_note> Do not exit on this ERROR

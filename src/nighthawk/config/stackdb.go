@@ -1,62 +1,50 @@
 package config
 
 import (
-	//"database/sql"
-	//"fmt"
-	"path/filepath"
-
-	//_ "github.com/mattn/go-sqlite3"
+	"fmt"
+	"net/http"
 )
 
 type StackDbConfig struct {
 	Index           string
-	Path            string
 	LookupEnabled   bool
 	LookupAvailable bool
 	LookupChecked   bool
 }
 
 func (config *StackDbConfig) LoadDefaultConfig() {
-	config.Index = "nighthawk.db"
-	config.Path = filepath.Join(CONFDIR, config.Index)
+	config.Index = "nighthawk"
 	config.LookupEnabled = false
 	config.LookupAvailable = false
 	config.LookupChecked = false
 }
 
-/*
+// Initialize function check if elasticsearch index "nighthawk"
+// is available to query IssuerCert and stacking information 
 func (config *StackDbConfig) Initialize() {
-	//sdconfig.Path = filepath.Join(CONFDIR, sdconfig.Index)
-
-	tDb, err := sql.Open("sqlite3", config.Path)
+	stackUrl := fmt.Sprintf("%s://%s:%d/%s", ElasticHttpScheme(), ElasticHost(), ElasticPort(), config.Index)
+	res, err := http.Get(stackUrl)
 	if err != nil {
-		//sdconfig.LookupAvailable = false
 		config.LookupChecked = true
-		fmt.Println("StackDbConfig::Initialize - Failed to open nighthakw.db - ", err.Error())
-		fmt.Println("StackDbConfig - Disabling StackDb Lookup")
+		fmt.Println("StackDB::initialize - Failed to connect to StackDB - ", err.Error())
 		return
 	}
+	defer res.Body.Close()
 
-	config.LookupEnabled = true
-	config.LookupAvailable = true
+	if res.StatusCode == 200 {
+		fmt.Println("StackDB::initialize - OK")
+		config.LookupEnabled = true
+		config.LookupAvailable = true
+	} else {
+		fmt.Println("StackDB::initialize - Status code ", res.StatusCode)
+	}
 	config.LookupChecked = true
-	nhdb = tDb
 }
-*/
-
-/*
-func StackDbObject() *sql.DB {
-	return nhdb
-}
-*/
 
 func StackDbIndex() string {
 	return sdconfig.Index
 }
 
-func StackDbPath() string {
-	return sdconfig.Path
-}
 
 func StackDbEnabled() bool {
 	return sdconfig.LookupEnabled

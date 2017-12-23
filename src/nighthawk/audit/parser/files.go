@@ -7,6 +7,7 @@
 package parser 
 
 import (
+	"nighthawk/analyze"
  	"fmt"
  	"os"
  	"encoding/xml"
@@ -73,7 +74,8 @@ func ParseRawFiles(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, auditf
 				if item.FilenameAccessed == "" {item.FilenameAccessed = nhutil.FixEmptyTimestamp()}
 				if item.FilenameChanged == "" {item.FilenameChanged = nhutil.FixEmptyTimestamp()}
 
-				item.IsWhitelisted = false
+				item.IsWhitelisted = analyze.RawFileIsWhitelisted(&item)
+				item.IsBlacklisted = analyze.RawFileIsBlacklisted(&item)
 				
 				// Add timeline time
 				item.TlnTime = item.FilenameCreated
@@ -152,6 +154,8 @@ func ParseApiFiles(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, auditf
 				if item.Accessed == "" {item.Accessed = nhutil.FixEmptyTimestamp()}
 				if item.Changed == "" {item.Changed = nhutil.FixEmptyTimestamp()}
 				
+				item.IsBlacklisted = analyze.FileIsBlacklisted(&item)
+				item.IsWhitelisted = analyze.FileIsWhitelisted(&item)
 
 				// Add timeline time
 				item.TlnTime = item.Created

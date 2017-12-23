@@ -3,19 +3,44 @@ package analyze
 import (
 	nhconfig "nighthawk/config"
 	nhs "nighthawk/nhstruct"
-	"nighthawk/stack"
 )
 
+func TaskIsBlacklisted(task *nhs.TaskItem) bool {
+	ti := nhs.BlacklistItem{
+		AuditType: "w32tasks",
+		Name: task.Name,
+		Path: task.Path,
+		TaskCreator: task.Creator,
+	}
 
-func TaskIsVerified(task nhs.TaskItem) (bool, string) {
+	return QueryBlacklistInformation(&ti)
+}
+
+
+func TaskIsWhitelisted(task *nhs.TaskItem) bool {
+	ti := nhs.WhitelistItem{
+		AuditType: "w32tasks",
+		Name: task.Name,
+		Path: task.Path,
+		TaskCreator: task.Creator,
+	}
+
+	return QueryWhitelistInformation(&ti)
+}
+
+
+func TaskIsVerified(task *nhs.TaskItem) (bool, string) {
+	//// Check task Stacking
 	if nhconfig.StackDbEnabled() && nhconfig.StackDbAvailable() {
-		// Arguments passed to IsCommonStackItem
-		// audit: w32tasks
-		// name: TaskItem.Name
-		// path: TaskItem.Path
-		// regpath: ""
-		// additional_info: TaskItem.Creator 
-		if stack.IsCommonStackItem("w32tasks", task.Name, task.Path,"",task.Creator) {
+
+		si := nhs.StackItem{
+			AuditType:"w32tasks",
+			Name: task.Name,
+			Path: task.Path,
+			TaskCreator: task.Creator,
+		}
+
+		if IsCommonStackItem(&si) {
 			return true, "Verified by stacking tasks"
 		}
 	}

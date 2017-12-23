@@ -231,6 +231,18 @@ func SetAuthCode(authcode string) {
 	nhrconfig.Elastic.Authcode = authcode
 }
 
+func SetVerboseLevel(verboseLevel int) {
+	nhrconfig.Nighthawk.VerboseLevel = verboseLevel
+}
+
+func SetOutputType(outputType int) {
+	nhrconfig.Nighthawk.OpControl = outputType
+}
+
+func SetStandalone() {
+	nhrconfig.Nighthawk.Standalone = true
+}
+
 func ParserConfigSetting(auditname string) bool {
 	switch auditname {
 	case "agentstate":

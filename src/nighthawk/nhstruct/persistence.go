@@ -26,6 +26,7 @@ type PersistenceItem struct {
     StackPath           string
     IsGoodPersistence   string 
     IsWhitelisted       bool
+    IsBlacklisted       bool
     NHScore             int
     Tag                 string
     NhComment           NHComment `json:"Comment"`

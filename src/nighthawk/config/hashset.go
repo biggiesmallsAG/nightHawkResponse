@@ -20,7 +20,7 @@ func (config *HashSetConfig) LoadDefaultConfig() {
 }
 
 // checking hashset
-func (config HashSetConfig) Initialize() {
+func (config *HashSetConfig) Initialize() {
 	hashsetUrl := fmt.Sprintf("%s://%s:%d/%s", ElasticHttpScheme(), ElasticHost(), ElasticPort(), config.Index)
 	res, err := http.Get(hashsetUrl)
 	if err != nil {
@@ -30,10 +30,13 @@ func (config HashSetConfig) Initialize() {
 	}
 	defer res.Body.Close()
 	if res.StatusCode == 200 {
-		hsconfig.LookupEnabled = true
-		hsconfig.LookupAvailable = true // HASHSET_LOOKUP_AVAILABLE = true
+		fmt.Println("HashSet::Initialize - OK")
+		config.LookupEnabled = true
+		config.LookupAvailable = true // HASHSET_LOOKUP_AVAILABLE = true
+	} else {
+		fmt.Println("HashSet::initialize - Status code ", res.StatusCode)
 	}
-	hsconfig.LookupChecked = true // HASHSET_LOOKUP_CHECKED = true
+	config.LookupChecked = true // HASHSET_LOOKUP_CHECKED = true
 }
 
 /******************************

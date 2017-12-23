@@ -68,17 +68,20 @@ func ParseProcessMemory(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, a
 				if item.KernelTime == "" {item.KernelTime = nhutil.FixEmptyTimestamp()}
 				if item.UserTime == "" {item.UserTime = nhutil.FixEmptyTimestamp()}
 
-				item.IsWhitelisted = false
+				item.IsWhitelisted = analyze.ProcessIsWhitelisted(&item)
+				item.IsBlacklisted = analyze.ProcessIsBlacklisted(&item)
 
 				// Checking process properties in Stack Database
 				// _rm> 2017-06-07
-				verifiedStatus, verifiedVerdict := analyze.ProcessIsVerified(item)
+				verifiedStatus, verifiedVerdict := analyze.ProcessIsVerified(&item)
 				if verifiedStatus {
 					item.IsGoodProcess = "true"
 					item.NhComment.Date = nhutil.CurrentTimestamp()
 					item.NhComment.Analyst = "nighthawk"
 					item.NhComment.Comment = verifiedVerdict 
 				}
+
+				
 
 				// Set timeline time
 				item.TlnTime = item.StartTime

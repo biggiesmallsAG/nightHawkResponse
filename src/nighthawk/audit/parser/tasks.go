@@ -84,11 +84,12 @@ func ParseTasks(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, auditfile
 				}
 
 
-				item.IsWhitelisted = false
+				item.IsWhitelisted = analyze.TaskIsWhitelisted(&item)
+				item.IsBlacklisted = analyze.TaskIsBlacklisted(&item)
 
 				// Checking StackDatabase 
 				// _rm> 2017-06-07
-				verifiedStatus,verifiedVerdict := analyze.TaskIsVerified(item)
+				verifiedStatus,verifiedVerdict := analyze.TaskIsVerified(&item)
 				if verifiedStatus {
 					item.IsGoodTask = "true"
 					item.NhComment.Date = nhutil.CurrentTimestamp()

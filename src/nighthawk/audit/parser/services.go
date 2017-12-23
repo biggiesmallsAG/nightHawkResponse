@@ -70,11 +70,12 @@ func ParseServices(caseinfo nhs.CaseInformation, auditinfo nhs.AuditType, auditf
 
 				// Fix empty timestamp
 				// no-timestamp data
-				item.IsWhitelisted = false
+				item.IsWhitelisted = analyze.ServiceIsWhitelisted(&item)
+				item.IsBlacklisted = analyze.ServiceIsBlacklisted(&item)
 
 				// Check ServiceItem in CommonStackDatabase
 				// _rm> 2017-06-07
-				verifiedStatus,verifiedVerdict := analyze.ServiceIsVerified(item)
+				verifiedStatus,verifiedVerdict := analyze.ServiceIsVerified(&item)
 				if verifiedStatus {
 					item.IsGoodService = "true"
 					item.NhComment.Date = nhutil.CurrentTimestamp()
