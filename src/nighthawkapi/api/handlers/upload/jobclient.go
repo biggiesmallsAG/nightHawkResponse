@@ -41,7 +41,7 @@ func JobDispatch(f *multipart.Form, c []string) {
 	// Get File Array
 	var af []string
 	for i, _ := range f.File {
-		af = append(af, fmt.Sprintf("%s%s/%s", api.WORKING_DIR, api.MEDIA_DIR, i))
+		af = append(af, api.MEDIA_DIR, i)
 	}
 
 	job_msg := Job{

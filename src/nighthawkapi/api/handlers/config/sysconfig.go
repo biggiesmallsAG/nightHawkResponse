@@ -53,7 +53,7 @@ func init() {
 
 func ReadConfFile() (c *ConfigVars, err error) {
 	var conf ConfigVars
-	configData, err := ioutil.ReadFile(fmt.Sprintf("%s%s", api.WORKING_DIR, api.CONF_FILE))
+	configData, err := ioutil.ReadFile(api.CONF_FILE)
 
 	if err != nil {
 		api.LogError(api.DEBUG, err)
@@ -122,7 +122,7 @@ func UpdateSystemConfig(w http.ResponseWriter, r *http.Request) {
 
 	fin, err := json.MarshalIndent(&conf.Cvars, "", "    ")
 
-	err = ioutil.WriteFile(fmt.Sprintf("%s%s", api.WORKING_DIR, api.CONF_FILE), fin, 0644)
+	err = ioutil.WriteFile(api.CONF_FILE, fin, 0644)
 	if err != nil {
 		api.LogError(api.DEBUG, err)
 		ret = api.HttpFailureMessage("Failed to write config")

@@ -16,7 +16,7 @@ import (
 	"nighthawkapi/api/handlers/stacking"
 	"nighthawkapi/api/handlers/upload"
 	"nighthawkapi/api/handlers/watcher"
-
+	"nighthawkapi/api/handlers/analyzer"
 	"github.com/gorilla/mux"
 )
 
@@ -266,5 +266,23 @@ var routes = Routes{
 		"POST",
 		fmt.Sprintf("%s/diff", _api),
 		stacking.TimelineEndpointDiff,
+	},
+	{
+		"AddBlacklistItem",
+		"POST",
+		fmt.Sprintf("%s/analyze/blacklist", _api),
+		analyzer.AddBlacklistInformation,
+	},
+	{
+		"AddWhitelistItem",
+		"POST",
+		fmt.Sprintf("%s/analyze/whitelist", _api),
+		analyzer.AddWhitelistInformation,
+	},
+	{
+		"AddStackCommonItem",
+		"POST",
+		fmt.Sprintf("%s/analyze/stack", _api),
+		analyzer.AddStackInformation,
 	},
 }

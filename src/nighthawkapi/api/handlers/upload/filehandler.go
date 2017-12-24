@@ -34,7 +34,7 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			dst, err := os.Create(fmt.Sprintf("%s%s/%s", api.WORKING_DIR, api.MEDIA_DIR, hdr.Filename))
+			dst, err := os.Create(fmt.Sprintf("%s/%s", api.MEDIA_DIR, hdr.Filename))
 			defer dst.Close()
 
 			if err != nil {

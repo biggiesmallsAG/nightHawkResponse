@@ -9,13 +9,23 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
+	"path/filepath"
+)
+
+var (
+	BASEDIR = "/opt/nighthawk"
+	CONFDIR 	= ""
+	STATEDIR 	= ""
+	MEDIA_DIR   = ""
+	CONF_FILE   = ""
 )
 
 const (
 	VERSION     = "1.0-rc"
-	WORKING_DIR = "/opt/nighthawk"
-	MEDIA_DIR   = "/var/media"
-	CONF_FILE   = "/etc/nighthawk.json"
+	// WORKING_DIR = "/opt/nighthawk"
+	// MEDIA_DIR   = "/var/media"
+	// CONF_FILE   = "/etc/nighthawk.json"
 	API_NAME    = "/api"
 	API_VER     = "/v1"
 	HTTP        = "http://"
@@ -28,6 +38,17 @@ var (
 	DEBUG  = false
 	STDOUT = false
 )
+
+func init() {
+	if runtime.GOOS == "windows" {
+		BASEDIR = "C:\\ProgramData\\nighthawk"
+	}
+
+	CONFDIR = filepath.Join(BASEDIR, "etc")
+	STATEDIR = filepath.Join(BASEDIR, "var")
+	MEDIA_DIR = filepath.Join(STATEDIR, "media")
+	CONF_FILE = filepath.Join(CONFDIR, "nighthawk.json")
+}
 
 type Err struct {
 	Reason   string `json:"reason"`
