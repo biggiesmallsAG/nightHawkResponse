@@ -285,4 +285,16 @@ var routes = Routes{
 		fmt.Sprintf("%s/analyze/stack", _api),
 		analyzer.AddStackInformation,
 	},
+	{
+		"DeleteAnalyzerItemByID",
+		"GET",
+		fmt.Sprintf("%s/analyze/delete/{analyzer_type}/{analyzer_id}", _api),
+		analyzer.DeleteAnalyzerItemByID,
+	},
+	{
+		"DeleteAnalyzerItemByQuery",
+		"POST",
+		fmt.Sprintf("%s/analyze/delete/{analyzer_type}", _api),
+		analyzer.DeleteAnalyzerItemByQuery,
+	},
 }

@@ -54,6 +54,13 @@ func GetWatcherResults(w http.ResponseWriter, r *http.Request) {
 		Size(1000).
 		Do(context.Background())
 
+	if err != nil {
+		api.LogError(api.DEBUG, err)
+		ret := api.HttpFailureMessage(err.Error())
+		fmt.Fprint(w, string(ret))
+		return
+	}
+	
 	for _, hit := range alerts.Hits.Hits {
 		json.Unmarshal(*hit.Source, &wr)
 		_wr = append(_wr, wr)

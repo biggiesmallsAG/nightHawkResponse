@@ -7,7 +7,7 @@ import (
 	nhconfig "nighthawk/config"
 	"nighthawklogger/logger"
 
-//	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 type DBFactory interface {

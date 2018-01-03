@@ -94,11 +94,12 @@ func IsCommonStackItem(si *nhs.StackItem) bool {
 				elastic.NewTermQuery("path.keyword", si.Path),
 				elastic.NewTermQuery("reg_path.keyword",si.RegPath))
 
-	case nhat.RL_PROCESSMEMORY, nhat.RL_PROCESS_API:
+	case "w32processes":
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("audit_type.keyword", si.AuditType),
+			Must(elastic.NewTermQuery("audit_type.keyword", "w32processes"),
 				elastic.NewTermQuery("name.keyword", si.Name),
-				elastic.NewTermQuery("path.keyword", si.Path))
+				elastic.NewTermQuery("path.keyword", si.Path),
+				elastic.NewTermQuery("arguments.keyword", si.Arguments))
 
 	}
 

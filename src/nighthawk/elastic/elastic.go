@@ -71,7 +71,7 @@ func ExportToElasticsearch(computername string, auditgenerator string, data []nh
 			os.Exit(nhc.ERROR_ELASTIC_CREATE_PARENT)
 		}
 
-		nhlog.LogMessage("ExportToElasticsearch", "INFO", fmt.Sprintf("Parent created %t, ID %s", parent.Created, parent.Id))
+		nhlog.LogMessage("ExportToElasticsearch", "INFO", fmt.Sprintf("Parent created ID %s", parent.Id))
 		uploadBulkData(client, computername, data)
 		return
 	}

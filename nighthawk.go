@@ -34,16 +34,19 @@ import (
 )
 
 type RuntimeOptions struct {
-	CaseName     string
-	CaseDate     string
-	CaseAnalyst  string
-	ComputerName string
-	ConfigFile   string
-	TriageFile   string
-	Version      bool
-	Verbose      bool
-	Daemon       bool
-	PidFile      string
+	CaseName     	string
+	CaseDate     	string
+	CaseAnalyst  	string
+	ComputerName 	string
+	ConfigFile   	string
+	TriageFile   	string
+	Version      	bool
+	Verbose      	bool
+	VerboseLevel 	int 
+	Daemon       	bool
+	PidFile      	string
+	OutputType		int 		// bitmask 
+	Standalone		bool		// run standalone nighthawk without elasticsearch
 }
 
 func main() {
@@ -53,16 +56,19 @@ func main() {
 	// Setting commandline parser
 	var runopt RuntimeOptions
 
-	flag.StringVar(&runopt.CaseName, "N", "", "Case name for collected triage. Default: System generated")
-	flag.StringVar(&runopt.CaseDate, "case-date", "", "Case date for collected triage. Default: Today")
-	flag.StringVar(&runopt.CaseAnalyst, "a", "", "Case analyst working on collected triage")
-	flag.StringVar(&runopt.ComputerName, "C", "", "Computername of collected triage")
-	flag.StringVar(&runopt.ConfigFile, "c", nhconfig.CONFIG_FILE, "nightHawk Response configuration file.")
-	flag.StringVar(&runopt.TriageFile, "f", "", "Collected triage file")
-	flag.BoolVar(&runopt.Version, "V", false, "Display Version Information")
-	flag.BoolVar(&runopt.Verbose, "v", false, "Show verbose message")
-	flag.BoolVar(&runopt.Daemon, "D", false, "Daemonize the process")
+	flag.StringVar(&runopt.CaseName, "casename", "", "Case name for collected triage. Default: System generated")
+	flag.StringVar(&runopt.CaseDate, "casedate", "", "Case date for collected triage. Default: Today")
+	flag.StringVar(&runopt.CaseAnalyst, "analyst", "", "Case analyst working on collected triage")
+	flag.StringVar(&runopt.ComputerName, "computername", "", "Computername of collected triage")
+	flag.StringVar(&runopt.ConfigFile, "config", nhconfig.CONFIG_FILE, "nightHawk Response configuration file.")
+	flag.StringVar(&runopt.TriageFile, "file", "", "Collected triage file")
+	flag.BoolVar(&runopt.Version, "version", false, "Display Version Information")
+	flag.BoolVar(&runopt.Verbose, "verbose", false, "Show verbose message")
+	flag.BoolVar(&runopt.Daemon, "daemon", false, "Daemonize the process")
 	flag.StringVar(&runopt.PidFile, "pid", "", "PID file")
+	flag.IntVar(&runopt.VerboseLevel, "verbose-level",4,"Log verbose level. Default is ERROR")
+	flag.IntVar(&runopt.OutputType,"output-type", 2, "Default is Elasticsearch")
+	flag.BoolVar(&runopt.Standalone,"standalone", false, "Run nighthawk standalone without elasticsearch. Default is NO")
 
 	flag.Parse()
 
@@ -82,9 +88,15 @@ func main() {
 		nhconfig.SetVerbose()
 	}
 
-	// Show Banner
-	ShowVersion()
+	// Setting Log VerboseLevel and Output-Type (OpControl)
+	nhconfig.SetVerboseLevel(runopt.VerboseLevel)
+	nhconfig.SetOutputType(runopt.OutputType)
 	
+	if runopt.Standalone {
+		nhconfig.SetStandalone()
+	}
+
+
 	/*
 	 * Daemonize the process as nighthawk_worker process
 	 */
