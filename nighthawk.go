@@ -34,19 +34,19 @@ import (
 )
 
 type RuntimeOptions struct {
-	CaseName     	string
-	CaseDate     	string
-	CaseAnalyst  	string
-	ComputerName 	string
-	ConfigFile   	string
-	TriageFile   	string
-	Version      	bool
-	Verbose      	bool
-	VerboseLevel 	int 
-	Daemon       	bool
-	PidFile      	string
-	OutputType		int 		// bitmask 
-	Standalone		bool		// run standalone nighthawk without elasticsearch
+	CaseName     string
+	CaseDate     string
+	CaseAnalyst  string
+	ComputerName string
+	ConfigFile   string
+	TriageFile   string
+	Version      bool
+	Verbose      bool
+	VerboseLevel int
+	Daemon       bool
+	PidFile      string
+	OutputType   int  // bitmask
+	Standalone   bool // run standalone nighthawk without elasticsearch
 }
 
 func main() {
@@ -66,9 +66,9 @@ func main() {
 	flag.BoolVar(&runopt.Verbose, "verbose", false, "Show verbose message")
 	flag.BoolVar(&runopt.Daemon, "daemon", false, "Daemonize the process")
 	flag.StringVar(&runopt.PidFile, "pid", "", "PID file")
-	flag.IntVar(&runopt.VerboseLevel, "verbose-level",4,"Log verbose level. Default is ERROR")
-	flag.IntVar(&runopt.OutputType,"output-type", 2, "Default is Elasticsearch")
-	flag.BoolVar(&runopt.Standalone,"standalone", false, "Run nighthawk standalone without elasticsearch. Default is NO")
+	flag.IntVar(&runopt.VerboseLevel, "verbose-level", 4, "Log verbose level. Default is ERROR")
+	flag.IntVar(&runopt.OutputType, "output-type", 2, "Default is Elasticsearch")
+	flag.BoolVar(&runopt.Standalone, "standalone", false, "Run nighthawk standalone without elasticsearch. Default is NO")
 
 	flag.Parse()
 
@@ -91,11 +91,10 @@ func main() {
 	// Setting Log VerboseLevel and Output-Type (OpControl)
 	nhconfig.SetVerboseLevel(runopt.VerboseLevel)
 	nhconfig.SetOutputType(runopt.OutputType)
-	
+
 	if runopt.Standalone {
 		nhconfig.SetStandalone()
 	}
-
 
 	/*
 	 * Daemonize the process as nighthawk_worker process
@@ -137,11 +136,9 @@ func main() {
 				json.Unmarshal(data.Body, &jobmsg)
 
 				jobmsg.InProg = true
-				//nhutil.LoggerPublish(conn, "INFO", fmt.Sprintf("New job received: %s, Total Audit files: %d", jobmsg.UID, len(jobmsg.Audits)))
-				//nhutil.LoggerPublish(conn, "JOB", &jobmsg)
 
 				nhlog.LogMessage("main", "INFO", fmt.Sprintf("New job received: %s, Total Audit files: %d", jobmsg.UID, len(jobmsg.Audits)))
-				nhlog.CreateJobMessage(&jobmsg)
+				// nhlog.CreateJobMessage(&jobmsg) // _rm> bug_2018010501
 
 				if jobmsg.CaseID == "" {
 					jobmsg.CaseID = nhc.GenerateCaseName()
@@ -156,7 +153,6 @@ func main() {
 					} else if sourcetype == nhutil.MOD_ZIP {
 						ParseTriageFile(caseinfo, _audit)
 					} else {
-						//nhutil.LoggerPublish(conn, "ERROR", "Unsupported triage file.")
 						nhlog.LogMessage("main", "ERROR", "Unsupported triage file")
 					}
 				}
@@ -164,14 +160,11 @@ func main() {
 				jobmsg.InProg = false
 				jobmsg.Complete = true
 
-				//nhutil.LoggerPublish(conn, "INFO", fmt.Sprintf("Finished Job UID: %s", jobmsg.UID))
-				//nhutil.LoggerPublish(conn, "JOB", &jobmsg)
 				nhlog.LogMessage("main", "INFO", fmt.Sprintf("Finished Job UID: %s", jobmsg.UID))
-				nhlog.CreateJobMessage(&jobmsg)
+				//nhlog.CreateJobMessage(&jobmsg)  // bug_2018010501
 			}
 		}()
 
-		//nighthawk.ConsoleMessage("INFO", "Waiting for Jobs.. Hit Ctrl-C to exit..", nhconfig.VERBOSE)
 		nhlog.LogMessage("main", "INFO", "Waiting for Jobs... Hit Ctrl-C to exit")
 		<-forever
 

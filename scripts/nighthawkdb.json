@@ -1,0 +1,11 @@
+{
+    "aliases": {},
+    "settings": {
+        "max_result_window": 500000
+    },
+    "mappings": {
+        "blacklist": {},
+        "whitelist": {},
+        "stack":{}
+    }
+}

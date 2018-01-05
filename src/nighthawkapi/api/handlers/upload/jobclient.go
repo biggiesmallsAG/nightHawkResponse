@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"nighthawk/rabbitmq"
 	api "nighthawkapi/api/core"
+	"path/filepath"
 	"time"
 )
 
@@ -41,7 +42,7 @@ func JobDispatch(f *multipart.Form, c []string) {
 	// Get File Array
 	var af []string
 	for i, _ := range f.File {
-		af = append(af, api.MEDIA_DIR, i)
+		af = append(af, filepath.Join(api.MEDIA_DIR, i))
 	}
 
 	job_msg := Job{

@@ -9,29 +9,26 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"path/filepath"
+	"runtime"
 )
 
 var (
-	BASEDIR = "/opt/nighthawk"
-	CONFDIR 	= ""
-	STATEDIR 	= ""
-	MEDIA_DIR   = ""
-	CONF_FILE   = ""
+	BASEDIR   = "/opt/nighthawk"
+	CONFDIR   = ""
+	STATEDIR  = ""
+	MEDIA_DIR = ""
+	CONF_FILE = ""
 )
 
 const (
-	VERSION     = "1.0-rc"
-	// WORKING_DIR = "/opt/nighthawk"
-	// MEDIA_DIR   = "/var/media"
-	// CONF_FILE   = "/etc/nighthawk.json"
-	API_NAME    = "/api"
-	API_VER     = "/v1"
-	HTTP        = "http://"
-	HTTPS       = "https://"
-	UPLOAD_MEM  = 100000
-	LAYOUT      = "2006-01-02T15:04:05Z"
+	VERSION    = "1.0-rc"
+	API_NAME   = "/api"
+	API_VER    = "/v1"
+	HTTP       = "http://"
+	HTTPS      = "https://"
+	UPLOAD_MEM = 100000
+	LAYOUT     = "2006-01-02T15:04:05Z"
 )
 
 var (
