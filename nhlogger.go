@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"nighthawk"
 	nhc "nighthawk/common"
 	"nighthawklogger/config"
 	"nighthawklogger/logger"
@@ -19,6 +20,7 @@ import (
 
 type RuntimeOptions struct {
 	Debug, Help bool
+	Version     bool
 }
 
 func fUsage() {
@@ -36,11 +38,17 @@ func main() {
 
 	flag.BoolVar(&runopt.Help, "h", false, "Display use flags.")
 	flag.BoolVar(&runopt.Debug, "d", false, "Turn on console level debugging.")
+	flag.BoolVar(&runopt.Version, "version", false, "Show version information")
 
 	flag.Parse()
 
 	if runopt.Help {
 		fUsage()
+	}
+
+	if runopt.Version {
+		nighthawk.ShowVersion()
+		os.Exit(0)
 	}
 
 	if runopt.Debug {

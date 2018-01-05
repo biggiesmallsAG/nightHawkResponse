@@ -73,7 +73,7 @@ func main() {
 	flag.Parse()
 
 	if runopt.Version {
-		ShowVersion()
+		nighthawk.ShowVersion()
 		os.Exit(0)
 	}
 

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"nighthawk"
 	api "nighthawkapi/api/core"
 	routes "nighthawkapi/api/routes"
 	"os"
@@ -18,6 +19,7 @@ type RuntimeOptions struct {
 	Debug, Help bool
 	Server      string
 	Port        int
+	Version     bool
 }
 
 func fUsage() {
@@ -37,11 +39,17 @@ func main() {
 	flag.BoolVar(&runopt.Debug, "d", false, "Turn on console level debugging.")
 	flag.StringVar(&runopt.Server, "s", "localhost", "Bind server to address. Default: localhost")
 	flag.IntVar(&runopt.Port, "p", 8080, "Bind server to port. Default: 8080")
+	flag.BoolVar(&runopt.Version, "version", false, "Show version information")
 
 	flag.Parse()
 
 	if runopt.Help {
 		fUsage()
+	}
+
+	if runopt.Version {
+		nighthawk.ShowVersion()
+		os.Exit(0)
 	}
 
 	if runopt.Debug {
