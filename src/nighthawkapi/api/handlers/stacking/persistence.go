@@ -85,11 +85,11 @@ func StackPersistence(w http.ResponseWriter, r *http.Request) {
 
 	if sc.IgnoreGood {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName), elastic.NewWildcardQuery("Record.PersistenceType.keyword", sc.Type)).
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName), elastic.NewWildcardQuery("Record.PersistenceType.keyword", sc.Type)).
 			MustNot(elastic.NewTermQuery("Record.IsGoodService.keyword", "true"))
 	} else {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName), elastic.NewWildcardQuery("Record.PersistenceType.keyword", sc.Type))
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName), elastic.NewWildcardQuery("Record.PersistenceType.keyword", sc.Type))
 	}
 
 	sr, err = client.Search().

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	api "nighthawkapi/api/core"
 
+	"nighthawkapi/api/handlers/analyzer"
 	"nighthawkapi/api/handlers/audit"
 	config "nighthawkapi/api/handlers/config"
 	"nighthawkapi/api/handlers/delete"
@@ -16,7 +17,7 @@ import (
 	"nighthawkapi/api/handlers/stacking"
 	"nighthawkapi/api/handlers/upload"
 	"nighthawkapi/api/handlers/watcher"
-	"nighthawkapi/api/handlers/analyzer"
+
 	"github.com/gorilla/mux"
 )
 
@@ -94,9 +95,21 @@ var routes = Routes{
 		upload.ListCompletedJobs,
 	},
 	{
+		"ListCompletedJobs",
+		"GET",
+		fmt.Sprintf("%s/list/jobs/completed", _api),
+		upload.ListCompletedJobs,
+	},
+	{
 		"SubscribeJobs",
 		"GET",
 		fmt.Sprintf("%s/subscribe/uploadjobs", _api),
+		upload.SubscribeJobs,
+	},
+	{
+		"SubscribeJobs",
+		"GET",
+		fmt.Sprintf("%s/subscribe/jobs/upload", _api),
 		upload.SubscribeJobs,
 	},
 	{
@@ -112,15 +125,33 @@ var routes = Routes{
 		audit.GetEndpointByCase,
 	},
 	{
+		"ShowEndpointByCase",
+		"GET",
+		fmt.Sprintf("%s/show/{case}/endpoints", _api),
+		audit.GetEndpointByCase,
+	},
+	{
 		"ShowCasedateByEndpoint",
 		"GET",
 		fmt.Sprintf("%s/show/{case}/{endpoint}", _api),
 		audit.GetCasedateByEndpoint,
 	},
 	{
+		"ShowCasedateByEndpoint",
+		"GET",
+		fmt.Sprintf("%s/show/{case}/{endpoint}/info", _api),
+		audit.GetCasedateByEndpoint,
+	},
+	{
 		"ShowAuditTypeByCaseDate",
 		"GET",
 		fmt.Sprintf("%s/show/{case}/{endpoint}/{case_date}", _api),
+		audit.GetAuditTypeByEndpointAndCase,
+	},
+	{
+		"ShowAuditTypeByCaseDate",
+		"GET",
+		fmt.Sprintf("%s/show/{case}/{endpoint}/{case_date}/audits", _api),
 		audit.GetAuditTypeByEndpointAndCase,
 	},
 	{

@@ -74,11 +74,11 @@ func StackServices(w http.ResponseWriter, r *http.Request) {
 
 	if sc.IgnoreGood {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32services"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName)).
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32services"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName)).
 			MustNot(elastic.NewTermQuery("Record.IsGoodService.keyword", "true"))
 	} else {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32services"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName))
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32services"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName))
 	}
 
 	sr, err = client.Search().

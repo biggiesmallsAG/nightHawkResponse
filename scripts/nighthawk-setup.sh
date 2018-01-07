@@ -267,11 +267,16 @@ create_nighthawk_binaries() {
 	/usr/local/go/bin/go build -ldflags '-s' -o $NHROOT/bin/nhapi nhapi.go
 	/usr/local/go/bin/go build -ldflags '-s' -o $NHROOT/bin/nhlogger nhlogger.go
 	cd ${SCRIPT_DIR}
+
+	cp -f nighthawk-web $NHROOT/bin
 }
 
 install_nighthawk_config() {
 	echo "Installing nighthawk configuration files"
 	cp -f ${SCRIPT_DIR}/../config/*.json $NHROOT/etc
+
+	echo "Installing nighthawk response systemd files"
+	cp -f ${SCRIPT_DIR}../config/systemd/*.service /usr/lib/systemd/system
 }
 
 

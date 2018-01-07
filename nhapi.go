@@ -48,7 +48,7 @@ func main() {
 	}
 
 	if runopt.Version {
-		nighthawk.ShowVersion()
+		nighthawk.ShowVersion("API Server")
 		os.Exit(0)
 	}
 

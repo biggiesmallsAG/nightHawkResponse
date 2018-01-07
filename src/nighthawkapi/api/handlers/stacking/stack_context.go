@@ -32,7 +32,7 @@ func (sc *StackingConfig) GetRecordField() (record_field string) {
 		record_field = "Record.Name.keyword"
 		break
 	case "dns/a":
-		record_field = "Record.RecordDataList.Ipv4Address.keywordgrace "
+		record_field = "Record.RecordDataList.Ipv4Address.keyword"
 	}
 	return
 }

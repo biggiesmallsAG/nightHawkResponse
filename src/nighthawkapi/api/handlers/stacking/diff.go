@@ -346,7 +346,7 @@ func getTimelineDataByAudit(audit_type string, audit_field string, dc DiffConfig
 	}
 
 	agg_cn := elastic.NewTermsAggregation().
-		Field("CaseInfo.case_name").
+		Field("CaseInfo.case_name.keyword").
 		Size(dc.SubAggSize)
 	agg := elastic.NewTermsAggregation().
 		Field(audit_field).

@@ -1,0 +1,17 @@
+{
+    "size":0,
+    "query": {
+      "bool": {
+        "must": [
+          {"match": {"CaseInfo.case_name.keyword": "CASE-ALFA-01"}} 
+          ]
+      }
+    },
+    "aggs": {
+      "endpoints": {
+        "terms": {
+          "field": "ComputerName.keyword"
+        }
+      }
+    }
+  }

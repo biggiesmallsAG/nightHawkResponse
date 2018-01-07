@@ -77,14 +77,14 @@ func StackRunKey(w http.ResponseWriter, r *http.Request) {
 		query = elastic.NewBoolQuery().
 			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"),
 				elastic.NewTermQuery("Record.PersistenceType.keyword", "Registry"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName),
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName),
 				elastic.NewWildcardQuery("Record.RegPath.keyword", "*Run*")).
 			MustNot(elastic.NewTermQuery("Record.IsGoodService.keyword", "true"))
 	} else {
 		query = elastic.NewBoolQuery().
 			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32scripting-persistence"),
 				elastic.NewTermQuery("Record.PersistenceType.keyword", "Registry"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName),
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName),
 				elastic.NewWildcardQuery("Record.RegPath.keyword", "*Run*"))
 	}
 

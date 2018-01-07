@@ -71,15 +71,15 @@ func StackDnsARequest(w http.ResponseWriter, r *http.Request) {
 		query = elastic.NewBoolQuery().
 			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32network-dns"),
 				elastic.NewTermQuery("Record.RecordType.keyword", "A"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName)).
-			MustNot(elastic.NewTermQuery("Record.IsGoodEntry", "true"),
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName)).
+			MustNot(elastic.NewTermQuery("Record.IsGoodEntry.keyword", "true"),
 				elastic.NewWildcardQuery("Record.Host.keyword", "_kerberos._tcp*"),
 				elastic.NewWildcardQuery("Record.Host.keyword", "_ldap._tcp*"))
 	} else {
 		query = elastic.NewBoolQuery().
 			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32network-dns"),
 				elastic.NewTermQuery("Record.RecordType.keyword", "A"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName)).
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName)).
 			MustNot(elastic.NewWildcardQuery("Record.Host.keyword", "_kerberos._tcp*"),
 				elastic.NewWildcardQuery("Record.Host.keyword", "_ldap._tcp*"))
 	}

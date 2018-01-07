@@ -75,11 +75,11 @@ func StackPrefetch(w http.ResponseWriter, r *http.Request) {
 
 	if sc.IgnoreGood {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32prefetch"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName)).
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32prefetch"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName)).
 			MustNot(elastic.NewTermQuery("Record.IsGoodPrefetch.keyword", "true"))
 	} else {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32prefetch"), elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName))
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "w32prefetch"), elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName))
 	}
 
 	sr, err = client.Search().

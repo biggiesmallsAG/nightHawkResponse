@@ -3,6 +3,7 @@ package audit
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -120,7 +121,7 @@ func GetEndpointByCase(w http.ResponseWriter, r *http.Request) {
 		Field("ComputerName.keyword").
 		Size(50000)
 
-	query = elastic.NewBoolQuery().Must(elastic.NewTermQuery("CaseInfo.case_name", vars_case))
+	query = elastic.NewBoolQuery().Must(elastic.NewTermQuery("CaseInfo.case_name.keyword", vars_case))
 
 	at, err = client.Search().
 		Index(conf.Elastic.Elastic_index).
@@ -299,10 +300,10 @@ func GetAuditTypeByEndpointAndCase(w http.ResponseWriter, r *http.Request) {
 func GetAuditDataByAuditGenerator(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	vars := mux.Vars(r)
-	order := r.URL.Query().Get("order")
 
 	var (
 		from        int
+		sort_field  string
 		sort_order  bool
 		method, ret string
 		client      *elastic.Client
@@ -311,12 +312,24 @@ func GetAuditDataByAuditGenerator(w http.ResponseWriter, r *http.Request) {
 		filter      FilterOn
 	)
 
+	// Setting default value for sort_order
+	// and sort_field
+	sort_field = "Record.TlnTime" // default field to sort
+	sort_order = true             // sort in ascending order
+
+	uriSortField := r.URL.Query().Get("sort")
+	if uriSortField != "" {
+		sort_field = uriSortField
+	}
+	uriSortOrder := r.URL.Query().Get("order")
+
+	// Values from RequestURI
 	vars_case := vars["case"]
 	vars_endpoint := vars["endpoint"]
 	vars_audittype := vars["audittype"]
 	vars_case_date := vars["case_date"]
 
-	switch order {
+	switch uriSortOrder {
 	case "desc":
 		sort_order = true
 		break
@@ -370,16 +383,17 @@ func GetAuditDataByAuditGenerator(w http.ResponseWriter, r *http.Request) {
 		Index(conf.Elastic.Elastic_index).
 		Query(query).
 		Size(100).
-		Sort(r.URL.Query().Get("sort"), sort_order).
+		Sort(sort_field, sort_order).
 		From(from).
 		Do(context.Background())
 
 	if err != nil {
 		api.HttpFailureMessage(fmt.Sprintf("Elasticsearch Error: %s", err.Error()))
-		api.LogError(api.DEBUG, err)
+		api.LogError(api.DEBUG, errors.New(fmt.Sprintf("%s - %s", r.RequestURI, err.Error())))
+		return
 	}
 
-	ret = api.HttpSuccessMessage("200", &at.Hits.Hits, at.TotalHits())
+	ret = api.HttpSuccessMessage("200", &at.Hits.Hits, at.Hits.TotalHits)
 	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] GET /show/%s/%s/%s/%s HTTP 200, returned audit data for endpoint/case", vars_case, vars_endpoint, vars_case_date, vars_audittype))
 	fmt.Fprintln(w, ret)
 }

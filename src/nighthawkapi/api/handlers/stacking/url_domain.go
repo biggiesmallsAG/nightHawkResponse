@@ -68,13 +68,13 @@ func StackUrlDomain(w http.ResponseWriter, r *http.Request) {
 
 	if sc.IgnoreGood {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator", "urlhistory"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName)).
-			MustNot(elastic.NewTermQuery("Record.IsGoodEntry", "true"))
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "urlhistory"),
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName)).
+			MustNot(elastic.NewTermQuery("Record.IsGoodEntry.keyword", "true"))
 	} else {
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewTermQuery("AuditType.Generator", "urlhistory"),
-				elastic.NewWildcardQuery("CaseInfo.case_name", sc.CaseName))
+			Must(elastic.NewTermQuery("AuditType.Generator.keyword", "urlhistory"),
+				elastic.NewWildcardQuery("CaseInfo.case_name.keyword", sc.CaseName))
 	}
 
 	sr, err = client.Search().

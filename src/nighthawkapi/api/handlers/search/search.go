@@ -89,8 +89,8 @@ func GetGlobalSearch(w http.ResponseWriter, r *http.Request) {
 
 	query = elastic.NewBoolQuery().
 		Must(elastic.NewMatchQuery("_all", gsc.SearchTerm),
-			elastic.NewWildcardQuery("CaseInfo.case_name", gsc.CaseName),
-			elastic.NewWildcardQuery("AuditType.Generator", gsc.Type),
+			elastic.NewWildcardQuery("CaseInfo.case_name.keyword", gsc.CaseName),
+			elastic.NewWildcardQuery("AuditType.Generator.keyword", gsc.Type),
 			elastic.NewWildcardQuery("ComputerName.keyword", gsc.Endpoint))
 
 	sr, err = client.Search().

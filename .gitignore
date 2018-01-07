@@ -6,3 +6,7 @@ nighthawk_go/pkg
 nighthawk_web/migrations
 .DS_Store
 local
+wwwroot
+nightHawkV4/node_modules
+config/systemd/nighthawk-web.service
+*.a

@@ -1,0 +1,19 @@
+[Unit]
+Description=nighthawk worker
+Documentation=https://github.com/biggieSmallsAG/nighthawkResponse
+
+PartOf=nighthawk.service
+After=nighthawk.service
+After=nighthawk-api.service
+
+[Service]
+
+User=nighthawk
+Group=nighthawk
+
+Environment=PID_DIR=/var/run/nighthawk
+ExecStart=/opt/nighthawk/bin/nighthawk -daemon -pid ${PID_DIR}/nighthawk.pid
+Restart=on-failure
+
+[Install]
+WantedBy=nighthawk.service

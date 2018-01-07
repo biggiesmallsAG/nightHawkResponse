@@ -149,15 +149,15 @@ func GetTimelineSearch(w http.ResponseWriter, r *http.Request) {
 
 		// Run this query if endpoint or endpoint_list is provided
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewWildcardQuery("CaseInfo.case_name", tc.CaseName),
-				elastic.NewWildcardQuery("AuditType.Generator", tc.Type),
+			Must(elastic.NewWildcardQuery("CaseInfo.case_name.keyword", tc.CaseName),
+				elastic.NewWildcardQuery("AuditType.Generator.keyword", tc.Type),
 				elastic.NewTermsQuery("ComputerName.keyword", cl...)).
 			Filter(elastic.NewRangeQuery("Record.TlnTime").From(tc.StartTime).To(tc.EndTime))
 	} else {
 		// If Endpoint or ComputerList is not provided run this Elastic query
 		query = elastic.NewBoolQuery().
-			Must(elastic.NewWildcardQuery("CaseInfo.case_name", tc.CaseName),
-				elastic.NewWildcardQuery("AuditType.Generator", tc.Type)).
+			Must(elastic.NewWildcardQuery("CaseInfo.case_name.keyword", tc.CaseName),
+				elastic.NewWildcardQuery("AuditType.Generator.keyword", tc.Type)).
 			Filter(elastic.NewRangeQuery("Record.TlnTime").From(tc.StartTime).To(tc.EndTime))
 	}
 

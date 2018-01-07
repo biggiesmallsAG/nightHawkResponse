@@ -78,7 +78,7 @@ func DeleteCaseEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	var query elastic.Query
 	query = elastic.NewBoolQuery().
-		Must(elastic.NewWildcardQuery("CaseInfo.case_name", dc.CaseName),
+		Must(elastic.NewWildcardQuery("CaseInfo.case_name.keyword", dc.CaseName),
 			elastic.NewTermQuery("ComputerName.keyword", dc.Endpoint))
 
 	deleteEndpointByQuery(w, query, "DeleteCaseEndpoint")
@@ -112,7 +112,7 @@ func DeleteCase(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var query elastic.Query
-	query = elastic.NewBoolQuery().Must(elastic.NewTermQuery("CaseInfo.case_name", dc.CaseName))
+	query = elastic.NewBoolQuery().Must(elastic.NewTermQuery("CaseInfo.case_name.keyword", dc.CaseName))
 	deleteEndpointByQuery(w, query, "DeleteCase")
 }
 

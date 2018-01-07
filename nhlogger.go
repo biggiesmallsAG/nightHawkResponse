@@ -47,7 +47,7 @@ func main() {
 	}
 
 	if runopt.Version {
-		nighthawk.ShowVersion()
+		nighthawk.ShowVersion("Unified Logging Service")
 		os.Exit(0)
 	}
 

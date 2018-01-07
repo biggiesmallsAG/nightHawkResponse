@@ -1,0 +1,17 @@
+[Unit]
+Description=nighthawk API Server
+Documentation=https://github.com/biggieSmallsAG/nighthawkResponse
+
+PartOf=nighthawk.service
+After=nighthawk.service
+
+[Service]
+
+User=nighthawk
+Group=nighthawk
+
+ExecStart=/opt/nighthawk/bin/nhapi
+Restart=on-failure
+
+[Install]
+WantedBy=nighthawk.service

@@ -1,0 +1,11 @@
+{
+    "query": {
+      "bool": {
+        "must": [
+            {"match": {"CaseInfo.case_name.keyword": "CASE-ALFA-01"}},
+            {"match": {"ComputerName.keyword": "COMPUTER-1"}},
+            {"match": {"AuditType.Generator.keyword": "w32ports"}}
+          ]
+      }
+    }
+  }

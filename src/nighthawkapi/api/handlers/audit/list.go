@@ -178,21 +178,21 @@ func GetAuditTypeList(w http.ResponseWriter, r *http.Request) {
 		api.LogError(api.DEBUG, err)
 	}
 	agg = elastic.NewTermsAggregation().
-		Field("AuditType.Generator").
-		Size(16)
+		Field("AuditType.Generator.keyword").
+		Size(100)
 
 	at, err = client.Search().
 		Index(conf.Elastic.Elastic_index).
 		Query(elastic.NewMatchAllQuery()).
-		Size(16).
-		Aggregation("endpoints", agg).
+		Size(0).
+		Aggregation("audittype", agg).
 		Do(context.Background())
 
 	if err != nil {
 		api.LogError(api.DEBUG, err)
 	}
 
-	a, found = at.Aggregations.Terms("endpoints")
+	a, found = at.Aggregations.Terms("audittype")
 	if !found {
 		api.LogDebug(api.DEBUG, "[!] Aggregation not found!")
 	}
@@ -204,7 +204,7 @@ func GetAuditTypeList(w http.ResponseWriter, r *http.Request) {
 		_r[i] = _a
 	}
 
-	ret = api.HttpSuccessMessage("200", &_a, at.TotalHits())
+	ret = api.HttpSuccessMessage("200", &_r, at.TotalHits())
 	api.LogDebug(api.DEBUG, "[+] GET /list/audittypes HTTP 200, returned audittype list.")
 	fmt.Fprintln(w, ret)
 }

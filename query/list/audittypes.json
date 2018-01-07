@@ -1,0 +1,13 @@
+{
+    "size":0,
+    "query": {
+      "match_all": {}
+    },
+    "aggs": {
+      "audits": {
+        "terms": {
+          "field": "AuditType.Generator.keyword"
+        }
+      }
+    }
+  }

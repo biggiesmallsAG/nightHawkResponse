@@ -16,12 +16,14 @@ type AgentEventItem struct {
 }
 
 type AddressNotificationEvent struct {
+	TlnTime   string `json:"TlnTime"`
 	Timestamp string
 	EventType string
 	Address   string
 }
 
 type FileWriteEvent struct {
+	TlnTime      string `json:"TlnTime"`
 	Timestamp    string `xml:"timestamp"`
 	EventType    string `xml:"eventType"`
 	FullPath     string `xml:"fullPath"`
@@ -43,6 +45,7 @@ type FileWriteEvent struct {
 }
 
 type ImageLoadEvent struct {
+	TlnTime     string `json:"TlnTime"`
 	Timestamp   string `xml:"timestamp"`
 	EventType   string `xml:"eventType"`
 	FullPath    string `xml:"fullPath"`
@@ -55,6 +58,7 @@ type ImageLoadEvent struct {
 }
 
 type NetworkEvent struct {
+	TlnTime     string `json:"TlnTime"`
 	Timestamp   string `xml:"timestamp"`
 	EventType   string `xml:"eventType"`
 	RemoteIP    string `xml:"remoteIP"`
@@ -67,6 +71,7 @@ type NetworkEvent struct {
 }
 
 type DnsLookupEvent struct {
+	TlnTime     string `json:"TlnTime"`
 	Timestamp   string
 	EventType   string
 	Hostname    string
@@ -75,6 +80,7 @@ type DnsLookupEvent struct {
 }
 
 type RegKeyEvent struct {
+	TlnTime          string `json:"TlnTime"`
 	Timestamp        string
 	EventType        string
 	Hive             string
