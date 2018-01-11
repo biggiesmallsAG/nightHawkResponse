@@ -8,9 +8,12 @@ import (
 	"fmt"
 	"net/http"
 	api "nighthawkapi/api/core"
+	"os"
+	"path/filepath"
 
 	"nighthawkapi/api/handlers/analyzer"
 	"nighthawkapi/api/handlers/audit"
+	"nighthawkapi/api/handlers/auth"
 	config "nighthawkapi/api/handlers/config"
 	"nighthawkapi/api/handlers/delete"
 	"nighthawkapi/api/handlers/search"
@@ -20,6 +23,18 @@ import (
 
 	"github.com/gorilla/mux"
 )
+
+var LogFile *os.File
+
+func init() {
+	LOGDIR := filepath.Join(api.STATEDIR, "log")
+	logfilename := filepath.Join(LOGDIR, "nighthawkapi.log")
+	var err error
+	LogFile, err = os.OpenFile(logfilename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+}
 
 type Route struct {
 	Name        string
@@ -327,5 +342,23 @@ var routes = Routes{
 		"POST",
 		fmt.Sprintf("%s/analyze/delete/{analyzer_type}", _api),
 		analyzer.DeleteAnalyzerItemByQuery,
+	},
+	{
+		"Login",
+		"POST",
+		fmt.Sprintf("%s/auth/login", _api),
+		auth.Login,
+	},
+	{
+		"Logout",
+		"POST",
+		fmt.Sprintf("%s/auth/logout", _api),
+		auth.Logout,
+	},
+	{
+		"SetPassword",
+		"POST",
+		fmt.Sprintf("%s/admin/password/set", _api),
+		auth.SetPassword,
 	},
 }
