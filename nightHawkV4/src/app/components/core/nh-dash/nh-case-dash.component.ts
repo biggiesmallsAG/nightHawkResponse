@@ -170,6 +170,6 @@ export class NhCaseDashComponent implements OnInit {
 
 	private destroyModalObject() {
 		this.modalActions.emit({action:"modal",params:['close']});
-		this.pTree = '';
+		this.pTree = {};
 	}
 }
