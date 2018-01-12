@@ -3,13 +3,11 @@ package auth
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"nighthawkapi/api/core"
 	"nighthawkapi/api/handlers/config"
-	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -100,6 +98,8 @@ func (config *Account) LoadParams(data []byte) {
 	}
 }
 
+// UserExxists verifies user exists in database
+// and return user Account data
 func UserExists(username string) (bool, Account) {
 	var acc Account
 
@@ -124,179 +124,116 @@ func UserExists(username string) (bool, Account) {
 	return false, acc
 }
 
-func HttpErrorReturn(w http.ResponseWriter, r *http.Request, message string, err error) {
-	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] %s %s, %s", r.Method, r.RequestURI, err.Error()))
-	fmt.Fprintln(w, api.HttpFailureMessage(message))
-}
-
-func HttpSuccessReturn(w http.ResponseWriter, r *http.Request, message string, hits int64) {
-	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] %s %s, %s", r.Method, r.RequestURI, message))
-	fmt.Fprintln(w, api.HttpSuccessMessage("200", message, hits))
-}
-
-func CreateNewUser(w http.ResponseWriter, r *http.Request) {
+// ChangePassword changed currently logged on user password
+// api_uri: POST /api/v1/user/password/change
+// post_data: {"password":"currentpassword", "new_password":"newpassword123"}
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	isauth, message := IsAuthenticatedSession(w, r)
+	if !isauth {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
+		return
+	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
+		return
+	}
+
+	var passwdData map[string]string
+	json.Unmarshal(body, &passwdData)
+
+	// Get username from authenticated sesion table
+	passwdData["token"] = r.Header.Get("NHR-TOKEN")
+	passwdData["username"] = GetUseranmeByToken(passwdData["token"])
+
+	// Get account information from Elasticsearch
+	// Verify current password match and update hashed password
+	_, acc := UserExists(passwdData["username"])
+	if CheckPasswordHash(passwdData["password"], acc.PasswordHash) {
+		newPasswordHash, _ := HashPassword(passwdData["new_password"])
+		out, err := client.Update().Index(NHINDEX).Type(NHACCOUNT).Id(acc.DocId).Doc(map[string]interface{}{"password_hash": newPasswordHash}).Do(context.Background())
+		if err != nil || out.Result != "updated" {
+			api.HttpResponseReturn(w, r, "failed", "Failed to changed password", nil)
+			return
+		}
+	}
+
+	// default response is password changed successfully
+	api.HttpResponseReturn(w, r, "success", "Password change completed", passwdData["username"])
+}
+
+// CreateNewUser creates a new user
+// This operation is only allowed to authenticated admin user
+// api_uri: POST /api/v1/admin/user/create
+// post_data: {"username":"user", "password":"password123", "role":"user"}
+func CreateNewUser(w http.ResponseWriter, r *http.Request) {
+	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	// check if requesting user is admin user
+	isadmin, message := IsAuthenticatedAdminSession(w, r)
+	if !isadmin {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
 		return
 	}
 
 	var acc Account
 	acc.LoadParams(body)
 
-	conf, err = config.ReadConfFile()
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read config file", err)
-		return
-	}
-
-	client, err = elastic.NewClient(elastic.SetURL(fmt.Sprintf("%s://%s:%d", conf.ServerHttpScheme(), conf.ServerHost(), conf.ServerPort())))
-	if err != nil {
-		HttpErrorReturn(w, r, "Cannot connect to elasticsearch", err)
-		return
-	}
-
 	boolUserExits, _ := UserExists(acc.Username)
 	if boolUserExits {
-		HttpErrorReturn(w, r, "User already exists", errors.New("User already exists"))
+		api.HttpResponseReturn(w, r, "failed", "User already exits", acc.Username)
 		return
 	}
 
 	// Compute BCrypt Hash
 	acc.PasswordHash, err = HashPassword(acc.Password)
 	if err != nil {
-		fmt.Printf("Error hashingpassword, %s\n", err.Error())
+		api.HttpResponseReturn(w, r, "failed", "Internal error hashing password", nil)
 	}
 
 	// Set Password field empty so it is not indexed
 	acc.Password = ""
 	jsonAccount, _ := json.Marshal(acc)
 
-	client.Index().Index(NHINDEX).Type(NHACCOUNT).BodyJson(string(jsonAccount)).Do(context.Background())
+	res, err := client.Index().Index(NHINDEX).Type(NHACCOUNT).BodyJson(string(jsonAccount)).Do(context.Background())
+
+	if err != nil || !res.Created {
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
+		return
+	}
+
+	resdata := make(map[string]string)
+	resdata["username"] = acc.Username
+	resdata["role"] = acc.Role
+	api.HttpResponseReturn(w, r, "success", "User account created", "")
 }
 
-func ChangePassword(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
-		return
-	}
-
-	//fmt.Println("RequestHeaderToken ", r.Header.Get("NHR-TOKEN"))
-
-	var passwdData map[string]string
-	json.Unmarshal(body, &passwdData)
-	passwdData["clientip"] = "127.0.0.1"
-	passwdData["token"] = r.Header.Get("NHR-TOKEN")
-
-	conf, err = config.ReadConfFile()
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read config file", err)
-		return
-	}
-
-	client, err = elastic.NewClient(elastic.SetURL(fmt.Sprintf("%s://%s:%d", conf.ServerHttpScheme(), conf.ServerHost(), conf.ServerPort())))
-	if err != nil {
-		HttpErrorReturn(w, r, "Cannot connect to elasticsearch", err)
-		return
-	}
-
-	validSession, err := IsSessionTokenValid(passwdData["username"], passwdData["clientip"], passwdData["token"])
-	if !validSession {
-		HttpErrorReturn(w, r, "Session is not valid", err)
-		return
-	}
-
-	// Get account information from Elasticsearch
-	// Verify current password match and
-	// update hashed password
-	_, acc := UserExists(passwdData["username"])
-	if CheckPasswordHash(passwdData["password"], acc.PasswordHash) {
-		newPasswordHash, _ := HashPassword(passwdData["new_password"])
-		out, err := client.Update().Index(NHINDEX).Type(NHACCOUNT).Id(acc.DocId).Doc(map[string]interface{}{"password_hash": newPasswordHash}).Do(context.Background())
-		if err != nil {
-			HttpErrorReturn(w, r, "Failed to change password", err)
-			return
-		}
-
-		if out.Result != "updated" {
-			HttpErrorReturn(w, r, "Failed to change password", errors.New(fmt.Sprintf("Failed to update password with result %s", out.Result)))
-			return
-		}
-	}
-
-	// default response is password changed successfully
-	HttpSuccessReturn(w, r, "Password Changed", 1)
-}
-
+// DeleteUser deletes useraccount
+// This operation is only allowed to authenticated admin user
+// api_uri: POST /api/v1/admin/user/delete
+// post_data: {"username":"user"}
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
-		return
-	}
-
-	conf, err = config.ReadConfFile()
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read config file", err)
-		return
-	}
-
-	client, err = elastic.NewClient(elastic.SetURL(fmt.Sprintf("%s://%s:%d", conf.ServerHttpScheme(), conf.ServerHost(), conf.ServerPort())))
-	if err != nil {
-		HttpErrorReturn(w, r, "Cannot connect to elasticsearch", err)
-		return
-	}
-
-	var postData map[string]string
-	json.Unmarshal(body, &postData)
-
-	validUser, acc := UserExists(postData["delete_account"])
-	if !validUser {
-		HttpErrorReturn(w, r, "User not found", errors.New("User not found"))
-		return
-	}
-	res, err := client.Delete().Index(NHINDEX).Type(NHACCOUNT).Id(acc.DocId).Do(context.Background())
-
-	if err != nil || res.Result != "deleted" {
-		HttpErrorReturn(w, r, "Error deleting user", err)
-		return
-	}
-
-	HttpSuccessReturn(w, r, "Account deleted", 1)
-}
-
-func SetPassword(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
-	/// verify requesting user has admin role
-	token := r.Header.Get("NHR-TOKEN")
-	adminUser := GetUseranmeByToken(token)
-	if adminUser == "" {
-		HttpErrorReturn(w, r, "Could not find valid session for admin user", errors.New("Admin session is not valid"))
-		return
-	}
-
-	adminExists, adminAcc := UserExists(adminUser)
-	if !adminExists {
-		HttpErrorReturn(w, r, fmt.Sprintf("User account %s does not exits", adminUser), errors.New(fmt.Sprintf("User account %s does not exits", adminUser)))
-		return
-	}
-
-	if strings.ToLower(adminAcc.Role) != "admin" {
-		HttpErrorReturn(w, r, fmt.Sprintf("User account %s does not admin user", adminUser), errors.New(fmt.Sprintf("User account %s is not admin user", adminUser)))
+	// check if requesting user is admin user
+	isadmin, message := IsAuthenticatedAdminSession(w, r)
+	if !isadmin {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
 		return
 	}
 
@@ -305,15 +242,52 @@ func SetPassword(w http.ResponseWriter, r *http.Request) {
 
 	validUser, acc := UserExists(postData["username"])
 	if !validUser {
-		HttpErrorReturn(w, r, "User not found", errors.New("User not found"))
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
+		return
+	}
+	res, err := client.Delete().Index(NHINDEX).Type(NHACCOUNT).Id(acc.DocId).Do(context.Background())
+
+	if err != nil || res.Result != "deleted" {
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
+		return
+	}
+	api.HttpResponseReturn(w, r, "success", "User account delete", postData)
+}
+
+// SetPassword sets password for a user account.
+// This operation is only allowed to authenticated administrator user
+// api_uri: POST /api/v1/admin/password/set
+// post_data: {"username", "user", "new_password": "password123"}
+func SetPassword(w http.ResponseWriter, r *http.Request) {
+	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	// check if requesting user is admin user
+	isadmin, message := IsAuthenticatedAdminSession(w, r)
+	if !isadmin {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
+		return
+	}
+
+	var postData map[string]string
+	json.Unmarshal(body, &postData)
+
+	validUser, acc := UserExists(postData["username"])
+	if !validUser {
+		api.HttpResponseReturn(w, r, "failed", "User not found", postData["username"])
 		return
 	}
 
 	newPasswordHash, _ := HashPassword(postData["new_password"])
 	out, err := client.Update().Index(NHINDEX).Type(NHACCOUNT).Id(acc.DocId).Doc(map[string]interface{}{"password_hash": newPasswordHash}).Do(context.Background())
 	if err != nil || out.Result != "updated" {
-		HttpErrorReturn(w, r, "Failed to change password", err)
+		api.HttpResponseReturn(w, r, "failed", err.Error(), postData["username"])
 		return
 	}
-	HttpSuccessReturn(w, r, "Password Set", 1)
+	api.HttpResponseReturn(w, r, "success", "Password set completed", postData["username"])
 }

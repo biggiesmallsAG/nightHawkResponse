@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	api "nighthawkapi/api/core"
-	"os"
-	"path/filepath"
 
 	"nighthawkapi/api/handlers/analyzer"
 	"nighthawkapi/api/handlers/audit"
@@ -23,18 +21,6 @@ import (
 
 	"github.com/gorilla/mux"
 )
-
-var LogFile *os.File
-
-func init() {
-	LOGDIR := filepath.Join(api.STATEDIR, "log")
-	logfilename := filepath.Join(LOGDIR, "nighthawkapi.log")
-	var err error
-	LogFile, err = os.OpenFile(logfilename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
 
 type Route struct {
 	Name        string
