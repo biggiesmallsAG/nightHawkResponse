@@ -347,4 +347,46 @@ var routes = Routes{
 		fmt.Sprintf("%s/admin/password/set", _api),
 		auth.SetPassword,
 	},
+	{
+		"Comment::AddComment",
+		"POST",
+		fmt.Sprintf("%s/comment/add/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.AddComment,
+	},
+	{
+		"GetAllComment",
+		"GET",
+		fmt.Sprintf("%s/comment/show", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByPost",
+		"POST",
+		fmt.Sprintf("%s/comment/show", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCase",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpoint",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpointAudit",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}/{audit}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpointAuditDocId",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.GetComment,
+	},
 }
