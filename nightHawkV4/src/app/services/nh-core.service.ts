@@ -1,5 +1,5 @@
-import {Injectable}      from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Headers, Http, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -7,24 +7,28 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class NhCoreService {
-	public apiUrl = '/api/v1'; 
-	private headers = new Headers({'Content-Type': 'application/json'});
-	private mutlipart = new Headers({'Content-Type': 'multipart/form-data'})
-
-	constructor(private http: Http) { }
+	private apiUrl = '/api/v1';
+	private token: string = localStorage.getItem('nhr-token');
+	private options = new RequestOptions({
+		headers: new Headers({
+			'nhr-token': this.token,
+			'Content-Type': 'application/json'
+		})
+	});
+	constructor(private http: Http) {}
 
 	GET(endpoint: string) {
-		return this.http.get(this.apiUrl + endpoint)
-		.map(response => response.json().data)
-		.catch(error => this.handleError(error.reason))
+		return this.http.get(this.apiUrl + endpoint, this.options)
+			.map(response => response.json().data)
+			.catch(error => this.handleError(error.reason))
 	}
 
 	POST(endpoint: string, name: any) {
-		return this.http.post(this.apiUrl + endpoint, JSON.stringify({name: name}), {headers: this.headers})
+		return this.http.post(this.apiUrl + endpoint, JSON.stringify({ name: name }), this.options)
 			.map(response => {
 				switch (endpoint) {
 					case "/config":
-						return response.json()		
+						return response.json()
 					default:
 						return response.json().data
 				}
@@ -33,13 +37,13 @@ export class NhCoreService {
 	}
 
 	POSTJSON(endpoint: string, body: any) {
-		return this.http.post(this.apiUrl + endpoint, JSON.stringify(body), {headers: this.headers})
+		return this.http.post(this.apiUrl + endpoint, JSON.stringify(body), this.options)
 			.map(response => response.json().data)
 			.catch(error => this.handleError(error))
 	}
 
 	POSTUpload(endpoint: string, data: any) {
-		return this.http.post(this.apiUrl + endpoint, data)
+		return this.http.post(this.apiUrl + endpoint, data, this.options)
 			.map(response => response.json())
 			.catch(error => this.handleError(error.reason))
 	}

@@ -9,12 +9,12 @@ import (
 	"testing"
 )
 
-func TestCreateNeUser(t *testing.T) {
+func TestCreateNewUser(t *testing.T) {
 	var acc Account
 	acc.Firstname = "roshan"
 	acc.Lastname = "maskey"
-	acc.Username = "roshan"
-	acc.Password = "roshan"
+	acc.Username = "admin"
+	acc.Password = "admin"
 	acc.Role = "admin"
 
 	jd, _ := json.Marshal(acc)

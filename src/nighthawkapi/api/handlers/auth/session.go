@@ -207,7 +207,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("NHR-TOKEN", sessionToken)
-		fmt.Fprintln(w, "Login successful")
+		HttpSuccessReturn(w, r, sessionToken, 1)
 	} else {
 		HttpErrorReturn(w, r, "Password did not match", errors.New("Password did not match"))
 	}

@@ -19,6 +19,7 @@ import { NhGridHelperService } from './services/nh-grid-helper.service';
 import { NhLoadingService } from './services/nh-loading.service';
 import { D3Service } from 'd3-ng2-service';
 import { NhSharedModule } from './modules/nh-shared/nh-shared.module';
+import { NhAuthComponent } from 'app/components/core/nh-auth/nh-auth.component';
 
 @NgModule({
 	imports:      [ BrowserModule,
@@ -32,7 +33,8 @@ import { NhSharedModule } from './modules/nh-shared/nh-shared.module';
 					NhDashComponent,
 					NhContainerComponent,
 					NhMainViewComponent,
-					NhLoaderComponent
+					NhLoaderComponent,
+					NhAuthComponent
 	],
 	providers:    [ NhCoreService, 
 					NhPageTitleService,

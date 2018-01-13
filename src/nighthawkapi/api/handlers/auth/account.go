@@ -130,6 +130,7 @@ func HttpErrorReturn(w http.ResponseWriter, r *http.Request, message string, err
 }
 
 func HttpSuccessReturn(w http.ResponseWriter, r *http.Request, message string, hits int64) {
+	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] %s %s, %s", r.Method, r.RequestURI, message))
 	fmt.Fprintln(w, api.HttpSuccessMessage("200", message, hits))
 }
