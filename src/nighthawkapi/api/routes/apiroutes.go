@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	api "nighthawkapi/api/core"
-	"os"
-	"path/filepath"
 
 	"nighthawkapi/api/handlers/analyzer"
 	"nighthawkapi/api/handlers/audit"
@@ -23,18 +21,6 @@ import (
 
 	"github.com/gorilla/mux"
 )
-
-var LogFile *os.File
-
-func init() {
-	LOGDIR := filepath.Join(api.STATEDIR, "log")
-	logfilename := filepath.Join(LOGDIR, "nighthawkapi.log")
-	var err error
-	LogFile, err = os.OpenFile(logfilename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
 
 type Route struct {
 	Name        string
@@ -360,5 +346,47 @@ var routes = Routes{
 		"POST",
 		fmt.Sprintf("%s/admin/password/set", _api),
 		auth.SetPassword,
+	},
+	{
+		"Comment::AddComment",
+		"POST",
+		fmt.Sprintf("%s/comment/add/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.AddComment,
+	},
+	{
+		"GetAllComment",
+		"GET",
+		fmt.Sprintf("%s/comment/show", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByPost",
+		"POST",
+		fmt.Sprintf("%s/comment/show", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCase",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpoint",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpointAudit",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}/{audit}", _api),
+		audit.GetComment,
+	},
+	{
+		"GetCommentByCaseEndpointAuditDocId",
+		"GET",
+		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.GetComment,
 	},
 }

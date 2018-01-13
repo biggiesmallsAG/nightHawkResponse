@@ -3,19 +3,16 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"io/ioutil"
 	"net/http"
-	"nighthawkapi/api/handlers/config"
+	"strings"
 	"time"
-
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 type AuthSession struct {
 	Username        string
+	Role            string
+	AdminUser       bool
 	ClientIp        string
 	LoginTime       int64
 	Token           string
@@ -45,10 +42,18 @@ func init() {
 	asmap = make(map[string]int)
 }
 
-func CreateSession(username string, clientip string) (string, error) {
+// CreateSession creates new authenticated session information
+// for a user and stores in memory
+func CreateSession(username string, role string, clientip string) (string, error) {
 	var as AuthSession
 	as.Username = username
+	as.Role = role
 	as.ClientIp = clientip
+
+	if strings.ToLower(role) == "admin" {
+		as.AdminUser = true
+	}
+
 	as.NewSession()
 
 	authsession = append(authsession, as)
@@ -57,6 +62,7 @@ func CreateSession(username string, clientip string) (string, error) {
 	return as.Token, nil
 }
 
+// DestroySession deletes authenticated session information
 func DestroySession(username string, clientip string, token string) (bool, error) {
 	if len(authsession) == 0 {
 		return false, errors.New("No active session found")
@@ -98,32 +104,36 @@ func DestroySession(username string, clientip string, token string) (bool, error
 	return true, nil
 }
 
-func IsSessionTokenValid(username, clientip, token string) (bool, error) {
+// IsAuthenticatedSession verifies that if request is authenticated request
+// returns false with message if not a valid authenticated session
+func IsAuthenticatedSession(w http.ResponseWriter, r *http.Request) (bool, string) {
+	sessionData := make(map[string]string)
+
+	sessionData["clientip"] = "127.0.0.1"            // setting default to 127.0.0.1. Must be overwritten using x-forward-for
+	sessionData["token"] = r.Header.Get("NHR-TOKEN") // adding token informaiton
+
+	//// session validation
 	if len(authsession) == 0 {
-		return false, errors.New("No active session found")
+		return false, "No active session found"
 	}
-	asIndex := asmap[token]
+	asIndex := asmap[sessionData["token"]]
 
 	//// Check all the failing conditions
 	if asIndex < 0 || asIndex > len(authsession) {
-		return false, errors.New("Cannot find valid index in asmap")
+		return false, "Invalid token provided"
 	}
 
-	if authsession[asIndex].Username != username {
-		return false, errors.New("Username does not match in AuthSession")
+	if authsession[asIndex].Token != sessionData["token"] {
+		return false, "Token does not exist in authenticated session"
 	}
 
-	if authsession[asIndex].Token != token {
-		return false, errors.New("Token does not match in AuthSession")
-	}
-
-	if authsession[asIndex].ClientIp != clientip {
-		return false, errors.New("ClientIP does not match in AuthSession")
+	if authsession[asIndex].ClientIp != sessionData["clientip"] {
+		return false, "Invalid Client IP for authenticated session"
 	}
 
 	thisActivityTime := time.Now().UTC().Unix()
 	if thisActivityTime > authsession[asIndex].TokenHardExpiry {
-		return false, errors.New("Token expired. New session Token required")
+		return false, "Token has expired"
 	}
 
 	// TODO: v1.5
@@ -133,71 +143,35 @@ func IsSessionTokenValid(username, clientip, token string) (bool, error) {
 		}
 	*/
 
-	return true, nil
+	return true, "Authenticated session"
 }
 
-func IsAuthenticatedSession(w http.ResponseWriter, r *http.Request) bool {
-
-	return true
-}
-
-func IsAuthenticatedAdminSession(w http.ResponseWriter, r *http.Request) bool {
-	if !IsAuthenticatedSession(w, r) {
-		return false
+// IsAuthenticatedAdminSession function first check if it is a valid authenticated session
+// followed by authented user is member of admin group
+func IsAuthenticatedAdminSession(w http.ResponseWriter, r *http.Request) (bool, string) {
+	validSession, sessionMessage := IsAuthenticatedSession(w, r)
+	if !validSession {
+		return false, sessionMessage
 	}
 
 	//// Implement code to verify it is admin session
-	return true
-}
+	sessionToken := r.Header.Get("NHR-TOKEN")
 
-func GetUseranmeByToken(token string) string {
-	if token == "" {
-		return ""
+	if len(authsession) == 0 {
+		return false, "No active authenticated session found"
 	}
+	asIndex := asmap[sessionToken]
 
-	asIndex := asmap[token]
 	//// Check all the failing conditions
 	if asIndex < 0 || asIndex > len(authsession) {
-		return ""
+		return false, "Token is invalid or expired"
 	}
 
-	return authsession[asIndex].Username
-}
-
-//=================================================
-// Login/Logff Handlers
-//=================================================
-
-func Login(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
-		return
+	if authsession[asIndex].AdminUser {
+		return true, "Authenticated admin user"
 	}
 
-	var uacc Account
-	uacc.LoadParams(body)
-
-	conf, err = config.ReadConfFile()
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read config file", err)
-		return
-	}
-
-	client, err = elastic.NewClient(elastic.SetURL(fmt.Sprintf("%s://%s:%d", conf.ServerHttpScheme(), conf.ServerHost(), conf.ServerPort())))
-	if err != nil {
-		HttpErrorReturn(w, r, "Cannot connect to elasticsearch", err)
-		return
-	}
-
-	boolUserExits, sacc := UserExists(uacc.Username)
-	if !boolUserExits {
-		HttpErrorReturn(w, r, "User does not exist", errors.New("User does not exist"))
-		return
-	}
-
+<<<<<<< HEAD
 	passwordMatched := CheckPasswordHash(uacc.Password, sacc.PasswordHash)
 	if passwordMatched {
 		clientip := "127.0.0.1" // TODO: Extract from request header
@@ -211,28 +185,23 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	} else {
 		HttpErrorReturn(w, r, "Password did not match", errors.New("Password did not match"))
 	}
+=======
+	return false, "Authenticated user does not have admin role" //default return
+>>>>>>> 5af04688964ecae66fb4462369b904a79f6d5af8
 }
 
-func Logout(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		HttpErrorReturn(w, r, "Failed to read HTTP Reuqest", err)
-		return
+// GetUsernameByToken function returns login username for authenticated token.
+// This function returns empty string in error condition
+func GetUseranmeByToken(token string) string {
+	if token == "" {
+		return ""
 	}
 
-	postData := make(map[string]string)
-	json.Unmarshal(body, &postData)
-
-	postData["token"] = r.Header.Get("NHR-TOKEN")
-	postData["clientip"] = "127.0.0.1"
-
-	_, err = DestroySession(postData["username"], postData["clientip"], postData["token"])
-	if err != nil {
-		HttpErrorReturn(w, r, "Error destryoing session", err)
-		return
+	asIndex := asmap[token]
+	//// Check all the failing conditions
+	if asIndex < 0 || asIndex > len(authsession) {
+		return ""
 	}
 
-	HttpSuccessReturn(w, r, "Logout completed", 1)
+	return authsession[asIndex].Username
 }

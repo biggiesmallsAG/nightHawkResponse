@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
+<<<<<<< HEAD
 func TestCreateNewUser(t *testing.T) {
 	var acc Account
 	acc.Firstname = "roshan"
@@ -16,14 +18,43 @@ func TestCreateNewUser(t *testing.T) {
 	acc.Username = "admin"
 	acc.Password = "admin"
 	acc.Role = "admin"
+=======
+//// Test new account creation
+func TestCreateUser(t *testing.T) {
+
+	// Step 1: Authenticate as admin user
+	loginData := make(map[string]string)
+	loginData["username"] = "admin"
+	loginData["password"] = "admin"
+	jLoginData, _ := json.Marshal(loginData)
+
+	rr := loginUser(t, jLoginData)
+	sessionToken := rr.Header().Get("NHR-TOKEN")
+
+	// Step 2: Created new account as authenticated user
+	acc := Account{
+		Firstname: "roshan",
+		Lastname:  "maskey",
+		Email:     "roshanmaskey@nighthawk.local",
+		Username:  "roshan8",
+		Password:  "roshan",
+		Role:      "admin",
+	}
+>>>>>>> 5af04688964ecae66fb4462369b904a79f6d5af8
 
 	jd, _ := json.Marshal(acc)
-	createNewUser(t, jd)
+	createNewUser(t, sessionToken, jd)
 
+	// Step 3: Logout
+	logoutData := make(map[string]string)
+	logoutData["username"] = "admin"
+	jlogoutData, _ := json.Marshal(logoutData)
+	logout(t, sessionToken, jlogoutData)
 }
 
-func createNewUser(t *testing.T, data []byte) {
-	req, err := http.NewRequest("POST", "/api/v1/auth/user/create", bytes.NewReader(data))
+func createNewUser(t *testing.T, sessionToken string, data []byte) {
+	req, err := http.NewRequest("POST", "/api/v1/admin/user/create", bytes.NewReader(data))
+	req.Header.Set("NHR-TOKEN", sessionToken)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,71 +69,95 @@ func createNewUser(t *testing.T, data []byte) {
 	fmt.Println(rr.Body.String())
 }
 
-func TestLogin(t *testing.T) {
-	var acc1 Account
-	acc1.Username = "admin"
-	acc1.Password = "admin"
+//// Test useraccount deletion
+func TestDeleteUser(t *testing.T) {
 
-	jd, _ := json.Marshal(acc1)
+	// Step 1: Authenticate as admin user
+	loginData := make(map[string]string)
+	loginData["username"] = "admin"
+	loginData["password"] = "admin"
+	jLoginData, _ := json.Marshal(loginData)
 
-	// Test if token is valid
-	rr := nighthawkLogin(t, jd)
-	sessionToken := rr.Header().Get("Nhr-Token")
-	fmt.Println("NHR-TOKEN", sessionToken)
+	rr := loginUser(t, jLoginData)
+	sessionToken := rr.Header().Get("NHR-TOKEN")
 
-	// Testing for valid token
-	tokenTest("admin", "127.0.0.1", sessionToken)
+	// Step 2: Delete user by username
+	userinfo := make(map[string]string)
+	userinfo["username"] = "roshan8"
+	data, _ := json.Marshal(userinfo)
 
-	// Testing for invalid token
-	tokenTest("admin1", "127.0.0.1", sessionToken)
-	tokenTest("admin", "127.0.0.2", sessionToken)
-	tokenTest("admin", "127.0.0.1", sessionToken+"a")
+	deleteUser(t, sessionToken, data)
+
+	// Step 3: Logout
+	logoutData := make(map[string]string)
+	logoutData["username"] = loginData["username"]
+	jlogoutData, _ := json.Marshal(logoutData)
+	logout(t, sessionToken, jlogoutData)
 }
 
-func TestLogin2(t *testing.T) {
-	acc := Account{Username: "admin", Password: "admin"}
-	jd, _ := json.Marshal(acc)
+func deleteUser(t *testing.T, token string, data []byte) {
+	req, err := http.NewRequest("POST", "/api/v1/admin/user/delete", bytes.NewReader(data))
+	req.Header.Set("NHR-TOKEN", token)
 
-	// Login1
-	rr := nighthawkLogin(t, jd)
-	sessionToken1 := rr.Header().Get("Nhr-Token")
-	fmt.Println("NHR-TOKEN", sessionToken1)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// Login2
-	// Test if token is valid
-	rr = nighthawkLogin(t, jd)
-	sessionToken2 := rr.Header().Get("Nhr-Token")
-	fmt.Println("NHR-TOKEN", sessionToken2)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(DeleteUser)
+	handler.ServeHTTP(rr, req)
 
-	rr = nighthawkLogin(t, jd)
-	sessionToken3 := rr.Header().Get("Nhr-Token")
-	fmt.Println("NHR-TOKEN", sessionToken3)
-
-	rr = nighthawkLogin(t, jd)
-	sessionToken4 := rr.Header().Get("Nhr-Token")
-	fmt.Println("NHR-TOKEN", sessionToken4)
-
-	fmt.Println("Token test after creation")
-	tokenTest("admin", "127.0.0.1", sessionToken4)
-	tokenTest("admin", "127.0.0.1", sessionToken3)
-	tokenTest("admin", "127.0.0.1", sessionToken2)
-	tokenTest("admin", "127.0.0.1", sessionToken1)
-
-	DestroySession("admin", "127.0.0.1", sessionToken2)
-
-	fmt.Println("Token test after deletion")
-	tokenTest("admin", "127.0.0.1", sessionToken4)
-	tokenTest("admin", "127.0.0.1", sessionToken3)
-	tokenTest("admin", "127.0.0.1", sessionToken2)
-	tokenTest("admin", "127.0.0.1", sessionToken1)
-
-	fmt.Println(asmap)
-
-	fmt.Println(authsession)
-
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+	fmt.Println(rr.Body.String())
 }
 
-func nighthawkLogin(t *testing.T, jd []byte) *httptest.ResponseRecorder {
+// Test SetPassword
+func TestSetPassword(t *testing.T) {
+	// Step 1: Authenticate as admin user
+	loginData := make(map[string]string)
+	loginData["username"] = "admin"
+	loginData["password"] = "admin"
+	jLoginData, _ := json.Marshal(loginData)
+
+	rr := loginUser(t, jLoginData)
+	sessionToken := rr.Header().Get("NHR-TOKEN")
+
+	// Step 2: Set password
+	userinfo := make(map[string]string)
+	userinfo["username"] = "roshan8"
+	userinfo["new_password"] = "password123"
+	data, _ := json.Marshal(userinfo)
+
+	setPassword(t, sessionToken, data)
+
+	// Step 3: Logout
+	logoutData := make(map[string]string)
+	logoutData["username"] = loginData["username"]
+	jlogoutData, _ := json.Marshal(logoutData)
+	logout(t, sessionToken, jlogoutData)
+}
+
+func setPassword(t *testing.T, token string, data []byte) {
+	req, err := http.NewRequest("POST", "/api/v1/admin/password/set", bytes.NewReader(data))
+	req.Header.Set("NHR-TOKEN", token)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(SetPassword)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+	fmt.Println(rr.Body.String())
+}
+
+func loginUser(t *testing.T, jd []byte) *httptest.ResponseRecorder {
 	req, err := http.NewRequest("POST", "/api/v1/auth/login", bytes.NewReader(jd))
 	if err != nil {
 		t.Fatal(err)
@@ -119,42 +174,38 @@ func nighthawkLogin(t *testing.T, jd []byte) *httptest.ResponseRecorder {
 	return rr
 }
 
-func tokenTest(username, clientip, sessionToken string) {
-	tokenStatus, err := IsSessionTokenValid(username, clientip, sessionToken)
-	if tokenStatus {
-		fmt.Println("Valid Token")
-	} else {
-		fmt.Println("Invalid Token ", err.Error())
-	}
-}
-
+//// Test changing password
 func TestChangePassword(t *testing.T) {
 
+	// Step 1: Authenticate as user
+	loginData := make(map[string]string)
+	loginData["username"] = "roshan4"
+	loginData["password"] = "roshan"
+	jLoginData, _ := json.Marshal(loginData)
+
+	rr := loginUser(t, jLoginData)
+	sessionToken := rr.Header().Get("NHR-TOKEN")
+
+	// Step 2: Change current password
 	passwdData := make(map[string]string)
-	passwdData["username"] = "admin2"
-	passwdData["password"] = "admin2"
+	passwdData["password"] = loginData["password"]
+	passwdData["new_password"] = "roshan123"
+	data, _ := json.Marshal(passwdData)
 
-	jpasswdData, _ := json.Marshal(passwdData)
+	changePassword(t, sessionToken, data)
 
-	var res map[string]string
-	createNewUser(t, jpasswdData)
+	// Step 3: Logout
+	logoutData := make(map[string]string)
+	logoutData["username"] = loginData["username"]
+	jlogoutData, _ := json.Marshal(logoutData)
+	logout(t, sessionToken, jlogoutData)
 
-	rr := nighthawkLogin(t, jpasswdData)
-	json.Unmarshal([]byte(rr.Body.String()), &res)
+	time.Sleep(1 * time.Second)
 
-	if res["response"] == "failed" {
-		fmt.Println("Login failed")
-		return
-	}
-
-	sessionToken := rr.Header().Get("Nhr-Token")
-	fmt.Println(sessionToken)
-
-	passwdData["new_password"] = "maskey"
-	jpasswdData, _ = json.Marshal(passwdData)
-	fmt.Println(string(jpasswdData))
-
-	changePassword(t, sessionToken, jpasswdData)
+	// Step 4: Login Using new password
+	loginData["password"] = passwdData["new_password"]
+	data, _ = json.Marshal(loginData)
+	loginUser(t, data)
 }
 
 func changePassword(t *testing.T, token string, data []byte) {
@@ -167,77 +218,6 @@ func changePassword(t *testing.T, token string, data []byte) {
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(ChangePassword)
-	handler.ServeHTTP(rr, req)
-
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-	fmt.Println(rr.Body.String())
-}
-
-func TestDeleteUser(t *testing.T) {
-
-	sessionToken := ""
-	postData := make(map[string]string)
-	postData["delete_account"] = "admin2"
-
-	jd, _ := json.Marshal(postData)
-	//fmt.Println(string(jd))
-	deleteUser(t, sessionToken, jd)
-}
-
-func deleteUser(t *testing.T, token string, data []byte) {
-	req, err := http.NewRequest("POST", "/api/v1/auth/user/delete", bytes.NewReader(data))
-	//req.Header.Set("NHR-TOKEN", token)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(DeleteUser)
-	handler.ServeHTTP(rr, req)
-
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-	fmt.Println(rr.Body.String())
-}
-
-func TestSetPassword(t *testing.T) {
-	postData := make(map[string]string)
-	postData["username"] = "admin"
-	postData["password"] = "admin"
-
-	jsonPostData, _ := json.Marshal(postData)
-	rr := nighthawkLogin(t, jsonPostData)
-
-	res := make(map[string]string)
-	json.Unmarshal([]byte(rr.Body.String()), &res)
-
-	if res["result"] == "failed" || res["response"] == "failed" {
-		fmt.Println("Login failed for ", postData["username"])
-		return
-	}
-
-	sessionToken := rr.Header().Get("NHR-TOKEN")
-	postData["username"] = "admin1"
-	postData["new_password"] = "maskey2"
-	jsonPostData, _ = json.Marshal(postData)
-
-	setPassword(t, sessionToken, jsonPostData)
-}
-
-func setPassword(t *testing.T, token string, data []byte) {
-	req, err := http.NewRequest("POST", "/api/v1/auth/password/set", bytes.NewReader(data))
-	req.Header.Set("NHR-TOKEN", token)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(SetPassword)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -270,7 +250,7 @@ func TestLoginLogout(t *testing.T) {
 	data["password"] = "maskey2"
 	jdata, _ := json.Marshal(data)
 
-	rr := nighthawkLogin(t, jdata)
+	rr := loginUser(t, jdata)
 	res := make(map[string]string)
 	json.Unmarshal([]byte(rr.Body.String()), &res)
 
