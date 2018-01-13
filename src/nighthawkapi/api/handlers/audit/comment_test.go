@@ -14,7 +14,7 @@ import (
 func TestAddComment(t *testing.T) {
 	comment := Comment{
 		CreatedBy:    "roshan",
-		CaseName:     "CASE-ALFA-02",
+		CaseName:     "CASE-ALFA-04",
 		ComputerName: "COMPUTER-01",
 		Audit:        "w32tasks",
 		DocId:        "aaaaaaaaaabbbbbbb",
@@ -22,7 +22,6 @@ func TestAddComment(t *testing.T) {
 	}
 
 	cBody := make(map[string]string)
-	cBody["casename"] = comment.CaseName
 	cBody["comment"] = comment.Comment
 	cBody["created_by"] = comment.CreatedBy
 	data, _ := json.Marshal(cBody)
@@ -35,7 +34,7 @@ func TestAddComment(t *testing.T) {
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc("/api/v1/comment/add/{case}/{endpoint}/{audit}/{doc_id}", AddComment)
+	r.HandleFunc("/api/v1/comment/add/{casename}/{endpoint}/{audit}/{doc_id}", AddComment)
 
 	rr := httptest.NewRecorder()
 	r.ServeHTTP(rr, req)

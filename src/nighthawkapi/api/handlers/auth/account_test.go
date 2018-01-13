@@ -10,15 +10,6 @@ import (
 	"time"
 )
 
-<<<<<<< HEAD
-func TestCreateNewUser(t *testing.T) {
-	var acc Account
-	acc.Firstname = "roshan"
-	acc.Lastname = "maskey"
-	acc.Username = "admin"
-	acc.Password = "admin"
-	acc.Role = "admin"
-=======
 //// Test new account creation
 func TestCreateUser(t *testing.T) {
 
@@ -40,7 +31,6 @@ func TestCreateUser(t *testing.T) {
 		Password:  "roshan",
 		Role:      "admin",
 	}
->>>>>>> 5af04688964ecae66fb4462369b904a79f6d5af8
 
 	jd, _ := json.Marshal(acc)
 	createNewUser(t, sessionToken, jd)

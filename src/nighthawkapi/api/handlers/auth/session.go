@@ -171,23 +171,7 @@ func IsAuthenticatedAdminSession(w http.ResponseWriter, r *http.Request) (bool, 
 		return true, "Authenticated admin user"
 	}
 
-<<<<<<< HEAD
-	passwordMatched := CheckPasswordHash(uacc.Password, sacc.PasswordHash)
-	if passwordMatched {
-		clientip := "127.0.0.1" // TODO: Extract from request header
-		sessionToken, err := CreateSession(uacc.Username, clientip)
-		if err != nil {
-			HttpErrorReturn(w, r, "Error authenticating user", errors.New("Failed to generate session Token"))
-			return
-		}
-		w.Header().Set("NHR-TOKEN", sessionToken)
-		HttpSuccessReturn(w, r, sessionToken, 1)
-	} else {
-		HttpErrorReturn(w, r, "Password did not match", errors.New("Password did not match"))
-	}
-=======
 	return false, "Authenticated user does not have admin role" //default return
->>>>>>> 5af04688964ecae66fb4462369b904a79f6d5af8
 }
 
 // GetUsernameByToken function returns login username for authenticated token.

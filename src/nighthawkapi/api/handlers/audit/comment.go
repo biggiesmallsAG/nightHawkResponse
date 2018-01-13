@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	api "nighthawkapi/api/core"
+	"nighthawkapi/api/handlers/auth"
 	"nighthawkapi/api/handlers/config"
 	"time"
 
@@ -74,13 +75,12 @@ func loadCommentVars(comment *Comment, vars map[string]string) {
 func AddComment(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
-	/*
-		isauth, message := auth.IsAuthenticatedSession(w, r)
-		if !isauth {
-			api.HttpResponseReturn(w, r, "failed", message, nil)
-			return
-		}
-	*/
+	// For UnitTest comment auth
+	isauth, message := auth.IsAuthenticatedSession(w, r)
+	if !isauth {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
+		return
+	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -139,13 +139,12 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 func GetComment(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
-	/*
-		isauth, message := auth.IsAuthenticatedSession(w, r)
-		if !isauth {
-			api.HttpResponseReturn(w, r, "failed", message, nil)
-			return
-		}
-	*/
+	// For UnitTest comment auth
+	isauth, message := auth.IsAuthenticatedSession(w, r)
+	if !isauth {
+		api.HttpResponseReturn(w, r, "failed", message, nil)
+		return
+	}
 
 	var comment Comment
 
@@ -207,7 +206,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sr.TotalHits() < 1 {
-		api.HttpResponseReturn(w, r, "success", "Comment search completed with no result", nil)
+		api.HttpResponseReturn(w, r, "failed", "Comment not found", nil)
 		return
 	}
 

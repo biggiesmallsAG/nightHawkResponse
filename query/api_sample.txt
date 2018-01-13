@@ -1,0 +1,179 @@
+
+#====================================
+# Authnetication APIs
+#====================================
+
+# Login 
+POST /api/v1/auth/login 
+{
+    "username": "roshan",
+    "password": "roshan"
+}
+
+API Response Body - Failed authetnication 
+{
+   "response": "failed",
+   "reason": "Password did not match",
+   "data": null
+}
+
+API Response Body - Successful authentication
+{
+   "response": "success",
+   "reason": "Authentication completed",
+   "data": {
+     "token": "YmMek0j8PVDG70EB8zJ0ZlhE1Z08gNd0EcytrMHz8vI=",
+     "username": "roshan"
+   }
+}
+
+
+## Logout 
+POST /api/v1/auth/logout 
+{
+    "username": "roshan3"
+}
+
+Logut Response Body 
+{
+   "response": "success",
+   "reason": "Logout completed",
+   "data": {
+     "clientip": "127.0.0.1",
+     "token": "h7Wx6o89D95HNmtm0v951_HmL4H8YYxhb20CAPrQgrU=",
+     "username": "roshan3"
+   }
+ }
+
+
+ # Change Password 
+ POST /api/v1/auth/password/change 
+ {
+     "password": "roshan",
+     "new_password": "roshan123"
+ }
+
+ Change Password response body 
+ {
+   "response": "success",
+   "reason": "Password change completed",
+   "data": "roshan3"
+ }
+
+
+# PasswordSet 
+POST /api/v1/admin/password/set 
+{
+    "username": "roshan",
+    "new_password": "roshan123"
+}
+
+Password set response body 
+{
+   "response": "success",
+   "reason": "Password set completed",
+   "data": "roshan"
+ }
+
+#====================================
+# TAG APIs
+#====================================
+
+# Adding New Tag
+POST /api/v1/tag/add/{casename}/{endpoint}/{audit}/{doc_id}
+{
+    "created_by": "roshan",
+    "tag_name": "tag_1"
+}
+
+API Response Body 
+{
+   "response": "success",
+   "reason": "Tag added successfully",
+   "data": "AWDxFO0eQ7ZZOJuRMFd4"
+}
+
+
+# GetTagData for Audit entry 
+GET /api/v1/tag/show/{casename}/{endpoint}/{audit}/{doc_id}
+
+API Response Body - Success 
+{
+   "response": "success",
+   "reason": "Tag search completed",
+   "data": [
+     {
+       "timestamp": "2018-01-13T07:25:50Z",
+       "created_by": "roshan",
+       "casename": "CASE-ALFA-01",
+       "computername": "COMPUTER-01",
+       "audit": "w32services",
+       "doc_id": "AWDs7OD5Q7ZZOJuRMFdq",
+       "tag_category": "result",
+       "tag_name": "testtag"
+     }
+   ]
+ }
+
+API Response Body - Failed 
+{
+   "response": "failed",
+   "reason": "No result found",
+   "data": null
+ }
+
+
+
+#====================================
+# Comment APIs
+#====================================
+
+# Adding New Comment
+POST /api/v1/comment/add/{casename}/{endpoint}/{audit}/{doc_id}
+{
+    "created_by": "roshan",
+    "comment": "This is a test comment"
+}
+
+API Response Body 
+{
+   "response": "success",
+   "reason": "Comment added",
+   "data": "AWDxPKSiQ7ZZOJuRMFd7"
+ }
+
+
+GET /api/v1/comment/show 
+
+API Response Body  - Success result  
+{
+   "response": "success",
+   "reason": "Comment search completed",
+   "data": [
+     {
+       "timestamp": "2018-01-13T02:26:55Z",
+       "created_by": "roshan",
+       "casename": "CASE-ALFA-02",
+       "computername": "COMPUTER-01",
+       "audit": "w32tasks",
+       "doc_id": "aaaaaaaaaabbbbbbb",
+       "comment": "This is comment about task"
+     },
+     {
+       "timestamp": "2018-01-13T02:34:29Z",
+       "created_by": "roshan",
+       "casename": "CASE-ALFA-02",
+       "computername": "COMPUTER-02",
+       "audit": "wservices",
+       "doc_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+       "comment": "Odd looking services. Potential malicious"
+     }
+   ]
+ }
+
+ API Response Body - Failed result
+ {
+   "response": "failed",
+   "reason": "Comment not found",
+   "data": null
+}

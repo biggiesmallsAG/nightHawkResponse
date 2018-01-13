@@ -348,6 +348,12 @@ var routes = Routes{
 		auth.SetPassword,
 	},
 	{
+		"ChangePassword",
+		"POST",
+		fmt.Sprintf("%s/auth/password/change", _api),
+		auth.ChangePassword,
+	},
+	{
 		"Comment::AddComment",
 		"POST",
 		fmt.Sprintf("%s/comment/add/{casename}/{endpoint}/{audit}/{doc_id}", _api),
@@ -388,5 +394,47 @@ var routes = Routes{
 		"GET",
 		fmt.Sprintf("%s/comment/show/{casename}/{endpoint}/{audit}/{doc_id}", _api),
 		audit.GetComment,
+	},
+	{
+		"AddTag",
+		"POST",
+		fmt.Sprintf("%s/tag/add/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.AddTag,
+	},
+	{
+		"GetAllTags",
+		"GET",
+		fmt.Sprintf("%s/tag/show", _api),
+		audit.GetTagData,
+	},
+	{
+		"GetTagByPost",
+		"POST",
+		fmt.Sprintf("%s/tag/show", _api),
+		audit.GetTagData,
+	},
+	{
+		"GetTagDataByCase",
+		"GET",
+		fmt.Sprintf("%s/tag/show/{casename}", _api),
+		audit.GetTagData,
+	},
+	{
+		"GetTagDataByCaseEndpoint",
+		"GET",
+		fmt.Sprintf("%s/tag/show/{casename}/{endpoint}", _api),
+		audit.GetTagData,
+	},
+	{
+		"GetTagByCaseEndpointAudit",
+		"GET",
+		fmt.Sprintf("%s/tag/show/{casename}/{endpoint}/{audit}", _api),
+		audit.GetTagData,
+	},
+	{
+		"GetTagDataByCaseEndpointAuditDocId",
+		"GET",
+		fmt.Sprintf("%s/tag/show/{casename}/{endpoint}/{audit}/{doc_id}", _api),
+		audit.GetTagData,
 	},
 }
