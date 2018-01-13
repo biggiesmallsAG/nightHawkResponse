@@ -124,25 +124,10 @@ func UserExists(username string) (bool, Account) {
 	return false, acc
 }
 
-<<<<<<< HEAD
-func HttpErrorReturn(w http.ResponseWriter, r *http.Request, message string, err error) {
-	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] %s %s, %s", r.Method, r.RequestURI, err.Error()))
-	fmt.Fprintln(w, api.HttpFailureMessage(message))
-}
-
-func HttpSuccessReturn(w http.ResponseWriter, r *http.Request, message string, hits int64) {
-	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	api.LogDebug(api.DEBUG, fmt.Sprintf("[+] %s %s, %s", r.Method, r.RequestURI, message))
-	fmt.Fprintln(w, api.HttpSuccessMessage("200", message, hits))
-}
-
-func CreateNewUser(w http.ResponseWriter, r *http.Request) {
-=======
 // ChangePassword changed currently logged on user password
 // api_uri: POST /api/v1/user/password/change
 // post_data: {"password":"currentpassword", "new_password":"newpassword123"}
 func ChangePassword(w http.ResponseWriter, r *http.Request) {
->>>>>>> 5af04688964ecae66fb4462369b904a79f6d5af8
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
 	isauth, message := IsAuthenticatedSession(w, r)

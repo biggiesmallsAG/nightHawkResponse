@@ -2,7 +2,7 @@
 *.mans
 log/nighthawk_django.log
 *.log
-pkg/
+pkg
 nighthawk_go/pkg
 nighthawk_web/migrations
 .DS_Store

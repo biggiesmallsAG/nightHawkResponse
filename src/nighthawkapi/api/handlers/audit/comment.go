@@ -48,7 +48,7 @@ type Comment struct {
 	Comment      string `json:"comment"`
 }
 
-func loadRequestVars(comment *Comment, vars map[string]string) {
+func loadCommentVars(comment *Comment, vars map[string]string) {
 	if len(vars) == 0 {
 		return
 	}
@@ -69,7 +69,7 @@ func loadRequestVars(comment *Comment, vars map[string]string) {
 }
 
 // AddComment create new comment about an artifact
-// api_uri: /api/v1/comment/add/{case}/{endpoint}/{audit}/{doc_id}
+// api_uri: /api/v1/comment/add/{casename}/{endpoint}/{audit}/{doc_id}
 // post_data: {"casedate":"2018-01-01T01:01:01Z","created_by": "user1", "comment": "this is comment"}
 func AddComment(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json; charset=UTF-8")
@@ -90,7 +90,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 
 	var comment Comment
 	json.Unmarshal(body, &comment)
-	loadRequestVars(&comment, mux.Vars(r))
+	loadCommentVars(&comment, mux.Vars(r))
 
 	// Comment Data validation
 	if comment.CreatedBy == "" {
@@ -159,7 +159,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal(body, &comment)
 	}
 
-	loadRequestVars(&comment, mux.Vars(r))
+	loadCommentVars(&comment, mux.Vars(r))
 
 	var queries []elastic.Query
 	if comment.CaseName == "" {
