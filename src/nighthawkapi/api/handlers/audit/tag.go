@@ -135,7 +135,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		BodyJson(string(jsonTag)).
 		Do(context.Background())
 
-	if err != nil || !res.Created {
+	if err != nil {
 		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
 		return
 	}

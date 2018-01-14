@@ -124,7 +124,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	jsonComment, _ := json.Marshal(comment)
 
 	res, err := client.Index().Index(conf.ServerIndex()).Type(EsCommentType).BodyJson(string(jsonComment)).Do(context.Background())
-	if err != nil || !res.Created {
+	if err != nil {
 		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
 		return
 	}

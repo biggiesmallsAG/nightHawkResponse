@@ -206,7 +206,7 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request) {
 
 	res, err := client.Index().Index(NHINDEX).Type(NHACCOUNT).BodyJson(string(jsonAccount)).Do(context.Background())
 
-	if err != nil || !res.Created {
+	if err != nil {
 		api.HttpResponseReturn(w, r, "failed", err.Error(), nil)
 		return
 	}
@@ -214,7 +214,7 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request) {
 	resdata := make(map[string]string)
 	resdata["username"] = acc.Username
 	resdata["role"] = acc.Role
-	api.HttpResponseReturn(w, r, "success", "User account created", "")
+	api.HttpResponseReturn(w, r, "success", "User account created", res.Id)
 }
 
 // DeleteUser deletes useraccount
