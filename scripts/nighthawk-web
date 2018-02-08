@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-# nighthawk response - web service
-#
-WEBROOT=/opt/nighthawk/wwwroot
-
-cd $WEBROOT
-npm start 
