@@ -7,11 +7,30 @@ This application is designed to ingest a Mandiant Redline "collections" file and
 
 **The application was born out of the inability to control multiple investigations (or hundreds of endpoints) in a single pane of glass.**
 
-To ingest redline audits, we created `nightHawk.GO`, a fully fledge GOpher application designed to accompany this framework. The source code to the application is available in this repo, a binary has been compiled and is running inside the iso ready to ingest from first boot.
+To ingest redline audits, we created nightHawkResponse, a fully fledge GOpher application designed to accompany this framework. The source code to the application is available in this repo, a binary has been compiled and is running inside the iso ready to ingest from first boot.
 
-# Build
-
-**NEW VERSION (1.0.4) is on the way. Start of July, heaps of new features/design !**
+# Version 1.0.4 
+Installation <br>
+- Version 1.0.4 would work on any Ubuntu x64 OS (we have tested in Ubuntu 16.04LTS) <br>
+- Update Ubuntu to latesth patch <br>
+- Download release/nhr-1.0.4.tar.gz <br>
+- Unarchive nhr-1.0.4.tar.gz <br>
+- Change directory to nhr-1.0.4 <br>
+- Change nhr-setup.sh to executable (chmod +x nhr-setup.sh) <br>
+- Install dependencies and nightHawk Response packages (sudo ./nhr-setup.sh install) <br>
+  Note: Internet access is required during installation. <br>
+- Initial installation may fail to create Elasticsearch index. If that happens please re-run (sudo ./nhr-setup.sh install) <br>
+- Verify all the components are running <br>
+---- sudo systemctl status elasticsearch <br>
+---- sudo systemctl status kibana <br>
+---- sudo systemctl status rabbitmq-server <br>
+---- sudo systemctl status nginx <br>
+---- sudo systemctl status nighthawk-api <br>
+---- sudo systemctl status nighthawk-worker <br> 
+- You can access it by browsing to https://ipaddress <br>
+- Default username and password is both admin/admin <br>
+<br>
+API documentation to follow in Wiki <br>
 
 01/09/2016: Version 1.0.3 <br>
 

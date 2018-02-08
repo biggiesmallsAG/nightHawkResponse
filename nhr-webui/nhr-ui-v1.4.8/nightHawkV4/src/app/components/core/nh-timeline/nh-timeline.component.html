@@ -1,0 +1,125 @@
+<div class="largecontainer">
+	<div class="row">
+		<div class="col s1 m1 l1"></div>
+		<div class="col s10 m10 l10">
+			<div class="row">
+				<div class="input-field col s3">
+					<form action="">
+						<h1>TIMELINE</h1>
+					</form>
+				</div>
+				<div class="input-field col s9">
+					<ul materialize="collapsible" data-collapsible="accordion">
+						<li>
+							<div class="collapsible-header">Timeline help</div>
+							<div class="collapsible-body">
+								<blockquote>
+									<p class="flowtext">
+										Use "Time Delta" as a modifier for time crunching, for instance, supply a start date and time and pass in "5" as a delta
+										to get a wrinkle time (-5m/+5m).
+									</p>
+								</blockquote>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<form [formGroup]="timelineForm" novalidate (ngSubmit)="searchTimeline(timelineForm.value, timelineForm.valid, $event)" materialize>
+					<div class="col s4">
+						<div class="row">
+							<div class="col s6">
+								<select materialize="material_select" [materializeSelectOptions]="selectedCase" (change)="getCaseEndpoint($event.target.value)"
+								 formControlName="case">
+									<option value="" disabled selected>Choose Case</option>
+									<option *ngFor="let option of selectedCase" [value]="option.case_name">{{option.case_name}}</option>
+								</select>
+							</div>
+							<div class="col s6">
+								<select materialize="material_select" formControlName="endpoint" [materializeSelectOptions]="selectedEndpoint">
+									<option value="" disabled selected>Choose Endpoint</option>
+									<option *ngFor="let option of selectedEndpoint" [value]="option.key">{{option.key}} ({{option.doc_count}})</option>
+								</select>
+							</div>
+							<div class="col s12">
+								<button class="btn waves-effect" type="submit" [disabled]="!timelineForm.valid || !timelineForm.dirty">Submit
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col s4">
+						<div class="input-field col s6">
+							<input id="start_time" type="text" class="validate" formControlName="start_time">
+							<label for="icon_prefix">Start Timestamp (UTC)</label>
+							<nh-form-control [control]="timelineForm.controls.start_time"></nh-form-control>
+						</div>
+						<div class="input-field col s6">
+							<input id="end_time" type="text" class="validate" formControlName="end_time">
+							<label for="icon_prefix">End Timestamp (UTC)</label>
+							<nh-form-control [control]="timelineForm.controls.end_time"></nh-form-control>
+						</div>
+					</div>
+					<div class="col s4">
+						<div class="row">
+							<div class="input-field col s6">
+								<i class="material-icons prefix">visibility</i>
+								<input id="icon_prefix" type="number" class="validate" formControlName="time_delta">
+								<label for="icon_prefix">Time Delta</label>
+							</div>
+							<div class="input-field col s6">
+								<input id="icon_prefix" type="number" class="validate" formControlName="search_limit">
+								<label for="icon_prefix">Search Limit</label>
+							</div>
+							<div class="col s6">
+								<div class="switch">
+									<label for="level">Filter (known) Good artifacts?</label>
+									<label>
+										<input type="checkbox" formControlName="ignore_good">
+										<span class="lever"></span>
+										On
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col s1 m1 l1"></div>
+	</div>
+	<div class="row gridrow">
+		<div class="col s12 gridrow">
+			<div class="col s12 m12 l12 maingridcontent" *ngIf="timelineResponse && !emptyResponse">
+				<ag-grid-angular #agGrid style="height: 100%; width: 100%" class="ag-dark" [gridOptions]="gridOptions" (selectionChanged)="onTimelineSelected()"
+				 enableColResize enableSorting enableFilter groupHeaders>
+				</ag-grid-angular>
+			</div>
+			<div class="col s12 m12 l12" *ngIf="emptyResponse">
+				<p class="flow-text center-align">
+					{{timelineResponse.reason}}
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modal1" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions" class="modal bottom-sheet modal-fixed-footer">
+	<div class="modal-content" *ngIf="sourceRecord">
+		<div class="row">
+			<div class="col s6">
+				<div class="rawjson tabcontent" RenderJson [jsonObject]="sourceRecord"></div>
+			</div>
+			<div class="col s6">
+				<app-nh-tag [tagMeta]="auditObject" [docId]="docId"></app-nh-tag>
+			</div>
+		</div>
+	</div>
+	<div class="modal-content" *ngIf="connError">
+		<p class="flow-text">
+			HTTP Status: {{connError.status}}, Error: {{connError.statusText}}
+		</p>
+	</div>
+	<div class="modal-footer">
+		<a class="waves-effect btn-flat ambertext" (click)="destroyModalObject()">Close</a>
+	</div>
+</div>

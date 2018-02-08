@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <form action="">
+        <h1>LOGIN</h1>
+      </form>
+    </div>
+  </div>
+  <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser(loginForm.value, loginForm.valid, $event)"
+    materialize>
+    <div class="row">
+      <div class="input-field col s6">
+        <input id="username" type="text" class="validate" formControlName="username">
+        <label class="active" for="username">Username</label>
+      </div>
+      <div class="input-field col s6">
+        <input id="password" type="password" class="validate" formControlName="password">
+        <label class="active" for="password">Password</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 center-align">
+        <button class="btn waves-effect waves-light modal-trigger" [disabled]="!loginForm.dirty || !loginForm.valid">Submit
+        </button>
+      </div>
+      <div id="modal1" materialize="modal" [materializeParams]="[{dismissible: true}]" [materializeActions]="modalActions" class="modal bottom-sheet">
+        <div class="modal-content" *ngIf="loginResponse">
+          <h4>Succesful login</h4>
+          <p>Reloading core services and authentication classes in 5 seconds...</p>
+        </div>
+        <div class="modal-content" *ngIf="!loginResponse">
+          <h4>Failed login</h4>
+          <p>{{loginError}}</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

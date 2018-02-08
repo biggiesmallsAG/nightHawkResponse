@@ -1,0 +1,30 @@
+<div class="row tagForm">
+  <form action="">
+    <h1>TAG DOCUMENT</h1>
+  </form>
+</div>
+<div class="row">
+  <form [formGroup]="tagForm" novalidate (ngSubmit)="save(tagForm.value, tagForm.valid, $event)" materialize>
+    <div class="input-field col s6">
+      <i class="medium material-icons prefix">chat_bubble_outline</i>
+      <input id="icon_prefix" type="text" class="validate" formControlName="comment">
+      <label for="icon_prefix">Tag Comment</label>
+    </div>
+    <div class="input-field col s6">
+      <select materialize="material_select" formControlName="TagName" [materializeSelectOptions]="tagOptions">
+        <option value="" disabled selected>Choose Tag Type</option>
+        <option *ngFor="let option of tagOptions" [value]="option.opt">{{option.name}}</option>
+      </select>
+    </div>
+    <div class="col s12">
+      <button class="btn waves-effect" type="submit">Submit
+      </button>
+    </div>
+  </form>
+</div>
+<div class="row" *ngIf="tagResponse">
+  Doc ID: {{tagResponse}} tagged succesfully. 
+</div>
+<div class="row">
+  <app-tag-history [tagMeta]="tagMeta" [docId]="docId"></app-tag-history>
+</div>

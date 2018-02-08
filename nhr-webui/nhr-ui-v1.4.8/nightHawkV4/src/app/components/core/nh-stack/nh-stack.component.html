@@ -1,0 +1,108 @@
+<div class="largecontainer">
+	<div class="row gridrow">
+
+		<div class="col s4 m4 l4 gridrow">
+			<div class="row">
+				<form action="">
+					<h1>
+						STACKING
+					</h1>
+				</form>
+			</div>
+			<div class="row">
+				<form [formGroup]="stackForm" novalidate (ngSubmit)="getStack(stackForm.value, stackForm.valid, $event)" materialize >
+					<div class="col s12 m12 l12">
+						<div materialize action="#" class="select-form">
+							<select materialize="material_select" formControlName="stack_type" 
+							[materializeSelectOptions]="stackableObjects" (change)="stackType($event.target.value)">
+							<option value="" disabled selected>Choose Stack Type</option>
+							<option *ngFor="let option of stackableObjects" [value]="option.value" >{{option.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col s12 m12 l12" *ngIf="filterGood">
+					<div class="switch">
+						<label>
+							Filter (known) Good Services?
+							<input type="checkbox" formControlName="ignore_good_service">
+							<span class="lever"></span>
+							On
+						</label>
+					</div>
+				</div>
+				<div class="row"></div>
+				<div class="input-field col s6 m6 l6">
+					<input placeholder="(Default 100)" type="number" class="validate" formControlName="search_limit">
+					<label for="search_limit">Search Limit</label>
+				</div>
+				<div class="col s6 m6 l6">
+					<div class="switch">
+						<label>
+							Sort Most Frequent
+							<input type="checkbox" formControlName="sort_desc">
+							<span class="lever"></span>
+							On
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<button class="btn waves-effect" type="submit" [disabled]="searchSubmitted || !stackForm.valid">Submit
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row contextrow" *ngIf="selectedRows">
+			<form action="">
+				<h1>
+					OBJECT CONTEXT
+				</h1>
+			</form>
+			<div class="row gridrow">
+				<div class="col s12 m12 l12 calcheight">
+				<div class="row gridrow" *ngIf="contextResponse">
+						<div class="col s12 m12 l12 maingridcontent">
+							<ag-grid-angular #agGrid style="height: 100%; width: 100%" class="ag-dark"
+							[gridOptions]="ctxgridOptions"
+							(selectionChanged)="onEndpointSelectionChanged(stackForm.value)"
+							enableColResize
+							enableSorting
+							enableFilter
+							groupHeaders
+							toolPanelSuppressGroups
+							toolPanelSuppressValues>
+						</ag-grid-angular>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col s8 m8 l8 calcheight">
+	<div class="row gridrow" *ngIf="stackResponse">
+		<div class="col s12 m12 l12 maingridcontent">
+			<ag-grid-angular #agGrid style="height: 100%; width: 100%" class="ag-dark"
+			[gridOptions]="gridOptions"
+			(selectionChanged)="onStackSelectionChanged(stackForm.value)"
+			enableColResize
+			enableSorting
+			enableFilter
+			groupHeaders
+			toolPanelSuppressGroups
+			toolPanelSuppressValues>
+		</ag-grid-angular>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="modal1" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions" class="modal bottom-sheet modal-fixed-footer">
+	<div class="modal-content" *ngIf="sourceRecord">
+		<div class="rawjson tabcontent" RenderJson [jsonObject]="sourceRecord"></div>
+	</div>
+	<div class="modal-footer">
+		<a class="waves-effect btn-flat ambertext" (click)="destroyModalObject()">Close</a>
+	</div>
+</div>

@@ -1,0 +1,147 @@
+<!-- <div class="container"> -->
+<div class="platform_stats" *ngIf="pStats">
+<div class="row">
+	<div class="col s12 center-align">
+		<a class="waves-effect blue-grey darken-1 btn" (click)="updateStats()"><i class="material-icons right">replay</i>Refresh</a>
+	</div>
+</div>
+	<div class="row">
+		<div class="col s12 m12 l6 right-align">
+			<div class="card blue-grey darken-1">
+				<div class="card-content white-text">
+					<span class="card-title"><a class="waves-effect waves-light btn-flat"><i class="material-icons left">toll</i>Memory</a></span>
+					<table class="stats responsive-table">
+						<thead>
+							<tr>
+								<th>Total</th>
+								<th>Available</th>
+								<th>Used</th>
+								<th>Used %</th>
+								<th>Free</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{pStats.memory.total}}</td>
+								<td>{{pStats.memory.available}}</td>
+								<td>{{pStats.memory.used}}</td>
+								<td>{{pStats.memory.usedPercent}}</td>
+								<td>{{pStats.memory.free}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m12 l6 right-align">
+			<div class="card blue-grey darken-1">
+				<div class="card-content white-text">
+					<span class="card-title"><a class="waves-effect waves-light btn-flat"><i class="material-icons left">settings_input_hdmi</i>Disk</a></span>
+					<table class="stats responsive-table">
+						<thead>
+							<tr>
+								<th>Path</th>
+								<th>FS Type</th>
+								<th>Total</th>
+								<th>Free</th>
+								<th>Used</th>
+								<th>Used %</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{pStats.disk.path}}</td>
+								<td>{{pStats.disk.fstype}}</td>
+								<td>{{pStats.disk.total}}</td>
+								<td>{{pStats.disk.free}}</td>
+								<td>{{pStats.disk.used}}</td>
+								<td>{{pStats.disk.usedPercent}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	<div class="row">
+		<div class="col s12 m12 l6 right-align">
+			<div class="card blue-grey darken-1">
+				<div class="card-content white-text">
+					<span class="card-title"><a class="waves-effect waves-light btn-flat"><i class="material-icons left">dns</i>CPU</a></span>
+					<ul materialize="collapsible" data-collapsible="accordion">
+						<li>
+							<div class="collapsible-header">Expand for details...</div>
+							<div class="collapsible-body">
+								<table class="stats responsive-table">
+									<thead>
+										<tr>
+											<th>CPU</th>
+											<th>User</th>
+											<th>System</th>
+											<th>Idle</th>
+										</tr>
+									</thead>
+									<tbody *ngFor="let cpus of pStats.cpu">
+										<tr>
+											<td>{{cpus.cpu}}</td>
+											<td>{{cpus.user}}</td>
+											<td>{{cpus.system}}</td>
+											<td>{{cpus.idle}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			<div class="col s12 m12 l6 right-align">
+				<div class="card blue-grey darken-1">
+					<div class="card-content white-text">
+						<span class="card-title"><a class="waves-effect waves-light btn-flat"><i class="material-icons left">library_books</i>Elastic</a></span>
+						<table class="stats responsive-table">
+							<thead>
+								<tr>
+									<th>Docs</th>
+									<th>Status</th>
+									<th>Cluster</th>
+									<th>Index</th>
+									<th>Nodes</th>
+									<th>Cases</th>
+									<th>Endpoints</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{pStats.elastic.docs.count}}</td>
+									<td>{{pStats.elastic.status}}</td>
+									<td>{{pStats.elastic.cluster}}</td>
+									<td>{{pStats.elastic.index}}</td>
+									<td>{{pStats.elastic.nodes}}</td>
+									<td>{{pStats.elastic.cases}}</td>
+									<td>{{pStats.elastic.endpoints}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+	</div>
+		<div class="row">
+			<div class="col s12 m12 l6 right-align">
+				<div class="card blue-grey darken-1">
+					<div class="card-content white-text">
+						<span class="card-title"><a class="waves-effect waves-light btn-flat"><i class="material-icons left">perm_data_setting</i>Process</a></span>
+						<table class="stats responsive-table">
+							<thead>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- </div> -->

@@ -1,0 +1,37 @@
+@import 'src/app/styles/mixin';
+
+h1
+  +_header_style
+
+form h1
+ +_header_form_style
+
+button
+	+_button
+
+.input-field
+	margin-top: 0px
+
+.largecontainer
+	height: 100%
+
+.maingridcontent
+	height: 100%
+
+.calcheight
+	height: calc(100% - 25px)
+
+.gridrow
+	height: inherit
+
+.contextrow
+	height: calc(100% - 236px)
+
+.modal 
+    +_modal(100%)
+
+.modal-content 
+    +_modal_content
+
+.modal.modal-fixed-footer .modal-footer
+    +_modal_footer

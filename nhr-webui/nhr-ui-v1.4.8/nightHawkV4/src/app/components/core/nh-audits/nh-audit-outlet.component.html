@@ -1,0 +1,29 @@
+<div class="button-bar" *ngIf="auditData">
+    <button class="btn waves-effect waves-orange" (click)="autoSizeAll()">Auto-Size Columns</button>
+</div>
+<div *ngIf="auditData" class="grid-container largecontainer">
+	<ag-grid-angular #agGrid style="height: 100%; width: 100%" class="ag-dark" [gridOptions]="gridOptions" [columnDefs]="columnDefs"
+	 (selectionChanged)="onAuditSelectionChanged()" [frameworkComponents]="frameworkComponents" enableColResize enableSorting enableFilter>
+	</ag-grid-angular>
+</div>
+
+<div id="modal1" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions" class="modal bottom-sheet modal-fixed-footer">
+	<div class="modal-content" *ngIf="connError">
+		<p class="flow-text">
+			HTTP Status: {{connError.status}}, Error: {{connError.statusText}}
+		</p>
+	</div>
+	<div class="modal-content" *ngIf="sourceRecord">
+		<div class="row">
+			<div class="col s6">
+				<div class="rawjson tabcontent" RenderJson [jsonObject]="sourceRecord"></div>
+			</div>
+			<div class="col s6">
+				<app-nh-tag [tagMeta]="auditObject" [docId]="docId"></app-nh-tag>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a class="waves-effect btn-flat ambertext" (click)="destroyModalObject()">Close</a>
+	</div>
+</div>
