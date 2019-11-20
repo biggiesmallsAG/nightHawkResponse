@@ -9,6 +9,17 @@ This application is designed to ingest a Mandiant Redline "collections" file and
 
 To ingest redline audits, we created nightHawkResponse, a fully fledge GOpher application designed to accompany this framework. The source code to the application is available in this repo, a binary has been compiled and is running inside the iso ready to ingest from first boot.
 
+# Version 2.0 -ETA March 2020
+We are currently developing a new major version and will be releasing this by March 2020. The new version aims to accomplish the following. <br>
+- Docker based installation (with Kubenetes/Cloud/Local deployment guides/configs) (WIP)
+- New UI rewrite in React. Stripped back to do essentials and nothing more. (WIP)
+- Progressive and resumable triage uploading (DONE)
+- Kibana nightHawkResponse Plugin (WIP)
+- Simplified code base with unit tests (WIP)
+- Simplified development environment CI/CD (WIP)
+
+We realised that there were too many moving parts to effectively operate the entire repo, easily manage entities and keep everything up to date. We also belive that the core data that resides in Elastic should be used more effectively by Kibana and so we decided to make this a reality by developing a plugin that does this along side of Kibana's amazing workflow.
+
 # Version 1.0.4 
 Installation <br>
 - Version 1.0.4 would work on any Ubuntu x64 OS (we have tested in Ubuntu 16.04LTS) <br>
